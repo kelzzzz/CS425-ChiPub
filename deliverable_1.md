@@ -27,36 +27,18 @@
 
 ```mermaid
 graph LR
-    aid(author_id) --- A
-    af(first_name) --- A
-    al(last_name) --- A
-    aa(about) --- A
-
     A[Author] --- AB{writes}
     AB === B[Book]
 
-    gid(genre_id) --- G
-    gnm(name) --- G
     G[Genre] ~~~ GB{belong to} --> G
     GB ~~~ G
     GB === B
 
-    sid(subject_id) --- S
-    sn(name) --- S
     S[Subject] --- SB{belong to}
     SB --- B
 
-    lid(lang_id) --- L
-    lnm(lang_name) --- L
-
     L[Language] --- LB{written}
     LB === B
-
-    bt(title) --- B
-    bid(book_id) --- B
-    bf(fiction) --- B
-    be(edition) --- B
-    bp(pub_date) --- B
 
     B ~~~ BC{has} ==> B
     BC ~~~ B
@@ -69,9 +51,6 @@ graph LR
     C ~~~ CBr{is located at} ==> C
     CBr ~~~ C
 
-    C --- cid(copy_ID)
-    C --- cbr(branch_id)
-    C --- cbk(book_id)
     C ~~~ CT{subject of} --> C
     CT ~~~ C
 
@@ -79,22 +58,52 @@ graph LR
     H ~~~ HCh{requested by} --> H
     HCh ~~~ H
 
+    CBr --> Br[Branch]
+
+    CT ==> T[Transaction]
+    T === TCh{executed by}
+
+    TCh --> Ch[Cardholder]
+    HCh --- Ch
+```
+
+Attributes to add still:
+
+```
+    aid(author_id) --- A
+    af(first_name) --- A
+    al(last_name) --- A
+    aa(about) --- A
+
+    gid(genre_id) --- G
+    gnm(name) --- G
+
+    sid(subject_id) --- S
+    sn(name) --- S
+
+    lid(lang_id) --- L
+    lnm(lang_name) --- L
+
+    bt(title) --- B
+    bid(book_id) --- B
+    bf(fiction) --- B
+    be(edition) --- B
+    bp(pub_date) --- B
+
+    C --- cid(copy_ID)
+    C --- cbr(branch_id)
+    C --- cbk(book_id)
+
     H --- hid(hold_id)
     H --- hch(cardholder)
     H --- hbk(book)
     H --- hts(timestamp)
     H --- hst(status)
 
-    CBr --> Br[Branch]
-
     Br --- brd(branch_id)
     Br --- bn(name)
     Br --- ba(street_addr)
     Br --- bz(zip)
-
-    CT ==> T[Transaction]
-
-    T === TCh{executed by}
 
     T --- tid(transaction_id)
     T --- tch(cardholder)
@@ -102,10 +111,6 @@ graph LR
     T --- tts(timestamp)
     T --- ttp(type)
     T --- tdt(due_date)
-
-    TCh --> Ch[Cardholder]
-
-    HCh --- Ch
 
     Ch --- chid(cardholder_id)
     Ch --- chnm(card_num)
