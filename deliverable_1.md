@@ -22,7 +22,7 @@ graph TD
     GB ---> B
     SB --> B
     LB --> B
-    B --- CB{has many}
+    B --- CB{has}
     C[Copy] ~~~ CB --> C
     C ~~~ CBr{is located at} --> C
     CBr --- Br[Branch]
