@@ -13,7 +13,7 @@
 <!--![Entity relationship diagram, using Chen notation](erd.svg)-->
 
 ```mermaid
-graph LR
+graph TD
     A[Author] ~~~ AB{writes} --> A
     G[Genre] --- GB{belong to}
     S[Subject] ~~~ SB{belong to} --> S
