@@ -68,12 +68,12 @@ graph LR
 
     C ~~~ CBr{is located at} ---> C
     CBr ~~~ C
-    C ~~~ CT{subject of} --> C
-    CT ~~~ C
 
     C --- cid(copy_ID)
     C --- cbr(branch_id)
     C --- cbk(book_id)
+    C ~~~ CT{subject of} --> C
+    CT ~~~ C
 
     BH --- H[Hold]
     H ~~~ HCh{requested by} --> H
