@@ -14,9 +14,19 @@
 
 ```mermaid
 graph TD
+    aid(author_id) --- A
+    af(first_name) --- A
+    al(last_name) --- A
+    aa(about) --- A
     A[Author] ~~~ AB{writes} --> A
+    gid(genre_id) --- G
+    gnm(name) --- G
     G[Genre] --- GB{belong to}
+    sid(subject_id) --- S
+    sn(name) --- S
     S[Subject] ~~~ SB{belong to} --> S
+    lid(lang_id) --- L
+    lnm(lang_name) --- L
     L[Language] ~~~ LB{written} --> L
     AB --> B[Book]
     GB ---> B
@@ -45,19 +55,9 @@ These attributes haven't been incorporated into above diagram yet:
 
 ```mermaid
 
-    lid(lang_id) --- L
-    lnm(lang_name) --- L
 
-    aid(author_id) --- A
-    af(first_name) --- A
-    al(last_name) --- A
-    aa(about) --- A
 
-    gid(genre_id) --- G
-    gnm(name) --- G
 
-    sid(subject_id) --- S
-    sn(name) --- S
 ```
 
 ## Relational Schema
