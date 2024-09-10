@@ -32,14 +32,14 @@ graph LR
     al(last_name) --- A
     aa(about) --- A
 
-    A[Author] --- AB{writes}
-    AB --- B[Book]
+    A[Author] -— AB{writes}
+    AB === B[Book]
 
     gid(genre_id) --- G
     gnm(name) --- G
     G[Genre] ~~~ GB{belong to} --> G
     GB ~~~ G
-    GB --- B
+    GB === B
 
     sid(subject_id) --- S
     sn(name) --- S
@@ -50,7 +50,7 @@ graph LR
     lnm(lang_name) --- L
 
     L[Language] --- LB{written}
-    LB --- B
+    LB === B
 
     bt(title) --- B
     bid(book_id) --- B
@@ -58,15 +58,15 @@ graph LR
     be(edition) --- B
     bp(pub_date) --- B
 
-    B ~~~ BC{has} --> B
+    B ~~~ BC{has} ==> B
     BC ~~~ B
     B ~~~ BH{subject of} --> B
     BH ~~~ B
 
-    C[Copy] ~~~ BC --> C
+    C[Copy] ~~~ BC ==> C
     BC ~~~ C
 
-    C ~~~ CBr{is located at} ---> C
+    C ~~~ CBr{is located at} ==> C
     CBr ~~~ C
 
     C --- cid(copy_ID)
@@ -75,10 +75,9 @@ graph LR
     C ~~~ CT{subject of} --> C
     CT ~~~ C
 
-    BH --- H[Hold]
+    BH === H[Hold]
     H ~~~ HCh{requested by} --> H
     HCh ~~~ H
-    HCh --- Ch
 
     H --- hid(hold_id)
     H --- hch(cardholder)
@@ -86,16 +85,17 @@ graph LR
     H --- hts(timestamp)
     H --- hst(status)
 
-    CBr ---> Br[Branch]
+    CBr --> Br[Branch]
 
     Br --- brd(branch_id)
     Br --- bn(name)
     Br --- ba(street_addr)
     Br --- bz(zip)
 
-    CT --> T[Transaction]
+    CT ==> T[Transaction]
 
-    T --- TCh{executed by}
+    T === TCh{executed by}
+
     T --- tid(transaction_id)
     T --- tch(cardholder)
     T --- tcp(copy)
@@ -103,7 +103,9 @@ graph LR
     T --- ttp(type)
     T --- tdt(due_date)
 
-    TCh ---> Ch[Cardholder]
+    TCh --> Ch[Cardholder]
+
+    HCh --- Ch
 
     Ch --- chid(cardholder_id)
     Ch --- chnm(card_num)
