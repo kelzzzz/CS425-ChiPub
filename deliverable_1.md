@@ -22,6 +22,11 @@ graph TD
     GB ---> B
     SB --> B
     LB --> B
+    bt(title) --- B
+    bid(book_id) --- B
+    bf(fiction) --- B
+    be(edition) --- B
+    bp(pub_date) --- B
     B --- CB{has}
     C[Copy] ~~~ CB --> C
     C ~~~ CBr{is located at} --> C
@@ -39,11 +44,6 @@ graph TD
 These attributes haven't been incorporated into above diagram yet:
 
 ```mermaid
-    bt(title) --- B
-    bid(book_id) --- B
-    bf(fiction) --- B
-    be(edition) --- B
-    bp(pub_date) --- B
 
     lid(lang_id) --- L
     lnm(lang_name) --- L
