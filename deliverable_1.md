@@ -27,24 +27,25 @@
 
 ```mermaid
 graph LR
-    %% an Author can write
+    %% an Author can write one or more Books
+    %% every book is written by at least one Author
     A[Author] --- AB{writes}
-
-    %% 1 Genre can contain one or more books
-    %% every book belongs to a Genre
+    AB === B[Book]
+    
+    %% one Genre can contain one or more Books
+    %% every Book belongs to one Genre
     G[Genre] ~~~ GB{belong to} --> G
     GB ~~~ G 
     GB === B
 
-    %% one or more Subjects can belong
-    S[Subject] --- SB{belong to}
-
-    %% one or more Languages can write
-    L[Language] --- LB{written}
-
-    %% every book is written by at least one
-    AB === B[Book]
+    %% a Subject can describe one or more Books
+    %% a Book can be described by one or more Subjects
+    S[Subject] --- SB{describe}
     SB --- B
+
+    %% one or more Languages can be used to write a Book
+    %% a Book must be written in at least one Language
+    L[Language] --- LB{written}
     LB === B
 
     B ~~~ BC{has} ==> B
