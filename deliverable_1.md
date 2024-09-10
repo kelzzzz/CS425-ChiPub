@@ -13,7 +13,7 @@
 <!--![Entity relationship diagram, using Chen notation](erd.svg)-->
 
 ```mermaid
-graph TD
+graph LR
     aid(author_id) --- A
     af(first_name) --- A
     al(last_name) --- A
@@ -40,24 +40,39 @@ graph TD
     B --- CB{has}
     C[Copy] ~~~ CB --> C
     C ~~~ CBr{is located at} --> C
-    CBr --- Br[Branch]
     C --- CT{subject of}
-    CT --> T[Transaction]
     C --- CH{subject of}
+    C --- cid(copy_ID)
+    C --- cbr(branch)
+    CBr --- Br[Branch]
+    Br --- brd(branch_id)
+    Br --- bn(name)
+    Br --- ba(street_addr)
+    Br --- bz(zip)
+    CT --> T[Transaction]
     CH --> H[Hold]
     T ~~~ TCh{executed by} --> T
+    T --- tid(transaction_id)
+    T --- tch(cardholder)
+    T --- tcp(copy)
+    T --- tts(timestamp)
+    T --- ttp(type)
+    T --- tdt(due_date)
     TCh --- Ch[Cardholder]
     H ~~~ HCh{requested by} --> H
+    H --- hid(hold_id)
+    H --- hch(cardholder)
+    H --- hbk(book)
+    H --- hts(timestamp)
+    H --- hst(status)
     HCh --- Ch
-```
-
-These attributes haven't been incorporated into above diagram yet:
-
-```mermaid
-
-
-
-
+    Ch --- chid(cardholder_id)
+    Ch --- chnm(card_num)
+    Ch --- chfn(first_name)
+    Ch --- chln(last_name)
+    Ch --- chsa(street_address)
+    Ch --- chz(zip)
+    Ch --- chpw(password)
 ```
 
 ## Relational Schema
