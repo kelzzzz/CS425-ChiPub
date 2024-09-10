@@ -32,7 +32,7 @@ graph LR
     al(last_name) --- A
     aa(about) --- A
 
-    A[Author] -— AB{writes}
+    A[Author] --- AB{writes}
     AB === B[Book]
 
     gid(genre_id) --- G
