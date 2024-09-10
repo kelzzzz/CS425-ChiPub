@@ -8,6 +8,19 @@
 
 </div>
 
+## TODO:
+
+- [ ] ERD
+    - [x] get all E, R, & attrs into diagram
+    - [ ] fix cardinality
+    - [ ] include participation
+    - [ ] fix arrowless link problem mermaid-js/mermaid/issues/5813
+    - [ ] review for edits/corrections
+- [ ] Relational Schema
+    - [x] draft
+    - [ ] review/make names match ERD
+- [ ] Business Rules
+
 ## Entity Relationship Diagram
 
 <!--![Entity relationship diagram, using Chen notation](erd.svg)-->
@@ -18,54 +31,80 @@ graph LR
     af(first_name) --- A
     al(last_name) --- A
     aa(about) --- A
-    A[Author] ~~~ AB{writes} --> A
+
+    A[Author] --- AB{writes}
+    AB --- B[Book]
+
     gid(genre_id) --- G
     gnm(name) --- G
-    G[Genre] --- GB{belong to}
+    G[Genre] ~~~ GB{belong to} --> G
+    GB ~~~ G
+    GB --- B
+
     sid(subject_id) --- S
     sn(name) --- S
-    S[Subject] ~~~ SB{belong to} --> S
+    S[Subject] --- SB{belong to}
+    SB --- B
+
     lid(lang_id) --- L
     lnm(lang_name) --- L
-    L[Language] ~~~ LB{written} --> L
-    AB --> B[Book]
-    GB ---> B
-    SB --> B
-    LB --> B
+
+    L[Language] --- LB{written}
+    LB --- B
+
     bt(title) --- B
     bid(book_id) --- B
     bf(fiction) --- B
     be(edition) --- B
     bp(pub_date) --- B
-    B --- CB{has}
-    C[Copy] ~~~ CB --> C
-    C ~~~ CBr{is located at} --> C
-    C --- CT{subject of}
-    C --- CH{subject of}
+
+    B ~~~ BC{has} --> B
+    BC ~~~ B
+    B ~~~ BH{subject of} --> B
+    BH ~~~ B
+
+    C[Copy] ~~~ BC --> C
+    BC ~~~ C
+
+    C ~~~ CBr{is located at} ---> C
+    CBr ~~~ C
+    C ~~~ CT{subject of} --> C
+    CT ~~~ C
+
     C --- cid(copy_ID)
-    C --- cbr(branch)
-    CBr --- Br[Branch]
+    C --- cbr(branch_id)
+    C --- cbk(book_id)
+
+    BH --- H[Hold]
+    H ~~~ HCh{requested by} --> H
+    HCh ~~~ H
+    HCh --- Ch
+
+    H --- hid(hold_id)
+    H --- hch(cardholder)
+    H --- hbk(book)
+    H --- hts(timestamp)
+    H --- hst(status)
+
+    CBr ---> Br[Branch]
+
     Br --- brd(branch_id)
     Br --- bn(name)
     Br --- ba(street_addr)
     Br --- bz(zip)
+
     CT --> T[Transaction]
-    CH --> H[Hold]
-    T ~~~ TCh{executed by} --> T
+
+    T --- TCh{executed by}
     T --- tid(transaction_id)
     T --- tch(cardholder)
     T --- tcp(copy)
     T --- tts(timestamp)
     T --- ttp(type)
     T --- tdt(due_date)
-    TCh --- Ch[Cardholder]
-    H ~~~ HCh{requested by} --> H
-    H --- hid(hold_id)
-    H --- hch(cardholder)
-    H --- hbk(book)
-    H --- hts(timestamp)
-    H --- hst(status)
-    HCh --- Ch
+
+    TCh ---> Ch[Cardholder]
+
     Ch --- chid(cardholder_id)
     Ch --- chnm(card_num)
     Ch --- chfn(first_name)
