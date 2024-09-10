@@ -14,10 +14,50 @@
 
 ```mermaid
 graph LR
-    A[A] -- link --> B((B))
-    A --> C(C)
-    B --> D{D}
-    C --> D
+    A[Author] ~~~ AB{writes} --> A
+    G[Genre] --- GB{belong to}
+    S[Subject] ~~~ SB{belong to} --> S
+    L[Language] ~~~ LB{written} --> L
+    AB --> B[Book]
+    GB ---> B
+    SB --> B
+    LB --> B
+    B --- CB{has many}
+    C[Copy] ~~~ CB --> C
+    C ~~~ CBr{is located at} --> C
+    CBr --- Br[Branch]
+    C --- CT{subject of}
+    CT --> T[Transaction]
+    C --- CH{subject of}
+    CH --> H[Hold]
+    T ~~~ TCh{executed by} --> T
+    TCh --- Ch[Cardholder]
+    H ~~~ HCh{requested by} --> H
+    HCh --- Ch
+```
+
+These attributes haven't been incorporated into above diagram yet:
+
+```mermaid
+    bt(title) --- B
+    bid(book_id) --- B
+    bf(fiction) --- B
+    be(edition) --- B
+    bp(pub_date) --- B
+
+    lid(lang_id) --- L
+    lnm(lang_name) --- L
+
+    aid(author_id) --- A
+    af(first_name) --- A
+    al(last_name) --- A
+    aa(about) --- A
+
+    gid(genre_id) --- G
+    gnm(name) --- G
+
+    sid(subject_id) --- S
+    sn(name) --- S
 ```
 
 ## Relational Schema
