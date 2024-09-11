@@ -48,23 +48,25 @@ graph LR
     L[Language] --- LB{written}
     LB === B
 
-    %% every Book has at least one Copy
-    %% every Copy has only one Book
+    %% a book Book may have one or more Copy
+    %% every Copy has exactly one Book
     B ~~~ BC{has} ==> B
     BC ~~~ B
     C[Copy] ~~~ BC ==> C
     BC ~~~ C
 
-    B ~~~ BH{subject of} --> B
+    %% a Book may be requested for one or more Hold
+    %% every Hold must be requested for exactly one Book
+    B ~~~ BH{requested} --> B
     BH ~~~ B
-
+    BH === H[Hold]
+    
     C ~~~ CBr{is located at} ==> C
     CBr ~~~ C
 
     C ~~~ CT{subject of} --> C
     CT ~~~ C
 
-    BH === H[Hold]
     H ~~~ HCh{requested by} --> H
     HCh ~~~ H
 
