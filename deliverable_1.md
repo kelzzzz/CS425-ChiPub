@@ -48,13 +48,15 @@ graph LR
     L[Language] --- LB{written}
     LB === B
 
+    %% every Book has at least one Copy
+    %% every Copy has only one Book
     B ~~~ BC{has} ==> B
     BC ~~~ B
-    B ~~~ BH{subject of} --> B
-    BH ~~~ B
-
     C[Copy] ~~~ BC ==> C
     BC ~~~ C
+
+    B ~~~ BH{subject of} --> B
+    BH ~~~ B
 
     C ~~~ CBr{is located at} ==> C
     CBr ~~~ C
