@@ -8,47 +8,30 @@
 
 </div>
 
-## TODO:
-
-- [ ] ERD
-  - [x] get all E, R, & attrs into diagram
-  - [ ] fix cardinality
-  - [ ] include participation
-  - [ ] fix arrowless link problem mermaid-js/mermaid/issues/5813
-  - [ ] review for edits/corrections
-- [ ] Relational Schema
-  - [x] draft
-  - [ ] review/make names match ERD
-- [ ] Business Rules
-
 ## Entity Relationship Diagram
 
 ![Entity relationship diagram, using Chen notation](erd.svg)
 
 ## Relational Schema
 
-The main entities, including all necessary data for books, where they're stored, & checking them in/out or placing holds is included in the following entities:
+The main entities, including all necessary data for books & where they're stored:
 
-```
-Book(id, isbn, title, genre_id, fiction, edition, pub_date)
-Author(id, first_name, last_name, about)
-Genre(id, name)
-Subject(id, name)
-Language(id, name)
-Copy(id, book_id, branch_id)
-Cardholder(id, card_num, first_name, last_name, password, street_addr, zip, phone, email)
-Branch(id, name, street_addr, zip)
-```
+1. `Book(id, isbn, title, genre_id, fiction, edition, pub_date)`
+1. `Author(id, first_name, last_name, about)`
+1. `Genre(id, name)`
+1. `Subject(id, name)`
+1. `Language(id, name)`
+1. `Copy(id, book_id, branch_id)`
+1. `Cardholder(id, card_num, first_name, last_name, password, street_addr, zip, phone, email)`
+1. `Branch(id, name, street_addr, zip)`
 
-The following bridge entities are used to handle most many:many relationships:
+The following bridge entities are used to handle checking borrowed books in/out or placing/modifying hold requests, as well as any other many-to-many relationships:
 
-```
-Borrow(copy_id, cardholder_id, out, in, due_date)
-Holds(timestamp, book_id, cardholder_id, status)
-AuthorWriteBook(book_id, author_id)
-SubjectDescribeBook(book_id, subject_id)
-LanguageWrittenInBook(book_id, language_id)
-```
+1. `Borrow(copy_id, cardholder_id, out, in, due_date)`
+1. `Holds(timestamp, book_id, cardholder_id, status)`
+1. `AuthorWriteBook(book_id, author_id)`
+1. `SubjectDescribeBook(book_id, subject_id)`
+1. `LanguageWrittenInBook(book_id, language_id)`
 
 ## Business Rules
 
