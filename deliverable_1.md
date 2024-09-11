@@ -52,4 +52,19 @@ LanguageWrittenInBook(book_id, language_id)
 
 ## Business Rules
 
-... insert rules here when done ...
+1. An Author can write one or more Books;
+   however, every Book is written by at least one Author.
+2. One Genre can contain one or more Books;
+   however, every Book belongs to exactly one Genre.
+3. One or more Subjects may describe a Book.
+   One or more Books may be described by a Subject.
+4. One or more Languages can be used to write a Book;
+   a Book must be written in at least one Language.
+5. A Book may be requested for Hold by one or more Cardholder.
+   A Cardholder may request a Hold for one or more Book.
+6. A book Book may have one or more Copy;
+   however, every Copy has exactly one Book.
+7. A Copy can have one or more Borrow records for one or more Cardholder.
+   A Cardholder can have one or more Borrow records for one or more Copy.
+8. A Copy must be located at exactly one Branch;
+   however; a Branch may have one or more Copy.
