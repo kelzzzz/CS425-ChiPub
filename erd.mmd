@@ -1,0 +1,155 @@
+graph LR
+    %% ===
+    %% AUTHOR
+    %% ---
+
+    %% Attributes
+    aid(author_id) --- A
+    af(first_name) --- A
+    al(last_name) --- A
+    aa(about) --- A
+
+    %% Author to Book
+    %% an Author can write one or more Books
+    %% every Book is written by at least one Author
+    A[Author] --- AB{Writes}
+    AB === B[Book]
+    %% ===
+
+    %% ===
+    %% GENRE
+    %% ---
+
+    %% Attributes
+    gid(genre_id) --- G
+    gnm(name) --- G
+
+    %% Genre to Book
+    %% one Genre can contain one or more Books
+    %% every Book belongs to one Genre
+    %% workaround for reverse pointed arrows
+    G[Genre] ~~~ GB{belong to} --> G
+    %% Using this to attempt to "straighten" back out the lines
+    GB ~~~ G
+    GB === B
+    %% ===
+
+    %% ===
+    %% SUBJECT
+    %% ---
+
+    %% Attributes
+    sid(subject_id) --- S
+    sn(name) --- S
+
+    %% Subject to Book
+    %% a Subject can describe one or more Books
+    %% a Book can be described by one or more Subjects
+    S[Subject] --- SB{Describe}
+    SB --- B
+    %% ===
+
+    %% ===
+    %% LANGUAGE
+    %% ---
+
+    %% Attributes
+    lid(lang_id) --- L
+    lnm(lang_name) --- L
+
+    %% Language to Book
+    %% one or more Languages can be used to write a Book
+    %% a Book must be written in at least one Language
+    L[Language] --- LB{Written}
+    LB === B
+    %% ===
+
+    %% ===
+    %% BOOK
+    %% ---
+
+    %% Attributes
+    bid(book_id) --- B
+    bt(title) --- B
+    bf(fiction) --- B
+    be(edition) --- B
+    bp(pub_date) --- B
+    %% ===
+
+    %% ===
+    %% HOLD (Bridge Entity)
+    %% ---
+
+    %% Attributes
+    H --- hts(timestamp)
+    H --- hst(status)
+
+    %% a Book may be requested for Hold by one or more Cardholder
+    %% a Cardholder may request a Hold for one or more Book
+    B ~~~ H{Hold} --> B
+    H ~~~ B
+    H ==> Ch
+    %% ===
+
+    %% ===
+    %% COPY
+    %% ---
+
+    %% Attributes
+    C --- cid(copy_id)
+    C --- cbk(book_id)
+    C --- cbr(branch_id)
+
+    %% Book to Copy
+    %% a book Book may have one or more Copy
+    %% every Copy has exactly one Book
+    B ~~~ BC{has} ==> B
+    BC ~~~ B
+    BC === C[Copy]
+    %% ===
+
+    %% ===
+    %% BORROW (Bridge Entity)
+    %% ---
+
+    %% a Copy can have one or more Borrow records for one or more Cardholder
+    %% a Cardholder can have one or more Borrow records for one or more Copy
+    C --- Bw{Borrow}
+    Bw --- Ch[Cardholder]
+
+    %% Attributes
+    Bw --- tts(in)
+    Bw --- tot(out)
+    Bw --- tdt(due_date)
+    %% ===
+
+    %% ===
+    %% CARDHOLDER
+    %% ---
+
+    %% Attributes
+    Ch --- chid(cardholder_id)
+    Ch --- chnm(card_num)
+    Ch --- chfn(first_name)
+    Ch --- chln(last_name)
+    Ch --- chsa(street_address)
+    Ch --- chz(zip)
+    Ch --- chpw(password)
+    %% ===
+
+    %% ===
+    %% BRANCH
+    %% ---
+
+    %% a Copy must be located at exactly one Branch
+    %% a Branch may have one or more Copy
+    C ~~~ CBr{located at} === C
+    CBr ~~~ C
+    CBr --> Br[Branch]
+
+    %% Attributes
+    Br --- brd(branch_id)
+    Br --- bn(name)
+    Br --- ba(street_addr)
+    Br --- bz(zip)
+    %% ===

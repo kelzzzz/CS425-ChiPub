@@ -1,0 +1,15 @@
+{
+  "name": "chi-pub",
+  "version": "0.0.1",
+  "description": "A group project for CS 425 Database Organization.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.9.1",
+    "mermaid": "^10.9.1"
+  }
+}
