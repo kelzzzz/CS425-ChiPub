@@ -61,22 +61,26 @@ graph LR
     BH ~~~ B
     BH === H[Hold]
     
-    C ~~~ CBr{is located at} ==> C
+    %% a Copy must be located at exactly one Branch
+    %% a Branch may have one or more Copy
+    C ~~~ CBr{located at} === C
     CBr ~~~ C
-
-    C ~~~ CT{subject of} --> C
-    CT ~~~ C
-
-    H ~~~ HCh{requested by} --> H
-    HCh ~~~ H
-
     CBr --> Br[Branch]
 
+    %% a Copy can be recorded in one or more Transactions
+    %% every Transaction must be recorded for exactly one Copy
+    C ~~~ CT{recorded} --> C
+    CT ~~~ C
     CT ==> T[Transaction]
-    T === TCh{executed by}
 
+    %% a Hold must be requested by exactly one Cardholder
+    %% a Cardholder may request one or more Holds
+    H ~~~ HCh{requested by} --> H
+    HCh ~~~ H
+    HCh === Ch
+
+    T === TCh{executed by}
     TCh --> Ch[Cardholder]
-    HCh --- Ch
 ```
 
 Attributes to add still:
