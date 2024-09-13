@@ -16,22 +16,22 @@
 
 The main entities, including all necessary data for books & where they're stored:
 
-1. `Book(id, isbn, title, genre_id, fiction, edition, pub_date)`
-1. `Author(id, first_name, last_name, about)`
-1. `Genre(id, name)`
-1. `Subject(id, name)`
-1. `Language(id, name)`
-1. `Copy(id, book_id, branch_id)`
-1. `Cardholder(id, card_num, first_name, last_name, password, street_addr, zip, phone, email)`
-1. `Branch(id, name, street_addr, zip)`
+1. Book(<ins>bid</ins>, isbn, title, genre_id, fiction, edition, pub_date)
+1. Author(<ins>aid</ins>, first_name, last_name, about)
+1. Genre(<ins>gid</ins>, name)
+1. Subject(<ins>sid</ins>, name)
+1. Language(<ins>lid</ins>, name)
+1. Copy(<ins>cid</ins>, book_id, branch_id)
+1. Cardholder(<ins>chid</ins>, card_num, first_name, last_name, password, street_addr, zip, phone, email)
+1. Branch(<ins>brid</ins>, name, street_addr, zip)
 
 The following bridge entities are used to handle checking borrowed books in/out or placing/modifying hold requests, as well as any other many-to-many relationships:
 
-1. `Borrow(copy_id, cardholder_id, out, in, due_date)`
-1. `Holds(timestamp, book_id, cardholder_id, status)`
-1. `AuthorWriteBook(book_id, author_id)`
-1. `SubjectDescribeBook(book_id, subject_id)`
-1. `LanguageWrittenInBook(book_id, language_id)`
+1. Cardholder_Copy(<ins>copy_id, cardholder_id, out</ins>, in, due_date)
+1. Holds(<ins>timestamp, book_id, cardholder_id</ins>, status)
+1. Author_Book(<ins>book_id, author_id</ins>)
+1. Subject_Book(<ins>book_id, subject_id</ins>)
+1. Language_Book(<ins>book_id, language_id</ins>)
 
 ## Business Rules
 
