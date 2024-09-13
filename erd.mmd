@@ -4,8 +4,9 @@ graph LR
     %% ---
 
     %% Attributes
-    aid(author_id) --- A
-    af(first_name) --- A
+    aid(author_id) --- an
+    af(first_name) --- an
+    an(name) --- A
     al(last_name) --- A
     aa(about) --- A
 
@@ -13,7 +14,7 @@ graph LR
     %% an Author can write one or more Books
     %% every Book is written by at least one Author
     A[Author] --- AB{Writes}
-    AB === B[Book]
+    AB --- B[Book]
     %% ===
 
     %% ===
@@ -31,7 +32,7 @@ graph LR
     G[Genre] ~~~ GB{belong to} --> G
     %% Using this to attempt to "straighten" back out the lines
     GB ~~~ G
-    GB === B
+    GB --- B
     %% ===
 
     %% ===
@@ -61,7 +62,7 @@ graph LR
     %% one or more Languages can be used to write a Book
     %% a Book must be written in at least one Language
     L[Language] --- LB{Written}
-    LB === B
+    LB --- B
     %% ===
 
     %% ===
@@ -88,7 +89,7 @@ graph LR
     %% a Cardholder may request a Hold for one or more Book
     B ~~~ H{Hold} --> B
     H ~~~ B
-    H ==> Ch
+    H --> Ch
     %% ===
 
     %% ===
@@ -103,9 +104,9 @@ graph LR
     %% Book to Copy
     %% a book Book may have one or more Copy
     %% every Copy has exactly one Book
-    B ~~~ BC{has} ==> B
+    B ~~~ BC{has} --> B
     BC ~~~ B
-    BC === C[Copy]
+    BC --- C[Copy]
     %% ===
 
     %% ===
@@ -130,10 +131,16 @@ graph LR
     %% Attributes
     Ch --- chid(cardholder_id)
     Ch --- chnm(card_num)
-    Ch --- chfn(first_name)
-    Ch --- chln(last_name)
-    Ch --- chsa(street_address)
-    Ch --- chz(zip)
+    chn --- chfn(first_name)
+    chn --- chln(last_name)
+    Ch --- chn(name)
+    Ch --- ca(address)
+    ca --- csn(street_number)
+    ca --- cst(street_name)
+    ca --- caa(apt_number)
+    ca --- cac(city)
+    ca --- cas(state)
+    ca --- cz(zip)
     Ch --- chpw(password)
     %% ===
 
@@ -143,13 +150,18 @@ graph LR
 
     %% a Copy must be located at exactly one Branch
     %% a Branch may have one or more Copy
-    C ~~~ CBr{located at} === C
+    C ~~~ CBr{located at} --- C
     CBr ~~~ C
     CBr --> Br[Branch]
 
     %% Attributes
     Br --- brd(branch_id)
     Br --- bn(name)
-    Br --- ba(street_addr)
-    Br --- bz(zip)
+    Br --- ba(address)
+    ba --- bsn(street_number)
+    ba --- bst(street_name)
+    ba --- baa(apt_number)
+    ba --- bac(city)
+    ba --- bas(state)
+    ba --- bz(zip)
     %% ===
