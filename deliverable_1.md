@@ -22,8 +22,8 @@ The main entities, including all necessary data for books & where they're stored
 1. Subject(<ins>sid</ins>, name)
 1. Language(<ins>lid</ins>, name)
 1. Copy(<ins>cid</ins>, book_id, branch_id)
-1. Cardholder(<ins>chid</ins>, card_num, first_name, last_name, password, street_addr, zip, phone, email)
-1. Branch(<ins>brid</ins>, name, street_addr, zip)
+1. Cardholder(<ins>chid</ins>, card_num, first_name, last_name, password, addr_num, addr_street, addr_apt, addr_city, addr_state, addr_zip, phone, email)
+1. Branch(<ins>brid</ins>, name, addr_num, addr_street, addr_apt, addr_city, addr_state, addr_zip)
 
 The following bridge entities are used to handle checking borrowed books in/out or placing/modifying hold requests, as well as any other many-to-many relationships:
 
