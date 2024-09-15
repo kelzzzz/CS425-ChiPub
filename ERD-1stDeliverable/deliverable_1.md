@@ -45,9 +45,9 @@ The following bridge entities are used to handle checking borrowed books in/out 
    a Book must be written in at least one Language.
 5. A Book may be requested for Hold by one or more Cardholder.
    A Cardholder may request a Hold for one or more Book.
-6. A book Book may have one or more Copy;
+6. A Book may have one or more Copy;
    however, every Copy has exactly one Book.
 7. A Copy can have one or more Borrow records for one or more Cardholder.
    A Cardholder can have one or more Borrow records for one or more Copy.
-8. A Copy must be located at exactly one Branch;
-   however; a Branch may have one or more Copy.
+8. A Copy must be located at exactly one Branch,
+   however, a Branch may have one or more Copy.
