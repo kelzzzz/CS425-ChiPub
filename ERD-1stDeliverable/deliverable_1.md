@@ -27,7 +27,7 @@ The main entities, including all necessary data for books & where they're stored
 
 The following bridge entities are used to handle checking borrowed books in/out or placing/modifying hold requests, as well as any other many-to-many relationships:
 
-1. Cardholder_Copy(<ins>copy_id, cardholder_id, out</ins>, in, due_date)
+1. Cardholder_Copy(<ins>copy_id, cardholder_id</ins>, out, in, due_date)
 1. Holds(<ins>timestamp, book_id, cardholder_id</ins>, status)
 1. Author_Book(<ins>book_id, author_id</ins>)
 1. Subject_Book(<ins>book_id, subject_id</ins>)
