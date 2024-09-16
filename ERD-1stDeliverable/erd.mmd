@@ -1,20 +1,26 @@
+---
+themeVariables:
+  fontSize: 10px
+---
+
 graph LR
     %% ===
     %% AUTHOR
     %% ---
 
     %% Attributes
-    aid(author_id) --- an
-    af(first_name) --- an
-    an(name) --- A
-    al(last_name) --- A
-    aa(about) --- A
+    aid(<ins>author_id</ins>):::attr --- A
+    af(first_name):::subAttr --- an
+    al(last_name):::subAttr --- an
+    an(name):::attr --- A
+    aa(about):::attr --- A
 
     %% Author to Book
+    %% 1..M : 0..M
     %% an Author can write one or more Books
     %% every Book is written by at least one Author
-    A[Author] --- AB{Writes}
-    AB --- B[Book]
+    A[Author]:::entity --- AB{Writes}:::relation
+    AB === B[Book]:::entity
     %% ===
 
     %% ===
@@ -22,17 +28,18 @@ graph LR
     %% ---
 
     %% Attributes
-    gid(genre_id) --- G
-    gnm(name) --- G
+    gid(<ins>genre_id</ins>):::attr --- G
+    gnm(name):::attr --- G
 
     %% Genre to Book
+    %% 1..M : 0..1
     %% one Genre can contain one or more Books
     %% every Book belongs to one Genre
     %% workaround for reverse pointed arrows
-    G[Genre] ~~~ GB{belong to} --> G
+    G[Genre]:::entity ~~~ GB{belong to}:::relation --> G
     %% Using this to attempt to "straighten" back out the lines
     GB ~~~ G
-    GB --- B
+    GB === B
     %% ===
 
     %% ===
@@ -40,13 +47,14 @@ graph LR
     %% ---
 
     %% Attributes
-    sid(subject_id) --- S
-    sn(name) --- S
+    sid(<ins>subject_id</ins>):::attr--- S
+    sn(name):::attr--- S
 
     %% Subject to Book
+    %% 0..M : 0..M
     %% a Subject can describe one or more Books
     %% a Book can be described by one or more Subjects
-    S[Subject] --- SB{Describe}
+    S[Subject]:::entity --- SB{Describe}:::relation
     SB --- B
     %% ===
 
@@ -55,14 +63,15 @@ graph LR
     %% ---
 
     %% Attributes
-    lid(lang_id) --- L
-    lnm(lang_name) --- L
+    lid(<ins>lang_id</ins>):::attr--- L
+    lnm(lang_name):::attr--- L
 
     %% Language to Book
+    %% 1..M : 0..M
     %% one or more Languages can be used to write a Book
     %% a Book must be written in at least one Language
-    L[Language] --- LB{Written}
-    LB --- B
+    L[Language]:::entity --- LB{Written}:::relation
+    LB === B
     %% ===
 
     %% ===
@@ -70,58 +79,59 @@ graph LR
     %% ---
 
     %% Attributes
-    bid(book_id) --- B
-    bt(title) --- B
-    bf(fiction) --- B
-    be(edition) --- B
-    bp(pub_date) --- B
+    bid(<ins>book_id</ins>):::attr--- B
+    bt(title):::attr--- B
+    bf(fiction):::attr--- B
+    be(edition):::attr--- B
+    bp(pub_date):::attr--- B
     %% ===
 
     %% ===
-    %% HOLD (Bridge Entity)
+    %% HOLD (Book to Cardholder, Bridge Entity)
     %% ---
+    %% 0..M : 0..M
 
     %% Attributes
-    H --- hts(timestamp)
-    H --- hst(status)
+    H --- hts(timestamp):::attr
+    H --- hst(status):::attr
 
     %% a Book may be requested for Hold by one or more Cardholder
     %% a Cardholder may request a Hold for one or more Book
-    B ~~~ H{Hold} --> B
-    H ~~~ B
-    H --> Ch
+    B ~~~ H{Hold}:::relation --- B
+    H --- Ch
     %% ===
 
     %% ===
     %% COPY
     %% ---
 
-    %% Attributes
-    C --- cid(copy_id)
-    C --- cbk(book_id)
-    C --- cbr(branch_id)
-
     %% Book to Copy
+    %% 1..1 : 0..M
     %% a book Book may have one or more Copy
     %% every Copy has exactly one Book
-    B ~~~ BC{has} --> B
+    B ~~~ BC{has}:::relation --> B
     BC ~~~ B
-    BC --- C[Copy]
+    BC === C[Copy]:::entity
     %% ===
 
     %% ===
     %% BORROW (Bridge Entity)
     %% ---
+    %% 0..M : 0..M
 
     %% a Copy can have one or more Borrow records for one or more Cardholder
     %% a Cardholder can have one or more Borrow records for one or more Copy
-    C --- Bw{Borrow}
-    Bw --- Ch[Cardholder]
+    C --- Bw{Borrow}:::relation
+    Bw --- Ch[Cardholder]:::entity
 
     %% Attributes
-    Bw --- tts(in)
-    Bw --- tot(out)
-    Bw --- tdt(due_date)
+    Bw --- tts(in):::attr
+    Bw --- tot(out):::attr
+    Bw --- tdt(due_date):::derAttr
+
+    %% COPY Attributes
+    %% placed here to correct order of appearance in output
+    C --- cid(<ins>copy_id</ins>):::attr
     %% ===
 
     %% ===
@@ -129,39 +139,49 @@ graph LR
     %% ---
 
     %% Attributes
-    Ch --- chid(cardholder_id)
-    Ch --- chnm(card_num)
-    chn --- chfn(first_name)
-    chn --- chln(last_name)
-    Ch --- chn(name)
-    Ch --- ca(address)
-    ca --- csn(street_number)
-    ca --- cst(street_name)
-    ca --- caa(apt_number)
-    ca --- cac(city)
-    ca --- cas(state)
-    ca --- cz(zip)
-    Ch --- chpw(password)
+    Ch --- chid(<ins>cardholder_id</ins>):::attr
+    Ch --- chnm(card_num):::attr
+    chn --- chfn(first_name):::subAttr
+    chn --- chln(last_name):::subAttr
+    Ch --- chn(name):::attr
+    Ch --- ca(address):::attr
+    ca --- csn(street_number):::subAttr
+    ca --- cst(street_name):::subAttr
+    ca --- caa(apt_number):::subAttr
+    ca --- cac(city):::subAttr
+    ca --- cas(state):::subAttr
+    ca --- cz(zip):::subAttr
+    Ch --- chpw(password):::attr
     %% ===
 
     %% ===
     %% BRANCH
     %% ---
 
+    %% Copy to Branch
+    %% 0..M : 1..1
     %% a Copy must be located at exactly one Branch
     %% a Branch may have one or more Copy
-    C ~~~ CBr{located at} --- C
+    C ~~~ CBr{located at}:::relation === C
     CBr ~~~ C
-    CBr --> Br[Branch]
+    CBr --> Br[Branch]:::entity
 
     %% Attributes
-    Br --- brd(branch_id)
-    Br --- bn(name)
-    Br --- ba(address)
-    ba --- bsn(street_number)
-    ba --- bst(street_name)
-    ba --- baa(apt_number)
-    ba --- bac(city)
-    ba --- bas(state)
-    ba --- bz(zip)
+    Br --- brd(<ins>branch_id</ins>):::attr
+    Br --- bn(name):::attr
+    Br --- ba(address):::attr
+    ba --- bsn(street_number):::subAttr
+    ba --- bst(street_name):::subAttr
+    ba --- baa(apt_number):::subAttr
+    ba --- bac(city):::subAttr
+    ba --- bas(state):::subAttr
+    ba --- bz(zip):::subAttr
     %% ===
+
+    classDef entity fill:#c6e0b4;
+    classDef relation fill:#9dc3e5;
+    classDef attr fill:#fbf49b;
+    classDef subAttr fill:#fbf49b, stroke:red;
+    classDef derAttr fill:#fbf49b, stroke:red, stroke-dasharray: 10 5;
+    %% optional attr links
+    linkStyle 1,4,24,38,43,49,63 stroke:red, stroke-dasharray: 10 5;
