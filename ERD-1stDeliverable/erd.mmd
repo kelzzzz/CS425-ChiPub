@@ -1,15 +1,11 @@
----
-themeVariables:
-  fontSize: 10px
----
-
 graph LR
     %% ===
     %% AUTHOR
     %% ---
 
     %% Attributes
-    aid(<ins>author_id</ins>):::attr --- A
+    aid(author_id):::attr --- A
+    class aid pk;
     af(first_name):::subAttr --- an
     al(last_name):::subAttr --- an
     an(name):::attr --- A
@@ -28,7 +24,8 @@ graph LR
     %% ---
 
     %% Attributes
-    gid(<ins>genre_id</ins>):::attr --- G
+    gid(genre_id):::attr --- G
+    class gid pk;
     gnm(name):::attr --- G
 
     %% Genre to Book
@@ -47,7 +44,8 @@ graph LR
     %% ---
 
     %% Attributes
-    sid(<ins>subject_id</ins>):::attr--- S
+    sid(subject_id):::attr--- S
+    class sid pk;
     sn(name):::attr--- S
 
     %% Subject to Book
@@ -63,7 +61,8 @@ graph LR
     %% ---
 
     %% Attributes
-    lid(<ins>lang_id</ins>):::attr--- L
+    lid(lang_id):::attr--- L
+    class lid pk;
     lnm(lang_name):::attr--- L
 
     %% Language to Book
@@ -79,7 +78,8 @@ graph LR
     %% ---
 
     %% Attributes
-    bid(<ins>book_id</ins>):::attr --- B
+    bid(book_id):::attr --- B
+    class bid pk;
     bt(title):::attr --- B
     bi(isbn):::attr --- B
     bf(fiction):::attr --- B
@@ -132,7 +132,8 @@ graph LR
 
     %% COPY Attributes
     %% placed here to correct order of appearance in output
-    C --- cid(<ins>copy_id</ins>):::attr
+    C --- cid(copy_id):::attr
+    class cid pk;
     %% ===
 
     %% ===
@@ -140,7 +141,8 @@ graph LR
     %% ---
 
     %% Attributes
-    Ch --- chid(<ins>cardholder_id</ins>):::attr
+    Ch --- chid(cardholder_id):::attr
+    class chid pk;
     Ch --- chnm(card_num):::attr
     chn --- chfn(first_name):::subAttr
     chn --- chln(last_name):::subAttr
@@ -168,7 +170,8 @@ graph LR
     CBr --> Br[Branch]:::entity
 
     %% Attributes
-    Br --- brd(<ins>branch_id</ins>):::attr
+    Br --- brd(branch_id):::attr
+    class brd pk;
     Br --- bn(name):::attr
     Br --- ba(address):::attr
     ba --- bsn(street_number):::subAttr
@@ -181,8 +184,9 @@ graph LR
 
     classDef entity fill:#c6e0b4;
     classDef relation fill:#9dc3e5;
-    classDef attr fill:#fbf49b;
-    classDef subAttr fill:#fbf49b, stroke:red;
-    classDef derAttr fill:#fbf49b, stroke:red, stroke-dasharray: 10 5;
+    classDef attr,subAttr,derAttr fill:#fbf49b;
+    classDef subAttr,derAttr stroke:red;
+    classDef derAttr stroke-dasharray: 10 5;
+    classDef pk text-decoration: underline;
     %% optional attr links
     linkStyle 1,4,24,38,43,49,63 stroke:red, stroke-dasharray: 10 5;
