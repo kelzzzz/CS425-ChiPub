@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-db=hw_1_2
-glob=queries/*.sql
+db=chi_pub
 
-cd /var/src
+cd "$(dirname "$0")"
 
 echo ""
 echo "Tearing down database & tables..."

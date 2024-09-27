@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-db=hw_1_2
+db=chi_pub
 glob=queries/*.sql
 
 cd /var/src
