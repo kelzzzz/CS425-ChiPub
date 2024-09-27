@@ -37,6 +37,12 @@ graph LR
     %% Using this to attempt to "straighten" back out the lines
     GB ~~~ G
     GB === B
+
+    %% Genre to Genre
+    %% 0..1 : 0..M
+    %% a Genre must may to exactly one super Genre
+    %% a Genre may have 1 or more sub Genre
+    G --> G
     %% ===
 
     %% ===
@@ -110,9 +116,9 @@ graph LR
     %% 1..1 : 0..M
     %% a book Book may have one or more Copy
     %% every Copy has exactly one Book
-    B ~~~ BC{has}:::relation --> B
+    B ~~~ BC{has}:::weakRelation --> B
     BC ~~~ B
-    BC === C[Copy]:::entity
+    BC === C[Copy]:::weakEntity
     %% ===
 
     %% ===
@@ -182,11 +188,11 @@ graph LR
     ba --- bz(zip):::subAttr
     %% ===
 
-    classDef entity fill:#c6e0b4;
-    classDef relation fill:#9dc3e5;
+    classDef entity,weakEntity fill:#c6e0b4;
+    classDef relation,weakRelation fill:#9dc3e5;
     classDef attr,subAttr,derAttr fill:#fbf49b;
     classDef subAttr,derAttr stroke:red;
     classDef derAttr stroke-dasharray: 10 5;
     classDef pk text-decoration: underline;
     %% optional attr links
-    linkStyle 1,4,24,38,43,49,63 stroke:red, stroke-dasharray: 10 5;
+    linkStyle 1,4,26,39,45,51,65 stroke:red, stroke-dasharray: 10 5;
