@@ -4,7 +4,8 @@
   "description": "A group project for CS 425 Database Organization.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "grip deliverable_1.md 0.0.0.0",
+    "build:svg": "mmdc -i erd.mmd --cssFile erd.css -o erd.svg"
   },
   "author": "",
   "license": "ISC",
