@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0
+    command: --secure-file-priv=/var/data
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - type: bind
+        source: ./src
+        target: /var/src
+      - type: bind
+        source: ./data
+        target: /var/data
