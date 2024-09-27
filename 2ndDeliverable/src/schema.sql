@@ -3,34 +3,34 @@ create database if not exists chi_pub;
 use chi_pub;
 
 create table if not exists author (
-    aid uuid primary key,
+    aid int primary key,
     first_name varchar(510),
     last_name varchar(510) not null,
     about text
 );
 
 create table if not exists genre (
-    gid uuid primary key,
-    name vachar(127)
+    gid int primary key,
+    name varchar(127)
 );
 
 create table if not exists subject (
-    sid uuid primary key,
+    sid int primary key,
     name varchar(255)
 );
 
 create table if not exists language (
-    lid uuid primary key,
+    lid int primary key,
     name varchar(255)
 );
 
 create table if not exists book (
-    bid uuid primary key, 
-    isbn char(13) not null, 
-    title varchar(255) not null, 
-    genre_id uuid, 
-    fiction bool, 
-    edition varchar(127), 
+    bid int primary key,
+    isbn char(13) not null,
+    title varchar(255) not null,
+    genre_id int,
+    fiction bit(1), -- single bit bool repr, 0 is false, 1 is true
+    edition varchar(127),
     pub_date date,
     foreign key (genre_id)
         references genre(gid)
@@ -38,8 +38,8 @@ create table if not exists book (
 );
 
 create table if not exists author_book (
-    author_id uuid not null,
-    book_id uuid not null,
+    author_id int not null,
+    book_id int not null,
     primary key (author_id, book_id),
     foreign key (author_id)
         references author(aid)
@@ -50,8 +50,8 @@ create table if not exists author_book (
 );
 
 create table if not exists subject_book (
-    book_id uuid,
-    subject_id uuid,
+    book_id int,
+    subject_id int,
     primary key (subject_id, book_id),
     foreign key (book_id)
         references book(bid)
@@ -62,8 +62,8 @@ create table if not exists subject_book (
 );
 
 create table if not exists language_book (
-    book_id uuid,
-    language_id uuid,
+    book_id int,
+    language_id int,
     primary key (language_id, book_id),
     foreign key (book_id)
         references book(bid)
@@ -74,8 +74,8 @@ create table if not exists language_book (
 );
 
 create table if not exists cardholder (
-    chid uuid primary key,
-    card_num uuid not null,
+    chid int primary key,
+    card_num int not null,
     first_name varchar(510),
     last_name varchar(510) not null,
     password varchar(127),
@@ -89,7 +89,7 @@ create table if not exists cardholder (
 );
 
 create table if not exists cardholder_phone (
-    cardholder_id uuid not null,
+    cardholder_id int not null,
     phone_number char(10) not null,
     primary key (cardholder_id, phone_number),
     foreign key (cardholder_id)
@@ -99,8 +99,8 @@ create table if not exists cardholder_phone (
 
 create table if not exists book_cardholder (
     timestamp timestamp not null,
-    book_id uuid not null,
-    cardholder_id uuid not null,
+    book_id int not null,
+    cardholder_id int not null,
     status enum('pending', 'fulfilled', 'cancelled') not null, -- this will default to 'pending' if no value is given
     primary key (timestamp, book_id, cardholder_id),
     foreign key (book_id)
@@ -112,20 +112,20 @@ create table if not exists book_cardholder (
 );
 
 create table if not exists branch (
-    brid uuid primary key,
+    brid int primary key,
     name varchar(255) not null,
     addr_num smallint not null,
     addr_street varchar(255) not null,
     addr_apt varchar(31),
     addr_city varchar(127) not null,
     addr_state varchar(127) not null,
-    addr_zip smallint not null,
+    addr_zip smallint not null
 );
 
 create table if not exists copy (
-    cid uuid primary key,
-    book_id uuid uuid not null,
-    branch_id uuid not null,
+    cid int primary key,
+    book_id int not null,
+    branch_id int not null,
     foreign key (book_id)
         references book(bid)
         on delete cascade,
@@ -135,10 +135,10 @@ create table if not exists copy (
 );
 
 create table if not exists cardholder_copy (
-    copy_id uuid not null,
-    cardholder_id uuid not null,
-    out timestamp not null,
-    in timestamp,
+    copy_id int not null,
+    cardholder_id int not null,
+    checked_out timestamp not null,
+    checked_in timestamp,
     primary key (copy_id, cardholder_id),
     foreign key (copy_id)
         references copy(cid)
