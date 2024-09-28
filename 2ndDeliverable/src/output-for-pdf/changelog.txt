@@ -1,0 +1,13 @@
+9/27/2024
+
+a) Created 2 new Indexes on author.last_name and book.isbn. Assumes that these are going to be frequently accessed and having indexes here could have impact on the speed of queries.
+
+b) Created a trigger on cardholder_copy.checked_in, where, if an automated data population client attempts to insert an invalid datetime value of '0000-00-00 00:00:00' it will catch it and change that value to null before populating the DB itself
+
+c) Created a view to run a query on cardholder_copy that displays only copies which are checked out.
+
+d) Created a temporary table called copystatus, which runs a query to consolidate every single copy with its branch and current in/out status. This would: be better if it also calculated the hold status, and probably also be better as a view, but we need a temporary table for the assignment.
+
+e) Created one function to calculate due dates by adding two weeks to a given cardholder_copy.checked_out datetime value.
+
+f) Created two stored procs. SelectBookByAuthorLastName polls a result set of any books in the catalog with the given varchar lastname. Check_in updates cardholder_copy.checked_in with the current system timestamp. Yes I know my naming conventions are inconsistent. I'm tired ok!

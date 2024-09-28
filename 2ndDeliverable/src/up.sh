@@ -21,3 +21,6 @@ for f in $glob; do
     mysql --local-infile=1 -ppass $db -e "load data local infile '$f' into table $t fields terminated by ',' ignore 1 lines;" # load data from csv
     mysql -ppass $db -e "select * from $t limit 10;"
 done
+
+mysql -ppass sys < util_data.sql
+mysql -ppass sys < util_func.sql
