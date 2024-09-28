@@ -1,0 +1,546 @@
+andrew@LAZARUS: ~/college/cs_425/prj/2ndDeliverable
+$ docker compose up -d
+[+] Building 0.0s (0/0)                                               docker:default
+[+] Running 2/2
+ ✔ Network 2nddeliverable_default  Created                                      0.1s 
+ ✔ Container 2nddeliverable-db-1   Started                                      0.1s 
+
+andrew@LAZARUS: ~/college/cs_425/prj/2ndDeliverable
+$ docker exec -it 2nddeliverable-db-1 /var/src/up.sh
+Setting up database & tables...
+
+
++--------------------+
+| Database           |
++--------------------+
+| chi_pub            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
++-------------------+
+| Tables_in_chi_pub |
++-------------------+
+| author            |
+| author_book       |
+| book              |
+| book_cardholder   |
+| branch            |
+| cardholder        |
+| cardholder_copy   |
+| cardholder_phone  |
+| copy              |
+| genre             |
+| language          |
+| language_book     |
+| subject           |
+| subject_book      |
++-------------------+
+
+Loading data from csv source...
+loading data from mock-data/01-author.csv into author
+
+
++-----+------------+------------+------------------------------------------------
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+------------------------------+
+| aid | first_name | last_name  | about                                          
+                                                                                 
+                                                                                 
+                              |
++-----+------------+------------+------------------------------------------------
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+------------------------------+
+|   0 | Nat        | Lebsack    | Laudantium deserunt molestias soluta. Dolorem s
+ed nostrum odit nobis aliquam iusto amet nihil. Quam eum voluptatem odit iusto ni
+hil nulla qui.                                                                   
+                              |
+|   1 |            | Nader      |                                                
+                                                                                 
+                                                                                 
+                              |
+|   2 |            | Runolfsson | Deleniti voluptatem qui aspernatur suscipit rep
+ellendus quibusdam. Dolor odit aliquam et aut doloremque consequatur. Veritatis n
+umquam labore voluptas commodi eos voluptates quia. Dolorem dicta culpa consectet
+ur ut rem incidunt tenetur.   |
+|   3 |            | Krajcik    |                                                
+                                                                                 
+                                                                                 
+                              |
+|   4 |            | Gorczany   | Dolorum exercitationem ratione minus dolor repe
+llat. Et et vel aut ea quasi officia.                                            
+                                                                                 
+                              |
+|   5 | Leif       | Cronin     |                                                
+                                                                                 
+                                                                                 
+                              |
+|   7 |            | Torphy     | Iusto enim dolor non voluptatem. Nemo sunt sapi
+ente ipsam ut sed sed. Sint officiis sapiente deserunt sed voluptatem. Aut exerci
+tationem sunt ipsa laudantium est est reiciendis. Laborum vero tenetur enim.     
+                              |
+|   8 | Theresa    | Kling      |                                                
+                                                                                 
+                                                                                 
+                              |
+|   9 | Karianne   | Pagac      |                                                
+                                                                                 
+                                                                                 
+                              |
+|  28 |            | Hagenes    | Occaecati natus sunt dolore numquam dignissimos
+. Exercitationem officia voluptatum architecto est natus eos. Qui et nulla magnam
+ et quo accusamus sed necessitatibus. Doloremque aperiam nemo autem optio consequ
+atur vel blanditiis sapiente. |
+|  32 | Skylar     | Schulist   |                                                
+                                                                                 
+                                                                                 
+                              |
+|  40 |            | Mayert     |                                                
+                                                                                 
+                                                                                 
+                              |
+|  41 | Oda        | Lubowitz   |                                                
+                                                                                 
+                                                                                 
+                              |
+|  49 |            | Jacobs     | Error quasi sit voluptatem iusto ut sunt tempor
+a. Accusantium vel tempora dolores tenetur ea. Velit ex animi ratione animi solut
+a molestiae provident laborum.                                                   
+                              |
+|  67 | Darlene    | Reichel    | Ea aut aspernatur ab dolores nulla similique. U
+t est animi ipsam asperiores ut id sapiente velit. Hic sint culpa autem culpa. Si
+t inventore occaecati cum et consequuntur rerum.                                 
+                              |
++-----+------------+------------+------------------------------------------------
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+------------------------------+
+loading data from mock-data/02-genre.csv into genre
+
+
++-----+------------+
+| gid | name       |
++-----+------------+
+|   0 | excepturi  |
+|   1 | in         |
+|   3 | quaerat    |
+|   6 | sunt       |
+|   8 | id         |
+|  29 | debitis    |
+|  30 | occaecati  |
+|  53 | quo        |
+|  87 | architecto |
+|  93 | qui        |
+| 102 | molestias  |
+| 198 | eum        |
+| 228 | voluptas   |
+| 483 | quo        |
+| 741 | eveniet    |
++-----+------------+
+loading data from mock-data/03-subject.csv into subject
+
+
++-----+--------------+
+| sid | name         |
++-----+--------------+
+|   0 | voluptas     |
+|   1 | accusantium  |
+|   2 | in           |
+|   3 | eos          |
+|   4 | sunt         |
+|   8 | ut           |
+|   9 | est          |
+|  59 | at           |
+|  61 | pariatur     |
+|  62 | ducimus      |
+|  74 | natus        |
+|  83 | illum        |
+| 125 | blanditiis   |
+| 146 | perspiciatis |
+| 183 | est          |
++-----+--------------+
+loading data from mock-data/04-language.csv into language
+
+
++----------+-------------+
+| lid      | name        |
++----------+-------------+
+|        0 | in          |
+|        6 | esse        |
+|       35 | et          |
+|       48 | saepe       |
+|       75 | et          |
+|      167 | qui         |
+|      184 | et          |
+|      366 | velit       |
+|     3733 | sed         |
+|   149674 | ipsam       |
+|   487559 | aut         |
+|  2260072 | consectetur |
+|  2640555 | laborum     |
+|  3872410 | dolor       |
+| 29848962 | omnis       |
++----------+-------------+
+loading data from mock-data/05-book.csv into book
+
+
++-----+--------------+-----------------------------------------------------------
+--+-----------+------------------+-----------------------------------------------
+---------------------------------------------------------------------------------
+-+------------+
+| bid | isbn         | title                                                     
+  | genre_id  | fiction          | edition                                       
+                                                                                 
+ | pub_date   |
++-----+--------------+-----------------------------------------------------------
+--+-----------+------------------+-----------------------------------------------
+---------------------------------------------------------------------------------
+-+------------+
+|   0 | 308054068658 | Voluptatem laudantium hic ut enim officia porro.          
+  |       102 | 0x01             | Quia velit nulla nam rem neque. Ea aliquam et 
+placeat recusandae excepturi culpa sint. Voluptas consequatur nobis explicabo.   
+ | NULL       |
+|   1 | 243437021836 | Occaecati deleniti reprehenderit mollitia placeat aut quos
+. |        87 | 0x01             | Laudantium consequatur asperiores optio porro.
+ Temporibus commodi ullam deleniti qui cum dolores. Quisquam sed sint voluptas ve
+ | 1984-01-20 |
+|   2 | 355211335443 | Hic autem ad dolores perferendis.                         
+  |         1 | 0x01             | Qui animi tenetur rerum occaecati dolores reic
+iendis. Ullam blanditiis et iure. Aut a quisquam et reiciendis. Est molestiae bla
+ | 2007-11-20 |
+|   3 | 523084086685 | Possimus neque minima aut nobis magnam est.               
+  |     20908 | 0x01             | Et ipsam a iure molestias nobis. Et cupiditate
+ quos deleniti cumque et dolore iure. Et labore itaque illum tempora consequatur 
+ | 1981-05-22 |
+|   4 | 248248684173 | Labore nihil non vel sequi vero quis fuga.                
+  |         0 | 0x01             | Possimus laudantium mollitia facere consequunt
+ur. Saepe qui quod doloremque sit earum porro quisquam praesentium.              
+ | 1998-03-10 |
+|   5 | 897885946233 | Ut accusamus in ut voluptas hic ab molestias.             
+  |         1 | 0x01             | Nihil doloribus ut culpa exercitationem. Et su
+nt placeat dolorem saepe aut. Dolor reiciendis et aliquam iste occaecati possimus
+ | 1983-09-25 |
+|   6 | 485407630872 | Voluptas voluptatibus ut architecto earum quia nam rem.   
+  | 478072846 | 0x01             | Eos asperiores autem quia et qui qui quo. Ut s
+aepe quam quia et. In ullam quia aut ipsum consequatur similique.                
+ | 2000-05-06 |
+|   7 | 853564641105 | At quibusdam quae sed omnis.                              
+  |     44766 | 0x01             | Aspernatur quisquam magnam ut corrupti ducimus
+ delectus. Fuga quaerat exercitationem sint quaerat voluptatibus sit facilis ut. 
+ | 1983-04-19 |
+|   8 | 758580370518 | Qui ad rerum sit nesciunt autem odio.                     
+  |  32486814 | 0x01             | Repellat id iure a sapiente voluptatem quo. Il
+lo ducimus eveniet porro sint non dolor autem.                                   
+ | 2019-03-11 |
+|   9 | 935745079688 | Saepe ab qui quia necessitatibus porro temporibus.        
+  |         6 | 0x01             | At dolores tempora molestiae. Rem dolorem veli
+t et delectus et omnis dicta.                                                    
+ | 1970-09-18 |
+|  11 | 532060649193 | Sunt adipisci possimus saepe soluta dolores illum.        
+  |         8 | 0x01             | Fugit ipsum nulla aut ipsam quam delectus sed 
+numquam. Est nemo voluptate blanditiis voluptas dolore accusamus qui qui. Similiq
+ | 1984-07-12 |
+|  12 | 465089857141 | Voluptatibus dolores aut ipsum deserunt velit.            
+  |         3 | 0x01             | Dolor natus ut voluptatem in et. Dolor quos qu
+idem eius officia occaecati in pariatur. Corrupti esse dolorum et aut esse impedi
+ | 1991-02-07 |
+|  13 | 641452788472 | Aut illo maiores sit sint.                                
+  | 478072846 | 0x01             | Nam velit culpa est sit ut illo. Fuga in omnis
+ et. Qui rerum eaque voluptatum sint.                                            
+ | 1993-01-01 |
+|  14 | 022314320415 | Voluptate rerum amet delectus velit suscipit.             
+  |     60505 | 0x01             | Libero odit eos excepturi. Temporibus cumque d
+olor sint in. Et velit incidunt architecto velit. Voluptas dolore rerum qui saepe
+ | 1984-09-17 |
+|  15 | 918791704461 | Consectetur dolorum qui quae saepe.                       
+  |   6034081 | 0x01             | Excepturi necessitatibus rerum veniam quia. Vo
+luptatum in ab ut ut rerum. Ea quo labore et est. Asperiores voluptatem dolore ma
+ | 1979-01-19 |
++-----+--------------+-----------------------------------------------------------
+--+-----------+------------------+-----------------------------------------------
+---------------------------------------------------------------------------------
+-+------------+
+loading data from mock-data/06-author_book.csv into author_book
+
+
++-----------+---------+
+| author_id | book_id |
++-----------+---------+
+|         0 |       0 |
+|         1 |       1 |
+|         2 |       2 |
+|         3 |       3 |
+|         4 |       4 |
+|         5 |       5 |
+|         7 |       6 |
+|         8 |       7 |
+|         9 |       8 |
+|        28 |       9 |
+|        32 |      11 |
+|        40 |      12 |
+|        41 |      13 |
+|        49 |      14 |
+|        67 |      15 |
++-----------+---------+
+loading data from mock-data/07-subject_book.csv into subject_book
+
+
++---------+------------+
+| book_id | subject_id |
++---------+------------+
+|       0 |          0 |
+|       1 |          1 |
+|       2 |          2 |
+|       3 |          3 |
+|       4 |          4 |
+|       5 |          8 |
+|       6 |          9 |
+|       7 |         59 |
+|       8 |         61 |
+|       9 |         62 |
+|      11 |         74 |
+|      12 |         83 |
+|      13 |        125 |
+|      14 |        146 |
+|      15 |        183 |
++---------+------------+
+loading data from mock-data/08-language_book.csv into language_book
+
+
++---------+-------------+
+| book_id | language_id |
++---------+-------------+
+|       0 |           0 |
+|       1 |           6 |
+|       2 |          35 |
+|       3 |          48 |
+|       4 |          75 |
+|       5 |         167 |
+|       6 |         184 |
+|       7 |         366 |
+|       8 |        3733 |
+|       9 |      149674 |
+|      11 |      487559 |
+|      12 |     2260072 |
+|      13 |     2640555 |
+|      14 |     3872410 |
+|      15 |    29848962 |
++---------+-------------+
+loading data from mock-data/09-cardholder.csv into cardholder
+
+
++------+------------+------------+-----------+-----------------------------------
+-------+----------+-----------------------------------------+----------+---------
+----------+--------------+----------+-----------------------------+
+| chid | card_num   | first_name | last_name | password                          
+       | addr_num | addr_street                             | addr_apt | addr_cit
+y         | addr_state   | addr_zip | email                       |
++------+------------+------------+-----------+-----------------------------------
+-------+----------+-----------------------------------------+----------+---------
+----------+--------------+----------+-----------------------------+
+|    0 | 2147483647 |            | Greenholt | 050aa6ffb4f5a8a4fbb048f649385de95a
+51780f |     1176 | Sit aut nulla.                          | 97i      | Port Nay
+eli       | Georgia      |    32767 | blanda.vicente@example.com  |
+|    2 | 2147483647 |            | Mayert    | 48d895bcd12c9937c3701f58fcc4f4b13e
+df527c |    19032 | Molestias cum fugit.                    | 35a      | Bogisich
+mouth     | Mississippi  |    32767 | schmitt.oswaldo@example.com |
+|    4 | 2147483647 |            | Willms    | 41131f97585c8a9950fe3b84b715f74217
+a444da |    32767 | Reiciendis unde.                        | 70v      | Ameliavi
+ew        | WestVirginia |    32767 | timmothy.kemmer@example.org |
+|    5 | 2147483647 | Elouise    | Barrows   | 70eaaddb2dec81fb96697354c2a0032b55
+06f4db |    32767 | Repudiandae necessitatibus accusantium. | 33g      | Lake Van
+essafurt  | NewYork      |    32767 | kallie.jones@example.com    |
+|    6 | 2147483647 | Davin      | Goldner   | 78295daf7b373e67e7c262112f663d9b0e
+3d056b |    16593 | Dolore necessitatibus qui.              | 23j      | South El
+oiseland  | NewJersey    |    32767 | jessica66@example.net       |
+|    7 | 2147483647 | Milford    | Runte     | 5fc2748135fd38ac16ba3dda29127185ef
+80c5c2 |    23415 | Autem sit.                              | 02x      | North Me
+khi       | Alabama      |    32767 | viva.gutmann@example.net    |
+|    8 | 1758068435 |            | Kiehn     | 7463b7eb402b901fa9ecf1e961b39d098d
+4ad873 |    32767 | Corrupti praesentium inventore.         | 18i      | Gottlieb
+furt      | RhodeIsland  |    32767 | lubowitz.iliana@example.org |
+|   11 | 1997906345 | Ericka     | Cremin    | 6edd646bc5b04ed98e2ab8f15de2e4e4f7
+f36eb7 |    32767 | Molestiae qui porro.                    | 05u      | West Flo
+ridaville | Ohio         |    32767 | mireya05@example.net        |
+|   12 | 2147483647 | Johnny     | Heaney    | a5dec128a32a92f631cf9391c5fb268744
+8da2b4 |    32767 | Qui quis ipsum.                         | 00e      | Nikolaus
+haven     | Florida      |    32767 | qbayer@example.org          |
+|   15 | 2147483647 | Maia       | Keeling   | d5b0d37e4081459cd990b7c65a7805eb01
+dd3a99 |    32767 | Magnam dignissimos.                     | 67r      | Port Hel
+enmouth   | California   |    32767 | kyra49@example.net          |
+|   20 | 1739930212 |            | Mosciski  | 9c70f460fd04321d53734458b8401b7f53
+5eb196 |    13522 | Velit molestiae perspiciatis.           | 94u      | South Hi
+ldatown   | Wisconsin    |    32767 | dorian69@example.org        |
+|   24 | 1256361334 |            | Koch      | aebf3e7f9695ca7dd7ce5af5a79b1cab86
+a157aa |    30464 | Pariatur at unde.                       | 04n      | Maciburg
+h         | RhodeIsland  |    32767 | kailey.mraz@example.net     |
+|   25 | 2147483647 | Alberto    | Klocko    | 17c819a679126e10ae6b897ba9ac65e424
+508bb7 |    15410 | Est ad assumenda.                       | 87t      | Port Max
+ime       | Vermont      |    18576 | elijah60@example.com        |
+|   27 | 1782129346 |            | Hoppe     | 882326cec94b9836e27fcc9ec92169792d
+39aa92 |    32767 | Et eveniet.                             | 60z      | Antwansh
+ire       | Arizona      |    32767 | friesen.leilani@example.org |
+|   28 | 2147483647 | Marie      | Dicki     | 232653baede24299be35baffc0b1a7ff10
+c7c8f8 |    15055 | Architecto esse.                        | 26j      | New Enri
+queville  | NewHampshire |    17838 | miles09@example.net         |
++------+------------+------------+-----------+-----------------------------------
+-------+----------+-----------------------------------------+----------+---------
+----------+--------------+----------+-----------------------------+
+loading data from mock-data/10-cardholder_phone.csv into cardholder_phone
+
+
++---------------+--------------+
+| cardholder_id | phone_number |
++---------------+--------------+
+|             0 | (769)507-6   |
+|             0 | (952)879-0   |
+|             2 | (806)781-7   |
+|             2 | 488-853-96   |
+|             4 | (842)371-6   |
+|             4 | 643-730-28   |
+|             5 | (717)353-8   |
+|             5 | 296.369.23   |
+|             6 | 114.581.61   |
+|             6 | 210-125-40   |
+|             7 | (177)109-4   |
+|             7 | (839)056-4   |
+|             8 | 421-473-56   |
+|             8 | 533-116-99   |
+|            11 | 1-469-262-   |
++---------------+--------------+
+loading data from mock-data/11-book_cardholder.csv into book_cardholder
+
+
++---------------------+---------+---------------+-----------+
+| timestamp           | book_id | cardholder_id | status    |
++---------------------+---------+---------------+-----------+
+| 1970-02-19 09:00:58 |      38 |          4072 | pending   |
+| 1970-03-06 20:09:28 |      20 |            50 | fulfilled |
+| 1970-03-06 21:32:57 |       7 |            11 | cancelled |
+| 1970-08-05 09:56:39 |      30 |           692 | cancelled |
+| 1970-10-06 22:16:26 |      50 |         24718 | cancelled |
+| 1971-11-23 06:11:12 |      23 |            56 | fulfilled |
+| 1973-10-27 08:59:08 |      28 |           537 | pending   |
+| 1973-12-25 06:48:38 |       5 |             7 | fulfilled |
+| 1975-05-15 05:22:54 |       1 |             2 | fulfilled |
+| 1976-09-19 04:19:37 |       9 |            15 | cancelled |
+| 1977-06-17 23:42:31 |      13 |            25 | cancelled |
+| 1979-12-29 10:51:08 |      32 |           992 | fulfilled |
+| 1980-11-04 06:40:53 |       4 |             6 | fulfilled |
+| 1984-02-07 20:31:44 |       8 |            12 | cancelled |
+| 1984-06-21 04:44:53 |      44 |          8657 | fulfilled |
++---------------------+---------+---------------+-----------+
+loading data from mock-data/12-branch.csv into branch
+
+
++---------+----------------------------------------+----------+------------------
+------------------------+----------+----------------+----------------------+-----
+-----+
+| brid    | name                                   | addr_num | addr_street      
+                        | addr_apt | addr_city      | addr_state           | addr
+_zip |
++---------+----------------------------------------+----------+------------------
+------------------------+----------+----------------+----------------------+-----
+-----+
+|      11 | Exercitationem quos est numquam.       |    32767 | Unde iste dolor. 
+                        | 71l      | Blockbury      | Missouri             |    3
+2767 |
+|      65 | Fugit est sed.                         |    32767 | Eum iste officiis
+.                       | 81s      | North Serena   | Minnesota            |    2
+4102 |
+|      78 | Dolores quos dicta omnis.              |    32767 | Velit dolores qui
+.                       | 06z      | West Cordia    | District of Columbia |    3
+2767 |
+|      89 | Accusamus voluptas provident quod.     |     3851 | Eius soluta dolor
+es in.                  | 61z      | East Josefina  | Hawaii               |    3
+2767 |
+|      96 | Occaecati animi velit voluptatum.      |        4 | Quisquam corporis
+ aliquam voluptas.      | 15z      | Wardchester    | Illinois             |    3
+2767 |
+|   12617 | Exercitationem sequi eos.              |    32767 | Rerum rerum hic s
+it adipisci.            | 21d      | Lake Sandra    | Alaska               |    3
+2767 |
+|   28410 | Tenetur pariatur.                      |        0 | Eveniet rerum rec
+usandae.                | 91u      | Reynoldshaven  | SouthDakota          |    3
+2767 |
+|   53172 | Libero pariatur expedita autem odit.   |    32767 | Autem ex qui.    
+                        | 14i      | Jillianchester | Michigan             |    3
+2767 |
+| 7253076 | Ullam consequuntur repellendus ex.     |        0 | Soluta eaque prov
+ident nemo.             | 41e      | East Jovani    | Maine                |    2
+7812 |
+| 8981887 | Officia beatae praesentium asperiores. |    32767 | Voluptates et exe
+rcitationem distinctio. | 47g      | Predovicfurt   | NewHampshire         |    3
+2767 |
++---------+----------------------------------------+----------+------------------
+------------------------+----------+----------------+----------------------+-----
+-----+
+loading data from mock-data/13-copy.csv into copy
+
+
++----------+-----------+-----------+
+| cid      | book_id   | branch_id |
++----------+-----------+-----------+
+|  3811930 |       256 |        65 |
+|  8874928 |    714417 |        11 |
+| 11278540 |      5633 |        96 |
+| 11758107 |  90071911 |   7253076 |
+| 16409021 |         2 |        78 |
+| 21227193 |  76460661 |        65 |
+| 28012337 |  88021511 |     53172 |
+| 28959398 |     18570 |        11 |
+| 35683014 |     89495 |        11 |
+| 41320555 |       343 |     28410 |
+| 48676202 |     67165 |        11 |
+| 54738188 | 930014220 |        78 |
+| 67662260 |     10410 |     53172 |
+| 70986019 |     70425 |   7253076 |
+| 73256695 | 525914250 |     12617 |
++----------+-----------+-----------+
+loading data from mock-data/14-cardholder_copy.csv into cardholder_copy
+
+
++----------+---------------+---------------------+---------------------+
+| copy_id  | cardholder_id | checked_out         | checked_in          |
++----------+---------------+---------------------+---------------------+
+|  3811930 |             0 | 2015-05-20 05:37:26 | 0000-00-00 00:00:00 |
+|  8874928 |             2 | 2005-08-25 21:33:55 | 2009-12-27 05:51:45 |
+| 11278540 |             4 | 2002-12-10 15:56:19 | 0000-00-00 00:00:00 |
+| 11758107 |             5 | 2017-05-09 05:07:59 | 1985-01-27 12:44:21 |
+| 16409021 |             6 | 1977-07-18 14:31:25 | 0000-00-00 00:00:00 |
+| 21227193 |             7 | 1981-01-18 09:52:30 | 2005-09-13 08:33:49 |
+| 28012337 |             8 | 1999-06-01 03:51:17 | 0000-00-00 00:00:00 |
+| 28959398 |            11 | 1977-06-11 22:03:02 | 2013-05-13 04:12:53 |
+| 35683014 |            12 | 1978-10-08 17:59:34 | 1999-09-08 04:31:41 |
+| 41320555 |            15 | 2005-10-20 15:05:49 | 1976-11-17 13:33:41 |
+| 48676202 |            20 | 1973-01-23 06:14:32 | 2003-07-10 04:37:20 |
+| 54738188 |            24 | 1997-09-10 15:22:29 | 0000-00-00 00:00:00 |
+| 67662260 |            25 | 2003-05-26 23:58:20 | 1990-04-18 09:46:06 |
+| 70986019 |            27 | 1976-10-19 13:34:48 | 1971-02-28 07:46:20 |
+| 73256695 |            28 | 1992-10-11 22:19:48 | 2017-01-25 22:39:29 |
++----------+---------------+---------------------+---------------------+
+
+andrew@LAZARUS: ~/college/cs_425/prj/2ndDeliverable
+$ docker exec -it 2nddeliverable-db-1 /var/src/down.sh
+
+Tearing down database & tables...
+
+
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+andrew@LAZARUS: ~/college/cs_425/prj/2ndDeliverable
+$ docker-compose down
+[+] Running 2/2
+ ✔ Container 2nddeliverable-db-1   Remov...                                 2.0s 
+ ✔ Network 2nddeliverable_default  Remo...                                  0.2s 
