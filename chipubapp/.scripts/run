@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# enable sdk
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# build & run w/ java 11
+sdk use java 11.0.25-zulu
+# build, then run
+# .scripts/build
+mvn exec:java
