@@ -13,6 +13,20 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.5.0</version>
+          <configuration>
+            <mainClass>org.iitcs.Main</mainClass>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -34,7 +48,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.7.4</version>
+            <version>4.7.6</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
