@@ -50,8 +50,6 @@ public class PropertiesManager {
 
     public String getDbJdbcUrl() { return dbJdbcUrl;}
     public String getDbJdbcSchema() { return dbJdbcSchema;}
-    public String getDbAdminUsername() {
-        return dbAdminUsername;
-    }
+    public String getDbAdminUsername() { return dbAdminUsername; }
     public String getDbAdminPassword() { return dbAdminPassword;}
 }

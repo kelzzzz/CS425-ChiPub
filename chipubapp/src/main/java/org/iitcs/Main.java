@@ -51,7 +51,6 @@ public class Main {
             result.close(); //close result sets every time!!!!
         }catch(SQLException e){
             LOGGER.error(e.getMessage());
-            LOGGER.error("My log error message");
         }
 
         //Always remember to close your connection when you're done-- again, prevents memory leaks

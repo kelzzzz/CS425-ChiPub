@@ -24,12 +24,6 @@ public class ChiPubConnection {
             ps.execute();
         }catch(SQLException e){
             LOGGER.error(e.getMessage());
-            LOGGER.error("Chi pub connector failed to get connection with:\n"
-                    .concat(url)
-                    .concat("\n")
-                    .concat(credentials.getProperty("user"))
-                    .concat("\n")
-                    .concat(credentials.getProperty("password")));
         }
     }
     public Connection getChiPubConnectionObj(){

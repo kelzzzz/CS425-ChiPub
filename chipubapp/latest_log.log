@@ -1,4 +1,6 @@
-2024-10-21 19:48:45.503 [main] INFO  org.iitcs.Main - Hello world!
-2024-10-21 19:48:46.037 [main] INFO  org.iitcs.database.ChiPubConnection - Connection to jdbc:mysql://localhost:3306/ successful.
-2024-10-21 19:48:46.050 [main] INFO  org.iitcs.database.ChiPubConnection - Connecting to schema: com.mysql.cj.jdbc.ClientPreparedStatement: use sakila;
-2024-10-21 19:48:46.052 [main] INFO  org.iitcs.Main - Trying to execute query: com.mysql.cj.jdbc.ClientPreparedStatement: select * from actor
+2024-10-21 21:14:03.071 [main] INFO  org.iitcs.Main - Hello world!
+2024-10-21 21:14:03.608 [main] INFO  org.iitcs.database.ChiPubConnection - Connection to jdbc:mysql://localhost:3306/ successful.
+2024-10-21 21:14:03.624 [main] INFO  org.iitcs.database.ChiPubConnection - Connecting to schema: com.mysql.cj.jdbc.ClientPreparedStatement: use chipub;
+2024-10-21 21:14:03.632 [main] ERROR org.iitcs.database.ChiPubConnection - Unknown database 'chipub'
+2024-10-21 21:14:03.633 [main] INFO  org.iitcs.Main - Execute query: com.mysql.cj.jdbc.ClientPreparedStatement: select * from mytablename;
+2024-10-21 21:14:03.634 [main] ERROR org.iitcs.Main - No database selected

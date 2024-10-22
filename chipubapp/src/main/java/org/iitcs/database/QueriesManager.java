@@ -9,6 +9,9 @@ import java.util.Properties;
 
 import org.iitcs.util.Constants;
 import org.iitcs.util.Constants.CRUD;
+
+import static org.iitcs.util.Constants.QUERY_KEYS;
+
 public class QueriesManager {
     private static final Logger LOGGER = LogManager.getLogger(QueriesManager.class);
     private Constants c;
@@ -39,17 +42,10 @@ public class QueriesManager {
     }
 
     public String get(CRUD crud, String tag){
-        switch(crud){
-            case CREATE:
-                return queries.getProperty(c.QUERIES_KEY_CREATE.concat(tag));
-            case READ:
-                return queries.getProperty(c.QUERIES_KEY_READ.concat(tag));
-            case UPDATE:
-                return queries.getProperty(c.QUERIES_KEY_UPDATE.concat(tag));
-            case DELETE:
-                return queries.getProperty(c.QUERIES_KEY_DELETE.concat(tag));
+        String q = queries.getProperty(QUERY_KEYS.get(crud).concat(tag));
+        if(q != null){
+            return q;
         }
-        return null;
+        throw new RuntimeException("No query with tag ".concat(tag).concat(" was found."));
     }
-
 }
