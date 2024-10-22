@@ -1,10 +1,29 @@
 #!/usr/bin/env bash
 
-build_and_run() {
-    ./build
-    ./run
-}
+SCRIPT_DIR=$PWD/"$(dirname "$0")"
+
+# FIXME: uncomment below section when ready to use db w/ cli
+# change to directory this script is in
+# cd $SCRIPT_DIR
+# 
+# # start database
+# ../../sql/up
+
+# change back to directory this script is in
+cd $SCRIPT_DIR
+
+# then to root directory
+cd ..
+
+args="${@:2}"
 
 echo "watching $@ for changes...\n\n"
-ag -l -g *.java | build_and_run
+ag -l -g ".*.java" | entr -s ".scripts/run $args"
 echo "\n\n...stopping watching"
+
+# FIXME: uncomment below section when ready to use db w/ cli
+# change back to directory this script is in
+# cd $SCRIPT_DIR
+# 
+# # tear down database
+# ../../sql/down

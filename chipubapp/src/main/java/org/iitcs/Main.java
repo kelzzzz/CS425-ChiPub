@@ -2,10 +2,13 @@ package org.iitcs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.iitcs.cli.Cli;
 import org.iitcs.database.ChiPubConnection;
 import org.iitcs.database.QueriesManager;
 import org.iitcs.util.Constants.CRUD;
+
+import picocli.CommandLine;
+
 import org.iitcs.util.PropertiesManager;
 
 import java.sql.PreparedStatement;
@@ -18,8 +21,10 @@ public class Main {
     private static PropertiesManager props = PropertiesManager.getInstance();
     private static QueriesManager queries = QueriesManager.getInstance();
 
-    public static void main(String[] args) {
-        sampleCode();
+    public static void main(String... args) {
+        CommandLine cmd = new CommandLine(new Cli());
+        int exitCode = cmd.execute(args);
+        // sampleCode();
     }
 
     public static void sampleCode(){
