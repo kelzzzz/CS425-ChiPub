@@ -1,0 +1,4 @@
+2024-10-21 19:48:45.503 [main] INFO  org.iitcs.Main - Hello world!
+2024-10-21 19:48:46.037 [main] INFO  org.iitcs.database.ChiPubConnection - Connection to jdbc:mysql://localhost:3306/ successful.
+2024-10-21 19:48:46.050 [main] INFO  org.iitcs.database.ChiPubConnection - Connecting to schema: com.mysql.cj.jdbc.ClientPreparedStatement: use sakila;
+2024-10-21 19:48:46.052 [main] INFO  org.iitcs.Main - Trying to execute query: com.mysql.cj.jdbc.ClientPreparedStatement: select * from actor
