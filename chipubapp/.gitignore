@@ -35,5 +35,7 @@ build/
 .vscode/
 
 ### Mac OS ###
-.DS_Storelatest_log.log
+.DS_Store
+
+### Log files ###
 latest_log.log
