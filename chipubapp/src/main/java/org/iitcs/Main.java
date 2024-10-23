@@ -24,6 +24,7 @@ public class Main {
     public static void main(String... args) {
         CommandLine cmd = new CommandLine(new Cli());
         int exitCode = cmd.execute(args);
+        System.exit(exitCode);
         // sampleCode();
     }
 
