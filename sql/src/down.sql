@@ -1,4 +1,4 @@
-use chi_pub;
+use chipub;
 
 drop table cardholder_copy;
 drop table copy;
@@ -15,4 +15,4 @@ drop table subject;
 drop table genre;
 drop table author;
 
-drop database chi_pub;
+drop database chipub;

@@ -1,6 +1,6 @@
-create database if not exists chi_pub;
+create database if not exists chipub;
 
-use chi_pub;
+use chipub;
 
 create table if not exists author (
     aid int primary key,

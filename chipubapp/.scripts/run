@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# change to directory this script is in
+cd "$(dirname "$0")"
+
+cd ..
+
+# enable sdk
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# build & run w/ java 11
+sdk use java 11.0.25-zulu
+# build, then run
+# .scripts/build
+mvn exec:java -Dexec.args="$@"

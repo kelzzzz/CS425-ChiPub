@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-db=chi_pub
+db=chipub
 glob=mock-data/*.csv
 
 cd "$(dirname "$0")"
