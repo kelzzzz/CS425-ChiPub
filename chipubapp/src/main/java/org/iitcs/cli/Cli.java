@@ -8,8 +8,10 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
 @Command(
-    name = "chipub",
-    description = "A small cli for interacting with the Chicago Public Library database system.",
+    resourceBundle = "default_properties",
+    name = "${bundle:name}",
+    description = "${bundle:description}",
+    version = "${bundle:version}",
     mixinStandardHelpOptions = true,
     subcommands = {Search.class, View.class}
 )
