@@ -72,6 +72,8 @@ class Search implements Runnable {
     // first, the main function that defers all actions to subcommands
     @Override
     public void run() {
+        // TODO: maybe this actually can be run w/out subcommands, instead searching across all 3
+        // types, but without any flags for narrowing...
         throw new ParameterException(spec.commandLine(), "Specify a subcommand");
     };
 
