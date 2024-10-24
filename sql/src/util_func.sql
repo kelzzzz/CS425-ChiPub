@@ -109,8 +109,8 @@ DELIMITER ;
 
 #Stored proc to check in a book and update its checked_in timestamp
 DELIMITER //
-	CREATE PROCEDURE Check_in(copid int, chid int)
-	BEGIN
+CREATE PROCEDURE Check_in(copid int, chid int)
+BEGIN
 	UPDATE cardholder_copy
 		SET checked_in = current_timestamp() 
 		WHERE copy_id = copid AND cardholder_id = chid AND checked_in IS NULL;
