@@ -101,9 +101,20 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE CreateCardholderTableWithPhone()
+BEGIN
+CREATE TEMPORARY TABLE IF NOT EXISTS cardholdertempCLI_phone AS
+SELECT card_num, first_name, last_name, addr_num, addr_street, addr_apt, addr_city, addr_state, addr_zip, email, phone_number
+FROM cardholder 
+LEFT JOIN cardholder_phone cp
+ON cp.cardholder_id = cardholder.chid;
+END //
+DELIMITER ;
+
+DELIMITER //
 CREATE PROCEDURE DropTempSearchTables ()
 BEGIN
-	DROP TEMPORARY TABLE IF EXISTS MasterBookIndex, booktempCLI_BaseIndex, booktempCLI_AuthLName, booktempCLI_AuthFName, booktempCLI_genre, booktempCLI_subject, booktempCLI_language;
+	DROP TEMPORARY TABLE IF EXISTS cardholdertempCLI_phone, MasterBookIndex, booktempCLI_BaseIndex, booktempCLI_AuthLName, booktempCLI_AuthFName, booktempCLI_genre, booktempCLI_subject, booktempCLI_language;
 END //
 DELIMITER ;
 

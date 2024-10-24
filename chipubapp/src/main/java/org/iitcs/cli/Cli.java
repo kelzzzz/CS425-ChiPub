@@ -14,7 +14,7 @@ import picocli.CommandLine.Spec;
     description = "${bundle:description}",
     version = "${bundle:version}",
     mixinStandardHelpOptions = true,
-    subcommands = {Search.class, View.class}
+    subcommands = {Search.class/*, View.class*/}
 )
 public class Cli implements Runnable {
     @Spec CommandSpec spec;
@@ -120,15 +120,18 @@ class Search implements Runnable {
     // search for cardholders
     @Command(name = "cardholder", description = "cardholders by a simple string, or by providing specific values for various properties, such as name, address, phone number, etc.")
     void cardholder(
-        @Parameters(index = "0", paramLabel = "<search terms>") String query,
+        //Removing the generic query for now, save time on dev work
+        //@Parameters(index = "0", paramLabel = "<search terms>") String query,
         @Option(names = { "-a", "--address" }, description = "narrow search by address") String address,
         @Option(names = { "-n", "--name" }, description = "narrow search by name") String name,
         @Option(names = { "-p", "--phone-number" }, description = "narrow search by phone number") String phoneNumber
     ) {
-        // TODO...
+       qexec.executeCardholderSearch(name, address, phoneNumber);
     };
 }
 
+//TODO Will come back to these later!
+/*
 @Command(name = "view", description = "View information about...", mixinStandardHelpOptions = true)
 class View implements Runnable {
     @Spec CommandSpec spec;
@@ -187,4 +190,4 @@ class View implements Runnable {
     ) {
         // TODO...
     }
-}
+}*/

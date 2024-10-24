@@ -73,6 +73,34 @@ public class QueryExecutor {
             System.out.println();
         }
     }
+    public void executeCardholderSearch(String name, String addr, String phonenum){
+        executeDropBookSearchTables(); //clear database's search tables
+        executeCardholderPhoneIndexTempTableCreation();
+
+        StringBuilder qCardholderSearch = new StringBuilder();
+
+        String qName = queries.get(CRUD.READ, "cardholder.where.name");
+        String qAddr = queries.get(CRUD.READ, "cardholder.where.addr");
+        String qPhoneNum = queries.get(CRUD.READ, "cardholder.where.phone");
+
+        qCardholderSearch.append(queries.get(CRUD.READ, "cardholder.where"));
+
+        concatSearchQuery(name, qCardholderSearch, qName);
+        concatSearchQuery(addr, qCardholderSearch, qAddr);
+        concatSearchQuery(phonenum, qCardholderSearch, qPhoneNum);
+
+        qCardholderSearch.delete(qCardholderSearch.length()-TRAILING_CHARACTERS_CONCAT_BOOK_QUERY, qCardholderSearch.length());
+
+        //TODO Transition the dynamic query to prepared statements at some point
+        try(PreparedStatement ps = conn.getChiPubConnectionObj().prepareStatement(qCardholderSearch.toString())){
+            System.out.println("Executing search for cardholder...");
+            LOGGER.info("Executing search query with: ".concat(qCardholderSearch.toString()));
+            ResultSet joinedSearchResult = ps.executeQuery();
+            printTabulatedResultSet(joinedSearchResult);
+        }catch(SQLException e){
+            LOGGER.error(e.getMessage());
+        }
+    }
 
     public void executeBookSearch(String author, String genre, String isbn, String lang, String subject){
         executeDropBookSearchTables(); //clear database's search tables
@@ -90,11 +118,11 @@ public class QueryExecutor {
         //setup book search query to be concatenated
         qBookSearch.append(queries.get(CRUD.READ, "book.selectwhere.masterbookindex"));
 
-        concatBookSearchQuery(author, qBookSearch, qAuthor);
-        concatBookSearchQuery(genre, qBookSearch, qGenre);
-        concatBookSearchQuery(isbn, qBookSearch, qIsbn);
-        concatBookSearchQuery(lang, qBookSearch, qLang);
-        concatBookSearchQuery(subject, qBookSearch, qSubj);
+        concatSearchQuery(author, qBookSearch, qAuthor);
+        concatSearchQuery(genre, qBookSearch, qGenre);
+        concatSearchQuery(isbn, qBookSearch, qIsbn);
+        concatSearchQuery(lang, qBookSearch, qLang);
+        concatSearchQuery(subject, qBookSearch, qSubj);
 
         qBookSearch.delete(qBookSearch.length()-TRAILING_CHARACTERS_CONCAT_BOOK_QUERY, qBookSearch.length());
 
@@ -110,7 +138,7 @@ public class QueryExecutor {
         }
     }
 
-    private static void concatBookSearchQuery(String input, StringBuilder qJoin, String query) {
+    private static void concatSearchQuery(String input, StringBuilder qJoin, String query) {
         if(input !=null){
             qJoin.append(query.replace("$param", input));
             qJoin.append(queries.get(CRUD.READ, "and"));
@@ -148,7 +176,20 @@ public class QueryExecutor {
         }
         return -1;
     }
-
+    public int executeCardholderPhoneIndexTempTableCreation(){
+        String q = queries.get(CRUD.CREATE, "book.run.createcardholderphoneindex");
+        try(CallableStatement cs = conn.getChiPubConnectionObj().prepareCall(q)){
+            cs.execute();
+            LOGGER.info("Created cardholder phone search index table.");
+            if(cs.getUpdateCount() == 0 ){
+                return 0; //update ran successfully but nothing was changed
+            }
+            return 1;
+        }catch(SQLException e){
+            LOGGER.error(e.getMessage());
+        }
+        return -1;
+    }
     public int executeDropBookSearchTables(){
         String q = queries.get(CRUD.DELETE, "droptemporarybooksearchtables");
         try(CallableStatement cs = conn.getChiPubConnectionObj().prepareCall(q)){
