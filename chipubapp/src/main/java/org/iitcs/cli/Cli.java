@@ -1,5 +1,6 @@
 package org.iitcs.cli;
 
+import org.iitcs.database.QueryExecutor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
@@ -17,7 +18,7 @@ import picocli.CommandLine.Spec;
 )
 public class Cli implements Runnable {
     @Spec CommandSpec spec;
-
+    QueryExecutor qexec = new QueryExecutor();
     // first, the main function that defers all actions to subcommands
     @Override
     public void run() {
@@ -34,7 +35,17 @@ public class Cli implements Runnable {
         @Parameters(index = "0", paramLabel = "<copy id number>") int copyId,
         @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
     ) {
-        // TODO...
+        switch(qexec.executeCheckOut(copyId, cardholderId)){
+            case(0):
+                System.out.println("Attempted to check-out, but no check-out was found with these parameters.");
+                break;
+            case(1):
+                System.out.println("The copy was successfully checked out!");
+                break;
+            case(-1):
+                System.out.println("Check-out attempt failed.");
+                break;
+        }
     }
 
     // return a book
@@ -43,7 +54,17 @@ public class Cli implements Runnable {
         @Parameters(index = "0", paramLabel = "<copy id number>") int copyId,
         @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
     ) {
-        // TODO...
+        switch(qexec.executeCheckIn(copyId, cardholderId)){
+            case(0):
+                System.out.println("Attempted to check-in, but no check-out was found with these parameters.");
+                break;
+            case(1):
+                System.out.println("The copy was successfully checked in!");
+                break;
+            case(-1):
+                System.out.println("Check-in attempt failed.");
+                break;
+        }
     }
 
     // request a hold
