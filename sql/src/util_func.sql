@@ -103,11 +103,11 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE CreateCardholderTableWithPhone()
 BEGIN
-CREATE TEMPORARY TABLE IF NOT EXISTS cardholdertempCLI_phone AS
-SELECT card_num, first_name, last_name, addr_num, addr_street, addr_apt, addr_city, addr_state, addr_zip, email, phone_number
-FROM cardholder 
-LEFT JOIN cardholder_phone cp
-ON cp.cardholder_id = cardholder.chid;
+	CREATE TEMPORARY TABLE IF NOT EXISTS cardholdertempCLI_phone AS
+	SELECT card_num, first_name, last_name, addr_num, addr_street, addr_apt, addr_city, addr_state, addr_zip, email, phone_number
+	FROM cardholder 
+	LEFT JOIN cardholder_phone cp
+	ON cp.cardholder_id = cardholder.chid;
 END //
 DELIMITER ;
 
