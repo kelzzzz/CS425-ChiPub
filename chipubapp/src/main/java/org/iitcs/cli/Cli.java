@@ -88,6 +88,7 @@ public class Cli implements Runnable {
 
 @Command(name = "search", description = "Search for...", mixinStandardHelpOptions = true)
 class Search implements Runnable {
+    QueryExecutor qexec = new QueryExecutor();
     @Spec CommandSpec spec;
 
     // first, the main function that defers all actions to subcommands
@@ -105,14 +106,15 @@ class Search implements Runnable {
     // search for books
     @Command(name = "book", description = "books by a simple string, or by providing specific values for various properties, such as author, genre, isbn, etc")
     void book(
-        @Parameters(index = "0", paramLabel = "<search terms>") String query,
+        //Removing the generic query for now, save time on dev work
+        //@Parameters(index = "0", paramLabel = "<search terms>") String query,
         @Option(names = { "-a", "--author" }, description = "narrow search by author") String author,
         @Option(names = { "-g", "--genre" }, description = "narrow search by genre") String genre,
         @Option(names = { "-i", "--isbn" }, description = "narrow search by isbn") String isbn,
         @Option(names = { "-l", "--language" }, description = "narrow search by language") String language,
         @Option(names = { "-s", "--subject" }, description = "narrow search by subject") String subject
     ) {
-        // TODO...
+        qexec.executeBookSearch(author, genre, isbn, language, subject);
     };
 
     // search for cardholders
