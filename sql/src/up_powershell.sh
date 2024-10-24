@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 echo "Setting up database & tables..."
 # start in sys database since a database has to
 # be selected to execute a sql source
-& cmd.exe /c "mysql -u root -padmin < schema.sql"
+& cmd.exe /c "mysql -u root -pPASS < schema.sql"
 # verify database created
 mysql -u root -pPASS -e "show databases;"
 # verify tables created
