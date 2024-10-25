@@ -1,6 +1,7 @@
 package org.iitcs.cli;
 
 import org.iitcs.database.QueryExecutor;
+import org.iitcs.util.Constants;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
@@ -33,7 +34,7 @@ public class Cli implements Runnable {
     @Command(name = "check-out", description = "Check out a book to a cardholder")
     void checkOut(
         @Parameters(index = "0", paramLabel = "<copy id number>") int copyId,
-        @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
+        @Parameters(index = "1", paramLabel = "<member's id number>") int cardholderId
     ) {
         switch(qexec.executeCheckOut(copyId, cardholderId)){
             case(0):
@@ -52,7 +53,7 @@ public class Cli implements Runnable {
     @Command(name = "check-in", description = "Return a book from a cardholder")
     void checkIn(
         @Parameters(index = "0", paramLabel = "<copy id number>") int copyId,
-        @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
+        @Parameters(index = "1", paramLabel = "<member's id number>") int cardholderId
     ) {
         switch(qexec.executeCheckIn(copyId, cardholderId)){
             case(0):
@@ -71,18 +72,38 @@ public class Cli implements Runnable {
     @Command(name = "hold-request", description = "Request a hold be placed on a book for a cardholder")
     void holdRequest(
         @Parameters(index = "0", paramLabel = "<book id number>") int copyId,
-        @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
+        @Parameters(index = "1", paramLabel = "<member's id number>") int cardholderId
     ) {
-        // TODO...
+        switch(qexec.executePreparedStatement(Constants.CRUD.UPDATE, "placehold", copyId, cardholderId, "Hold placed.")){
+            case(0):
+                System.out.println("Attempted to place hold, but nothing was updated.");
+                break;
+            case(1):
+                System.out.println("The hold was successfully placed!");
+                break;
+            case(-1):
+                System.out.println("Hold attempt failed.");
+                break;
+        }
     }
 
     // cancel a hold
     @Command(name = "hold-cancel", description = "Cancel a previously requested hold for a cardholder")
     void holdCancel(
         @Parameters(index = "0", paramLabel = "<book id number>") int copyId,
-        @Parameters(index = "1", paramLabel = "<member's card number>") int cardholderId
+        @Parameters(index = "1", paramLabel = "<member's id number>") int cardholderId
     ) {
-        // TODO...
+        switch(qexec.executePreparedStatement(Constants.CRUD.UPDATE, "cancelhold", copyId, cardholderId, "Hold cancelled.")){
+            case(0):
+                System.out.println("Attempted to cancel hold, but no hold was found.");
+                break;
+            case(1):
+                System.out.println("The hold was successfully cancelled!");
+                break;
+            case(-1):
+                System.out.println("Hold cancel failed.");
+                break;
+        }
     }
 }
 

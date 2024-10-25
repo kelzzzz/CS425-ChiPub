@@ -211,4 +211,21 @@ public class QueryExecutor {
     public int executeCheckOut(int cid, int chid) {
         return executeCallableStatementIntParameters(CRUD.UPDATE,"checkout", cid, chid, "Check out occurred");
     }
+
+    public int executePreparedStatement(CRUD crudTag, String qTag, int Param1, int Param2, String logMessage){
+        String q = queries.get(crudTag, qTag);
+        try(PreparedStatement ps = conn.getChiPubConnectionObj().prepareStatement(q)){
+            ps.setInt(1, Param1);
+            ps.setInt(2,Param2);
+            ps.execute();
+            LOGGER.info(logMessage);
+            if(ps.getUpdateCount() == 0 ){
+                return 0; //update ran successfully but nothing was changed
+            }
+            return 1;
+        }catch(SQLException e){
+            LOGGER.error(e.getMessage());
+        }
+        return -1;
+    }
 }
