@@ -25,7 +25,6 @@ public class ChiPubConnection {
         }catch(Exception e){
             System.out.println("Connection to database failed. Check your properties file.");
             LOGGER.error(e.getMessage());
-            System.out.println(e.getMessage());
             System.exit(1);
         }
     }
