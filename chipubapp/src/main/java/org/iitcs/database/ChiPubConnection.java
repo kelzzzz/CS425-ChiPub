@@ -14,6 +14,7 @@ public class ChiPubConnection {
     private static final Logger LOGGER = LogManager.getLogger(ChiPubConnection.class);
     public ChiPubConnection(String url, String schema, Properties credentials){
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, credentials);
             if(conn.isValid(1)){
                 LOGGER.info("Connection to ".concat(url).concat(" successful."));
@@ -21,9 +22,10 @@ public class ChiPubConnection {
             PreparedStatement ps = conn.prepareStatement("use ".concat(schema).concat(";"));
             LOGGER.info("Connecting to schema: ".concat(ps.toString()));
             ps.execute();
-        }catch(SQLException e){
+        }catch(Exception e){
             System.out.println("Connection to database failed. Check your properties file.");
             LOGGER.error(e.getMessage());
+            System.out.println(e.getMessage());
             System.exit(1);
         }
     }
