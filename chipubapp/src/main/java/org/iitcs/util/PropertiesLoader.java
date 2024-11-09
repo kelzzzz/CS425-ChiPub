@@ -50,6 +50,12 @@ public class PropertiesLoader {
 
     public String getDbJdbcUrl() { return dbJdbcUrl;}
     public String getDbJdbcSchema() { return dbJdbcSchema;}
+    public Properties getJdbcAdminCredentials(){
+        Properties props = new Properties();
+        props.put("user", this.dbAdminUsername);
+        props.put("password", this.dbAdminPassword);
+        return props;
+    }
     public String getDbAdminUsername() { return dbAdminUsername; }
     public String getDbAdminPassword() { return dbAdminPassword;}
 }
