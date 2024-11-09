@@ -4,7 +4,10 @@ import org.iitcs.database.dao.Book;
 import org.iitcs.database.dao.BookDao;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import static org.iitcs.util.Constants.APP_H;
@@ -14,7 +17,7 @@ public class BookSearchPanel extends JPanel {
     ApplicationStateManager as = ApplicationStateManager.getInstance();
     BookDao dao;
     DefaultListModel<Book> books = new DefaultListModel<>();
-    public BookSearchPanel(){
+    public BookSearchPanel(String lastSearchTerm){
         try{
             dao = new BookDao();
         }catch(InstantiationException e){
@@ -41,9 +44,25 @@ public class BookSearchPanel extends JPanel {
 
         JList booksJlist = new JList(books);
 
-        JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(e -> searchBooks(searchBar.getText()));
+        if(lastSearchTerm != null){
+            searchBooks(lastSearchTerm);
+        }
 
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(e -> clickSearchButton(searchBar));
+        MouseListener ml = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 2) {
+                    if (booksJlist.getSelectedIndex() != -1) {
+                        int index = booksJlist.locationToIndex(evt.getPoint());
+                        selectBook((Book) booksJlist.getSelectedValue());
+                    }
+                }
+            }
+        };
+
+        booksJlist.addMouseListener(ml);
 
         innerPanel.add(searchButton, c);
         add(innerPanel, BorderLayout.NORTH);
@@ -54,9 +73,18 @@ public class BookSearchPanel extends JPanel {
 
         setVisible(true);
     }
+        public void clickSearchButton(JTextField searchBar){
+            as.setPersistedSearch(searchBar.getText());
+            searchBooks(searchBar.getText());
+        }
         public void searchBooks(String searchTerm){
             books.clear();
             books.addAll(dao.search(searchTerm));
             revalidate();
+        }
+
+        public void selectBook(Book book){
+            as.setBookResponse(book);
+            as.setState(ApplicationStateManager.GuiState.BOOK_INFO);
         }
 }

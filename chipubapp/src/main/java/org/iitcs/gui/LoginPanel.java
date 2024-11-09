@@ -1,7 +1,6 @@
 package org.iitcs.gui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 import static org.iitcs.util.Constants.APP_H;
@@ -38,7 +37,7 @@ public class LoginPanel extends JPanel {
         JPanel chPanel = new JPanel();
         chPanel.setLayout(new BorderLayout());
 
-        JLabel cardholderLabel = new JLabel("Card number: ");
+        JLabel cardholderLabel = new JLabel("Username: "); //cardnums aren't unique, so will need to do like, cID + lastname
         chPanel.add(cardholderLabel, BorderLayout.WEST);
         JTextField cardnumberField = new JTextField(20);
         chPanel.add(cardnumberField, BorderLayout.EAST);

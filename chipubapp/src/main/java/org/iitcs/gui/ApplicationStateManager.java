@@ -1,10 +1,14 @@
 package org.iitcs.gui;
 
+import org.iitcs.database.dao.Book;
+
 public class ApplicationStateManager {
     private static ApplicationStateManager instance = null;
     private ApplicationFrame fw = new ApplicationFrame();;
     public GuiState state;
     public UserContext userContext;
+    private Book bookResponse;
+    private String persistedSearch = null;
     private ApplicationStateManager(){}
     public static synchronized ApplicationStateManager getInstance(){
         if(instance == null){
@@ -27,7 +31,10 @@ public class ApplicationStateManager {
                 fw.setSimplePanel(new LoginPanel());
                 break;
             case SEARCH_BOOK:
-                fw.setPanelWithMenu(new BookSearchPanel());
+                fw.setPanelWithMenu(new BookSearchPanel(persistedSearch));
+                break;
+            case BOOK_INFO:
+                fw.setPanelWithMenu(new BookDetailPanel(bookResponse));
                 break;
         }
     }
@@ -35,5 +42,7 @@ public class ApplicationStateManager {
     public void setUserContext(UserContext userContext){
         this.userContext = userContext;
     }
-
+    public void setBookResponse(Book book) {this.bookResponse = book;}
+    public void setPersistedSearch(String searchTerm) {this.persistedSearch = searchTerm;}
+    public String getPersistedSearch(){return this.persistedSearch;}
 }

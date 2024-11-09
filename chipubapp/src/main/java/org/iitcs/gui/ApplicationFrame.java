@@ -34,6 +34,7 @@ public class ApplicationFrame extends JFrame{
         getContentPane().add(mainPanel, c);
         addUserMessagePanel();
         revalidate();
+        repaint();
     }
 
     public void addUserMessagePanel(){
