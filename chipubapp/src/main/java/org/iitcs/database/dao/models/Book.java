@@ -1,6 +1,6 @@
-package org.iitcs.database.dao;
+package org.iitcs.database.dao.models;
 
-public class Book {
+public class Book extends CplEntity {
     private long bookId;
     private String isbn;
     private String title;
@@ -26,24 +26,18 @@ public class Book {
         return String.format("ISBN: %-10s | Title: %s", isbn, title);
     }
 
-    public String toJLabelDetail(){
+    @Override
+    public String toStringJLabelDetail(){
         StringBuilder sb = new StringBuilder();
-        sb.append("<html>");
-        appendIfNotNull(sb, "ISBN", isbn);
-        appendIfNotNull(sb, "Title", title);
-        appendIfNotNull(sb, "Author", authorFirstName.concat(" ").concat(authorLastName));
-        appendIfNotNull(sb, "Language", language);
-        appendIfNotNull(sb, "Subject", subject);
-        appendIfNotNull(sb, "Genre", genre);
-        sb.append("</html>");
+        appendHtmlOpenTag(sb);
+        appendLineBreakWithLabel(sb, "ISBN", isbn);
+        appendLineBreakWithLabel(sb, "Title", title);
+        appendLineBreakWithLabel(sb, "Author", authorFirstName.concat(" ").concat(authorLastName));
+        appendLineBreakWithLabel(sb, "Language", language);
+        appendLineBreakWithLabel(sb, "Subject", subject);
+        appendLineBreakWithLabel(sb, "Genre", genre);
+        appendHtmlClosingTag(sb);
         return sb.toString();
-    }
-    public void appendIfNotNull(StringBuilder sb, String tag, String s){
-        if(s!=null){
-            sb.append(tag.concat(": ").concat(s).concat("<br/>"));
-        }else{
-            sb.append(tag.concat(": ").concat( "N/A").concat("<br/>"));
-        }
     }
     public long getBookId() {
         return bookId;

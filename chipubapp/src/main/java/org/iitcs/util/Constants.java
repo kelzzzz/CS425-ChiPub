@@ -14,6 +14,7 @@ public class Constants {
 
     public static final int APP_W = 500;
     public static final int APP_H = 500;
+    public static final Long LOGIN_ERROR_CODE = (long) -99999;
     public enum CRUD{
         CREATE, READ, UPDATE, DELETE
     }

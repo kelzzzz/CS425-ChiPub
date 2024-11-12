@@ -1,4 +1,9 @@
-package org.iitcs.gui;
+package org.iitcs.gui.panel;
+
+import org.iitcs.database.dao.models.Admin;
+import org.iitcs.database.dao.CardholderDao;
+import org.iitcs.gui.ApplicationStateManager;
+import org.iitcs.util.PropertiesLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,8 +68,26 @@ public class LoginPanel extends JPanel {
         innerPanel.add(loginButton, BorderLayout.SOUTH);
     }
     private void loginAction(String cardholderId, char[] password){
-        boolean validated = true;
-        //try to use dao and validate box text with db
+        boolean validated = false;
+
+        try{
+            CardholderDao chd = new CardholderDao();
+            if(cardholderId.equals(PropertiesLoader.getInstance().getDbAdminUsername())
+                    && new String(password).equals(PropertiesLoader.getInstance().getDbAdminPassword())){
+
+                as.setUserContext(ApplicationStateManager.UserContext.ADMIN);
+                as.setCurrentUser(new Admin());
+                validated = true;
+
+            }else if(chd.validateCredentials(cardholderId, new String(password))){
+                as.setUserContext(ApplicationStateManager.UserContext.CARDHOLDER);
+                as.setCurrentUser(chd.get(chd.getChIDFromUsername(cardholderId)).get());
+                validated = true;
+            }
+        }catch(InstantiationException e){
+            //do something
+        }
+
         if(validated){
             as.setState(ApplicationStateManager.GuiState.SEARCH_BOOK);
         }

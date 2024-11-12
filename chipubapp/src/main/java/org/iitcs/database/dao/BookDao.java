@@ -3,6 +3,7 @@ package org.iitcs.database.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.iitcs.database.connection.ConnectionWrapper;
+import org.iitcs.database.dao.models.Book;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

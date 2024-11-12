@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.iitcs.database.connection.ConnectionWrapper;
-import org.iitcs.gui.ApplicationFrame;
 import org.iitcs.gui.ApplicationStateManager;
 import org.iitcs.util.PropertiesLoader;
 

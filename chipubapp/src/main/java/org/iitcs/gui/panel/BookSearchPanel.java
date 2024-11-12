@@ -1,14 +1,12 @@
-package org.iitcs.gui;
+package org.iitcs.gui.panel;
 
-import org.iitcs.database.dao.Book;
+import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.BookDao;
+import org.iitcs.gui.ApplicationStateManager;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 import static org.iitcs.util.Constants.APP_H;
 import static org.iitcs.util.Constants.APP_W;
@@ -84,7 +82,7 @@ public class BookSearchPanel extends JPanel {
         }
 
         public void selectBook(Book book){
-            as.setBookResponse(book);
-            as.setState(ApplicationStateManager.GuiState.BOOK_INFO);
+            as.setBookDetailResponse(book);
+            as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
         }
 }

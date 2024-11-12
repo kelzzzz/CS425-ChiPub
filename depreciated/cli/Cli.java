@@ -1,6 +1,5 @@
-package org.iitcs.cli;
+package org.iitcs.depreciated.cli;
 
-import org.iitcs.database.QueryExecutor;
 import org.iitcs.util.Constants;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
