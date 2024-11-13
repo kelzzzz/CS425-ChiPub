@@ -17,14 +17,14 @@ public class ApplicationFrame extends JFrame{
         setVisible(true);
     }
 
-    public void setSimplePanel(JPanel newPanel){
-        setPanel(newPanel);
+    public void packSimpleFrame(JPanel newPanel){
+        setMainPanel(newPanel);
         getContentPane().add(mainPanel);
         refreshPanel();
     }
 
-    public void setPanelWithMenu(JPanel newPanel, String greetingName){
-        setPanel(newPanel);
+    public void packFrameWithUserDetailButton(JPanel newPanel, String greetingName){
+        setMainPanel(newPanel);
 
         getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -41,12 +41,12 @@ public class ApplicationFrame extends JFrame{
         repaint();
     }
 
-    private void setPanel(JPanel newPanel) {
+    private void setMainPanel(JPanel newPanel) {
         this.mainPanel = newPanel;
         getContentPane().removeAll();
     }
 
-    public void addUserDetailButton(String greetingName){
+    private void addUserDetailButton(String greetingName){
         JPanel userDetailButtonPanel = new JPanel();
         addUserDetailButtonToPanel(greetingName, userDetailButtonPanel);
 

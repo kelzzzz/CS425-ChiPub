@@ -35,16 +35,16 @@ public class ApplicationStateManager {
 
         switch(state){
             case LOGIN:
-                fw.setSimplePanel(new LoginPanel());
+                fw.packSimpleFrame(new LoginPanel());
                 break;
             case SEARCH_BOOK:
-                fw.setPanelWithMenu(new BookSearchPanel(persistedSearch), currentUser.getFirstName());
+                fw.packFrameWithUserDetailButton(new BookSearchPanel(persistedSearch), currentUser.getFirstName());
                 break;
             case BOOK_DETAIL:
-                fw.setPanelWithMenu(new BookDetailPanel(bookDetailResponse), currentUser.getFirstName());
+                fw.packFrameWithUserDetailButton(new BookDetailPanel(bookDetailResponse), currentUser.getFirstName());
                 break;
             case USER_DETAIL:
-                fw.setSimplePanel(new CardholderDetailPanel(currentUser, lastState));
+                fw.packSimpleFrame(new CardholderDetailPanel(currentUser, lastState));
                 break;
         }
     }
