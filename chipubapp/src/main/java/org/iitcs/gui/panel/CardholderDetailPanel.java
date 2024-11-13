@@ -9,20 +9,20 @@ import java.awt.*;
 import static org.iitcs.util.Constants.APP_H;
 import static org.iitcs.util.Constants.APP_W;
 
-public class CardholderDetailPanel extends JPanel {
-    ApplicationStateManager as = ApplicationStateManager.getInstance();
+public class CardholderDetailPanel extends AbstractPanel {
     public CardholderDetailPanel(Cardholder currentUser, ApplicationStateManager.GuiState lastState){
-        setSize(APP_W,APP_H);
         setLayout(new GridBagLayout());
         JLabel userDetail = new JLabel(currentUser.toStringJLabelDetail());
         add(userDetail);
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> as.setState(lastState));
-        add(backButton);
+        addBackButton();
         setVisible(true);
         //TODO show currently checked out books and holds in a list
     }
     private void packAdminButtons(){
+        //TODO
+    }
 
+    private void packUserButtons(){
+        //TODO read user object checkouts and holds into a jlist
     }
 }

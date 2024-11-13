@@ -48,6 +48,9 @@ public class ApplicationStateManager {
                 break;
         }
     }
+    public Cardholder getCurrentUser() {
+        return currentUser;
+    }
 
     public void setUserContext(UserContext userContext){
         this.userContext = userContext;

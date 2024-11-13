@@ -3,12 +3,14 @@ package org.iitcs.database.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.iitcs.database.connection.ConnectionWrapper;
+import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.models.Cardholder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +20,11 @@ import static org.iitcs.util.Util.substringByRegex;
 
 public class CardholderDao implements IDao{
     Connection connection;
-    private static final Logger LOGGER = LogManager.getLogger(BookDao.class);
+    BookDao bd;
+    private static final Logger LOGGER = LogManager.getLogger(CardholderDao.class);
 
     public CardholderDao() throws InstantiationException {
+        bd = new BookDao();
         connection = ConnectionWrapper.getInstance().getConnection();
     }
     @Override
@@ -39,15 +43,33 @@ public class CardholderDao implements IDao{
     }
 
     private Cardholder createCardholderFromResultSet(ResultSet cardholder) throws SQLException {
-        //TODO set their address and phone numbers as well
-        return new Cardholder(
-                cardholder.getLong(1),
+        //TODO set their address, holds, checkouts, and phone numbers as well
+        Long chid = cardholder.getLong(1);
+        Cardholder ch = new Cardholder(
+                chid,
                 cardholder.getString(2),
                 cardholder.getString(3),
                 cardholder.getString(4),
                 null,
                 cardholder.getString(12)
         );
+        ArrayList<Book> holds = new ArrayList<Book>();
+        ArrayList<Long> bookIds = new ArrayList<>();
+        try(PreparedStatement ps = connection.prepareStatement("SELECT book_id FROM book_cardholder WHERE cardholder_id=? AND status = ?")) {
+            ps.setLong(1, chid);
+            ps.setString(2, statusMapping.get(Status.PENDING));
+            ResultSet holdRs = ps.executeQuery();
+            while (holdRs.next()) {
+                bookIds.add(holdRs.getLong(1));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+        for(Long id : bookIds){
+            holds.add(bd.get(id).get());
+        }
+        ch.setHolds(holds);
+        return ch;
     }
 
     @Override

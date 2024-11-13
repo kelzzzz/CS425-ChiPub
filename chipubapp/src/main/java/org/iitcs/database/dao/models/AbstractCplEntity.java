@@ -1,6 +1,6 @@
 package org.iitcs.database.dao.models;
 
-public abstract class CplEntity {
+public abstract class AbstractCplEntity {
     public static final String BR_TAG = "<br/>";
     public static final String NO_ATTRIBUTE = "N/A";
     public static final String COLON_SPACE = ": ";

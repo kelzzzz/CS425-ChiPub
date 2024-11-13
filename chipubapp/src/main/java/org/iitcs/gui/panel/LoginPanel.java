@@ -2,97 +2,117 @@ package org.iitcs.gui.panel;
 
 import org.iitcs.database.dao.models.Admin;
 import org.iitcs.database.dao.CardholderDao;
+import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.gui.ApplicationStateManager;
 import org.iitcs.util.PropertiesLoader;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static org.iitcs.util.Constants.APP_H;
-import static org.iitcs.util.Constants.APP_W;
+import static org.iitcs.util.Util.setGridBagConstraints;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends AbstractPanel {
     ApplicationStateManager as = ApplicationStateManager.getInstance();
-    JPanel innerPanel = new JPanel();
+    JPanel loginComponentContainer = new JPanel();
+    JTextField cardnumberField = new JTextField(20);
+    JPasswordField passwordField = new JPasswordField(20);
     JButton loginButton = new JButton();
-    JLabel failure = new JLabel();
+    JLabel failureLabel = new JLabel();
     public LoginPanel(){
-        setSize(APP_W,APP_H);
         setLayout(new GridBagLayout());
-        packInnerPanel();
+        packComponentContainer();
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        add(innerPanel, c);
+        setGridBagConstraints(c,0,0,0);
+        add(loginComponentContainer, c);
 
-        GridBagConstraints c2 = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        add(failure, c);
+        setGridBagConstraints(c,0,1,0);
+        add(failureLabel, c);
 
         setVisible(true);
     }
 
-    private void packInnerPanel(){ //TODO majorly improve this
-        innerPanel.setLayout(new BorderLayout());
-
-        JLabel loginLabel = new JLabel("Log in", SwingConstants.CENTER);
-        innerPanel.add(loginLabel, BorderLayout.NORTH);
-
-        JPanel chPanel = new JPanel();
-        chPanel.setLayout(new BorderLayout());
-
-        JLabel cardholderLabel = new JLabel("Username: "); //cardnums aren't unique, so will need to do like, cID + lastname
-        chPanel.add(cardholderLabel, BorderLayout.WEST);
-        JTextField cardnumberField = new JTextField(20);
-        chPanel.add(cardnumberField, BorderLayout.EAST);
-
-        JPanel pwPanel = new JPanel();
-        pwPanel.setLayout(new BorderLayout());
-
-        JLabel passwordLabel = new JLabel("Password: ");
-        pwPanel.add(passwordLabel, BorderLayout.WEST);
-        JPasswordField passwordField = new JPasswordField(20);
-        pwPanel.add(passwordField, BorderLayout.EAST);
-
-        JPanel fieldsPanel = new JPanel();
-        fieldsPanel.setLayout(new BorderLayout());
-        fieldsPanel.add(chPanel, BorderLayout.NORTH);
-        fieldsPanel.add(pwPanel, BorderLayout.SOUTH);
-        innerPanel.add(fieldsPanel, BorderLayout.CENTER);
-
-        loginButton.setText("Login");
-
-        loginButton.addActionListener(e -> loginAction(cardnumberField.getText(),passwordField.getPassword()));
-
-        innerPanel.add(loginButton, BorderLayout.SOUTH);
+    private void packComponentContainer(){
+        loginComponentContainer.setLayout(new BorderLayout());
+        packHeaderLabel();
+        packFields();
+        packLoginButton();
     }
-    private void loginAction(String cardholderId, char[] password){
+
+    private void packHeaderLabel() {
+        JLabel loginHeaderLabel = new JLabel("Log in", SwingConstants.CENTER);
+        loginComponentContainer.add(loginHeaderLabel, BorderLayout.NORTH);
+    }
+
+    private void packFields() {
+        JPanel fieldContainer = getFormattedFieldContainer(createFieldPanel("Username: ", cardnumberField), createFieldPanel("Password: ", passwordField));
+        loginComponentContainer.add(fieldContainer, BorderLayout.CENTER);
+    }
+
+    private void packLoginButton() {
+        loginButton.setText("Login");
+        loginButton.addActionListener(e -> loginAction(cardnumberField.getText(),passwordField.getPassword()));
+        loginComponentContainer.add(loginButton, BorderLayout.SOUTH);
+    }
+
+    private static JPanel getFormattedFieldContainer(JPanel cardHolderFieldContainer, JPanel passwordFieldContainer) {
+        JPanel infoContainer = new JPanel();
+        infoContainer.setLayout(new BorderLayout());
+        infoContainer.add(cardHolderFieldContainer, BorderLayout.NORTH);
+        infoContainer.add(passwordFieldContainer, BorderLayout.SOUTH);
+        return infoContainer;
+    }
+
+    private JPanel createFieldPanel(String text, JTextField field) {
+        JPanel fieldContainer = new JPanel();
+        fieldContainer.setLayout(new BorderLayout());
+
+        JLabel fieldLabel = new JLabel(text);
+        fieldContainer.add(fieldLabel, BorderLayout.WEST);
+        fieldContainer.add(field, BorderLayout.EAST);
+        return fieldContainer;
+    }
+
+    private void loginAction(String userName, char[] password){
         boolean validated = false;
 
         try{
             CardholderDao chd = new CardholderDao();
-            if(cardholderId.equals(PropertiesLoader.getInstance().getDbAdminUsername())
-                    && new String(password).equals(PropertiesLoader.getInstance().getDbAdminPassword())){
 
-                as.setUserContext(ApplicationStateManager.UserContext.ADMIN);
-                as.setCurrentUser(new Admin());
-                validated = true;
-
-            }else if(chd.validateCredentials(cardholderId, new String(password))){
-                as.setUserContext(ApplicationStateManager.UserContext.CARDHOLDER);
-                as.setCurrentUser(chd.get(chd.getChIDFromUsername(cardholderId)).get());
-                validated = true;
+            if(isAdminCredentials(userName, password)){
+                validated = sendUserContextResponse(ApplicationStateManager.UserContext.ADMIN, new Admin());
+            }else if(isUserCredentials(userName, password, chd)){
+                Cardholder user = chd.get(chd.getChIDFromUsername(userName)).get();
+                validated = sendUserContextResponse(ApplicationStateManager.UserContext.CARDHOLDER,
+                        user);
             }
+
         }catch(InstantiationException e){
-            //do something
+            logPanelException(e, "Login Panel tried to use uninitialized cardholder dao.");
         }
 
         if(validated){
             as.setState(ApplicationStateManager.GuiState.SEARCH_BOOK);
         }
         else{
-            failure.setText("Login attempt failed. Try again.");
+            showFailureMessage();
         }
+    }
+
+    private void showFailureMessage() {
+        failureLabel.setText("Login attempt failed. Try again.");
+    }
+
+    private boolean sendUserContextResponse(ApplicationStateManager.UserContext ctx, Cardholder user){
+        as.setUserContext(ctx);
+        as.setCurrentUser(user);
+        return true;
+    }
+    private static boolean isUserCredentials(String cardholderId, char[] password, CardholderDao chd) {
+        return chd.validateCredentials(cardholderId, new String(password));
+    }
+
+    private static boolean isAdminCredentials(String cardholderId, char[] password) {
+        return cardholderId.equals(PropertiesLoader.getInstance().getDbAdminUsername())
+                && new String(password).equals(PropertiesLoader.getInstance().getDbAdminPassword());
     }
 }

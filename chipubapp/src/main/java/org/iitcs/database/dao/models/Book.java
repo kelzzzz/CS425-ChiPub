@@ -1,6 +1,6 @@
 package org.iitcs.database.dao.models;
 
-public class Book extends CplEntity {
+public class Book extends AbstractCplEntity {
     private long bookId;
     private String isbn;
     private String title;

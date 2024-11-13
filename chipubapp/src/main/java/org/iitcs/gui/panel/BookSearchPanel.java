@@ -8,81 +8,91 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import static org.iitcs.util.Constants.APP_H;
-import static org.iitcs.util.Constants.APP_W;
+import static org.iitcs.util.Util.setGridBagConstraints;
 
-public class BookSearchPanel extends JPanel {
-    ApplicationStateManager as = ApplicationStateManager.getInstance();
+public class BookSearchPanel extends AbstractPanel {
     BookDao dao;
     DefaultListModel<Book> books = new DefaultListModel<>();
     public BookSearchPanel(String lastSearchTerm){
         try{
             dao = new BookDao();
         }catch(InstantiationException e){
-            //do something
+            logPanelException(e, "BookSearchPanel tried to use uninitialized dao.");
         }
 
-        setSize(APP_W,APP_H);
+        refreshSearchOnPageReentry(lastSearchTerm);
         setLayout(new BorderLayout());
-        JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        JLabel label = new JLabel("Search: ");
-        innerPanel.add(label, c);
+        packInnerPanels(lastSearchTerm);
+        setVisible(true);
+    }
 
-        c.gridx = 1;
-        c.gridy = 0;
-        JTextField searchBar = new JTextField(15);
-        innerPanel.add(searchBar, c);
-
-        c.gridx = 2;
-        c.gridy = 0;
-
-        JList booksJlist = new JList(books);
-
+    private void refreshSearchOnPageReentry(String lastSearchTerm) {
         if(lastSearchTerm != null){
             searchBooks(lastSearchTerm);
         }
+    }
 
+    private void packInnerPanels(String lastSearchTerm) {
+        addSearchBarContainer();
+        addScrollableListOfBooks();
+    }
+
+    private void addSearchBarContainer() {
+        JPanel searchBarContainer = new JPanel();
+        searchBarContainer.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        setGridBagConstraints(c,0,0,0);
+        JLabel label = new JLabel("Search: ");
+        searchBarContainer.add(label, c);
+
+        setGridBagConstraints(c,1,0,0);
+        JTextField searchBar = new JTextField(15);
+        searchBarContainer.add(searchBar, c);
+
+        setGridBagConstraints(c,2,0,0);
         JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(e -> clickSearchButton(searchBar));
+        searchButton.addActionListener(e -> clickSearchButtonAction(searchBar));
+        searchBarContainer.add(searchButton, c);
+
+        add(searchBarContainer, BorderLayout.NORTH);
+    }
+
+    private void addScrollableListOfBooks() {
+        JList booksJlist = new JList(books);
+        booksJlist.addMouseListener(doubleClickListAction(booksJlist));
+        JScrollPane scollPane = new JScrollPane(booksJlist);
+        scollPane.setPreferredSize(new Dimension(200, 200));
+        add(scollPane, BorderLayout.CENTER);
+    }
+
+    private MouseListener doubleClickListAction(JList list) {
         MouseListener ml = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 2) {
-                    if (booksJlist.getSelectedIndex() != -1) {
-                        int index = booksJlist.locationToIndex(evt.getPoint());
-                        selectBook((Book) booksJlist.getSelectedValue());
+                    if (list.getSelectedIndex() != -1) {
+                        int index = list.locationToIndex(evt.getPoint());
+                        selectBook((Book) list.getSelectedValue());
                     }
                 }
             }
         };
-
-        booksJlist.addMouseListener(ml);
-
-        innerPanel.add(searchButton, c);
-        add(innerPanel, BorderLayout.NORTH);
-
-        JScrollPane scollPane = new JScrollPane(booksJlist);
-        scollPane.setPreferredSize(new Dimension(200, 200));
-        add(scollPane, BorderLayout.CENTER);
-
-        setVisible(true);
+        return ml;
     }
-        public void clickSearchButton(JTextField searchBar){
-            as.setPersistedSearch(searchBar.getText());
-            searchBooks(searchBar.getText());
-        }
-        public void searchBooks(String searchTerm){
-            books.clear();
-            books.addAll(dao.search(searchTerm));
-            revalidate();
-        }
 
-        public void selectBook(Book book){
-            as.setBookDetailResponse(book);
-            as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
-        }
+    public void clickSearchButtonAction(JTextField searchBar){
+        as.setPersistedSearch(searchBar.getText());
+        searchBooks(searchBar.getText());
+    }
+    public void searchBooks(String searchTerm){
+        books.clear();
+        books.addAll(dao.search(searchTerm));
+        revalidate();
+    }
+
+    public void selectBook(Book book){
+        as.setBookDetailResponse(book);
+        as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
+    }
 }

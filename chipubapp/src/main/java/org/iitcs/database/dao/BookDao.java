@@ -2,13 +2,15 @@ package org.iitcs.database.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.iitcs.database.QueryConstants;
 import org.iitcs.database.connection.ConnectionWrapper;
 import org.iitcs.database.dao.models.Book;
+import org.iitcs.database.dao.models.Cardholder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,15 +37,15 @@ public class BookDao implements IDao{
     @Override
     public Optional<Book> get(long id) {
         //run query for a book with the id
-        try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM BOOK WHERE BID = ?");){
-            ps.setInt(1,(int)id);
+        try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM MasterBookIndex WHERE BID = ?");){
+            ps.setLong(1, id);
             ResultSet books = ps.executeQuery();
             while(books.next()){
                 LOGGER.info("Book with id " + id + " searched for.");
                 return Optional.of(createBookFromResultSet(books));
             }
         }catch(SQLException e){
-            //do something
+            LOGGER.info(e.getMessage());
         }
         return Optional.empty();
     }
@@ -65,11 +67,51 @@ public class BookDao implements IDao{
             }
 
         }catch(SQLException e){
-            System.out.println(e.getMessage());
+            LOGGER.info(e.getMessage());
         }
         return ret;
     }
 
+    public boolean placeHold(Book book, Cardholder cardholder){
+        try(PreparedStatement ps  = connection.prepareStatement("INSERT INTO book_cardholder (timestamp, book_id, cardholder_id, status) VALUES(?,?,?,?)")){
+            Timestamp timestamp = new Timestamp(ZonedDateTime
+                    .now(ZoneId.systemDefault())
+                    .with(LocalTime.now())
+                    .toInstant()
+                    .toEpochMilli());
+            ps.setTimestamp(1,timestamp);
+            ps.setLong(2,book.getBookId());
+            ps.setLong(3, cardholder.getChid());
+            ps.setString(4,QueryConstants.statusMapping.get(QueryConstants.Status.PENDING));
+            ps.executeUpdate();
+            if(ps.getUpdateCount() > 0){
+                return true;
+            }else{
+                LOGGER.info("Placing hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
+                return false;
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+        return false;
+    }
+    public boolean cancelHold(Book book, Cardholder cardholder){
+        try(PreparedStatement ps  = connection.prepareStatement("UPDATE book_cardholder SET status = ? WHERE book_id = ? and cardholder_id = ?")){
+            ps.setString(1,QueryConstants.statusMapping.get(QueryConstants.Status.CANCELLED));
+            ps.setLong(2,book.getBookId());
+            ps.setLong(3, cardholder.getChid());
+            ps.executeUpdate();
+            if(ps.getUpdateCount() > 0){
+                return true;
+            }else{
+                LOGGER.info("Cancelling hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
+                return false;
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+        return false;
+    }
     @Override
     public List getAll() {
 
