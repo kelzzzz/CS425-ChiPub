@@ -31,7 +31,7 @@ public class ApplicationFrame extends JFrame{
         setGridBagConstraints(c, 0,1, 120);
 
         getContentPane().add(mainPanel, c);
-        addUserDetailButton(greetingName);
+        addUserDetailPanelToFrame(greetingName);
 
         refreshPanel();
     }
@@ -46,7 +46,7 @@ public class ApplicationFrame extends JFrame{
         getContentPane().removeAll();
     }
 
-    private void addUserDetailButton(String greetingName){
+    private void addUserDetailPanelToFrame(String greetingName){
         JPanel userDetailButtonPanel = new JPanel();
         addUserDetailButtonToPanel(greetingName, userDetailButtonPanel);
 
