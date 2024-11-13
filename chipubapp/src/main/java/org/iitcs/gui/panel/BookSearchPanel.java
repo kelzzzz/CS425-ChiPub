@@ -2,11 +2,9 @@ package org.iitcs.gui.panel;
 
 import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.BookDao;
-import org.iitcs.gui.ApplicationStateManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 import static org.iitcs.util.Util.setGridBagConstraints;
 
@@ -34,7 +32,7 @@ public class BookSearchPanel extends AbstractPanel {
 
     private void packInnerPanels(String lastSearchTerm) {
         addSearchBarContainer();
-        addScrollableListOfBooks();
+        add(getScrollableListOfBooks(books),BorderLayout.SOUTH);
     }
 
     private void addSearchBarContainer() {
@@ -58,29 +56,6 @@ public class BookSearchPanel extends AbstractPanel {
         add(searchBarContainer, BorderLayout.NORTH);
     }
 
-    private void addScrollableListOfBooks() {
-        JList booksJlist = new JList(books);
-        booksJlist.addMouseListener(doubleClickListAction(booksJlist));
-        JScrollPane scollPane = new JScrollPane(booksJlist);
-        scollPane.setPreferredSize(new Dimension(200, 200));
-        add(scollPane, BorderLayout.CENTER);
-    }
-
-    private MouseListener doubleClickListAction(JList list) {
-        MouseListener ml = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 2) {
-                    if (list.getSelectedIndex() != -1) {
-                        int index = list.locationToIndex(evt.getPoint());
-                        selectBook((Book) list.getSelectedValue());
-                    }
-                }
-            }
-        };
-        return ml;
-    }
-
     public void clickSearchButtonAction(JTextField searchBar){
         as.setPersistedSearch(searchBar.getText());
         searchBooks(searchBar.getText());
@@ -91,8 +66,4 @@ public class BookSearchPanel extends AbstractPanel {
         revalidate();
     }
 
-    public void selectBook(Book book){
-        as.setBookDetailResponse(book);
-        as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
-    }
 }

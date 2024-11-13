@@ -4,10 +4,13 @@ import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.gui.panel.*;
 
+import java.util.Stack;
+
 public class ApplicationStateManager {
     private static ApplicationStateManager instance = null;
     private ApplicationFrame fw = new ApplicationFrame();
     public GuiState state;
+    public Stack<GuiState> stateTrail = new Stack<>();
     public GuiState lastState;
     public UserContext userContext;
     private Cardholder currentUser;
@@ -29,9 +32,15 @@ public class ApplicationStateManager {
     public enum UserContext {
         ADMIN, CARDHOLDER, GUEST
     }
+    public GuiState rewindState(){
+        this.stateTrail.pop();
+        return this.stateTrail.pop();
+    }
     public void setState(GuiState state){
-        this.lastState = this.state;
         this.state = state;
+        if(!stateTrail.contains(this.state)){
+            this.stateTrail.add(this.state);
+        }
 
         switch(state){
             case LOGIN:

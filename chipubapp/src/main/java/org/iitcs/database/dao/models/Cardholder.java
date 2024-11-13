@@ -42,10 +42,6 @@ public class Cardholder extends AbstractCplEntity {
         return checkOuts;
     }
 
-    public ArrayList<Book> getHolds() {
-        return holds;
-    }
-
     private String cardNum;
     private String firstName;
     private String lastName;
@@ -58,7 +54,9 @@ public class Cardholder extends AbstractCplEntity {
     public String getFirstName() {
         return firstName;
     }
-
+    public ArrayList<Book> getHolds() {
+        return holds;
+    }
     public ArrayList<Long> getHoldIds(){
         ArrayList<Long> holdIds = new ArrayList<>();
         for(Book book : holds){
