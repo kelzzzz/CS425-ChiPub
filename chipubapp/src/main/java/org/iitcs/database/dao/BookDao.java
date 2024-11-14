@@ -60,6 +60,20 @@ public class BookDao implements IDao{
             ps.setString(6, searchTerm);
             ps.setString(7, searchTerm);
 
+            ps.setString(8, searchTerm);
+            ps.setString(9, searchTerm);
+            ps.setString(10, searchTerm);
+            ps.setString(11, searchTerm);
+            ps.setString(12, searchTerm);
+            ps.setString(13, searchTerm);
+
+            ps.setString(14, searchTerm);
+            ps.setString(15, searchTerm);
+            ps.setString(16, searchTerm);
+            ps.setString(17, searchTerm);
+            ps.setString(18, searchTerm);
+            ps.setString(19, searchTerm);
+
             ResultSet books = ps.executeQuery();
 
             while(books.next()){

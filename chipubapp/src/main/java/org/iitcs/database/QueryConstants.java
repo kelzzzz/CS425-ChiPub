@@ -6,14 +6,25 @@ public class QueryConstants {
 
     public static final String BOOK_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateMasterBookIndex()}";
     public static final String CARDHOLDER_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateCardholderTableWithPhone()}";
-    public static final String SEARCH_BOOK_MASTER_INDEX_TABLE = "SELECT * FROM MasterBookIndex WHERE " +
-            "isbn = ?" +
-            " OR title LIKE CONCAT( '%',?,'%')" +
-            " OR author_last_name LIKE CONCAT( '%',?,'%') " +
-            " OR author_first_name LIKE CONCAT( '%',?,'%')" +
-            " OR genre LIKE CONCAT( '%',?,'%')" +
-            " OR language LIKE CONCAT( '%',?,'%')" +
-            " OR subject LIKE CONCAT( '%',?,'%')";
+    public static final String SEARCH_BOOK_MASTER_INDEX_TABLE =
+            "select *,\n" +
+                    "dense_rank() over(order by ((CASE WHEN title = ? THEN 1 ELSE 0 END) +\n" +
+                    "(CASE WHEN author_last_name = ? THEN 1 ELSE 0 END) +\n" +
+                    "(CASE WHEN author_first_name = ? THEN 1 ELSE 0 END) +\n" +
+                    "(CASE WHEN genre = CONCAT(?,char(13)) OR genre = ? THEN 1 ELSE 0 END) +\n" +
+                    "(CASE WHEN subject = CONCAT(?,char(13)) OR subject = ? THEN 1 ELSE 0 END) +\n" +
+                    "(CASE WHEN language = CONCAT(?,char(13)) OR language = ? THEN 1 ELSE 0 END)) desc) as match_rank\n" +
+                    "from MasterBookIndex where isbn = ?\n" +
+                    "or title like CONCAT( '%',?,'%')\n" +
+                    "or author_last_name like CONCAT( '%',?,'%')\n" +
+                    "or author_first_name like CONCAT( '%',?,'%')\n" +
+                    "or genre like CONCAT( '%',?,'%')\n" +
+                    "or language like CONCAT( '%',?,'%')\n" +
+                    "or subject like CONCAT( '%',?,'%')"+
+                    "or CONCAT(author_first_name,' ', author_last_name) like CONCAT( '%',?,'%')\n" +
+                    "or CONCAT(author_last_name,' ',author_first_name) like CONCAT( '%',?,'%')"+
+                    "or CONCAT(author_last_name,', ',author_first_name) like CONCAT( '%',?,'%')"+
+                    "order by match_rank, title asc";
     public static final String SQL_USE_SCHEMA_QUERY = "USE chipub";
     public static final String SQL_SELECT_CARDHOLDER = "SELECT * FROM cardholder WHERE chid = ?";
     public static final String SQL_SELECT_CARDHOLDER_PASSWORD = "SELECT password FROM cardholder WHERE chid = ? AND last_name = ?";

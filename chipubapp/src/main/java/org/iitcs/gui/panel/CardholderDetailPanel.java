@@ -17,11 +17,15 @@ public class CardholderDetailPanel extends AbstractPanel {
         JLabel userDetail = new JLabel(currentUser.toStringJLabelDetail());
         add(userDetail);
         addBackButton();
-        packUserCheckoutsAndHoldsDisplay();
+        if(as.userContext == ApplicationStateManager.UserContext.CARDHOLDER){
+            packUserDashboard();
+        }
+        else if(as.userContext == ApplicationStateManager.UserContext.ADMIN){
+            packAdminDashboard();
+        }
         setVisible(true);
-        //TODO show currently checked out books and holds in a list
     }
-    private void packAdminButtons(){
+    private void packAdminDashboard(){
         //TODO
     }
 
@@ -33,7 +37,7 @@ public class CardholderDetailPanel extends AbstractPanel {
         add(getScrollableListOfBooks(books),c);
         revalidate();
     }
-    private void packUserButtons(){
-        //TODO read user object checkouts and holds into a jlist
+    private void packUserDashboard(){
+        packUserCheckoutsAndHoldsDisplay();
     }
 }
