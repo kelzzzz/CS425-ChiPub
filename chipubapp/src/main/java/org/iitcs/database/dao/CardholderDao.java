@@ -54,21 +54,42 @@ public class CardholderDao implements IDao{
                 cardholder.getString(12)
         );
         ArrayList<Book> holds = new ArrayList<Book>();
-        ArrayList<Long> bookIds = new ArrayList<>();
+        ArrayList<Long> holdBookIds = new ArrayList<>();
+
+        ArrayList<Book> checkOuts = new ArrayList<>();
+        ArrayList<Long> checkOutBookIds = new ArrayList<>();
+
         try(PreparedStatement ps = connection.prepareStatement("SELECT book_id FROM book_cardholder WHERE cardholder_id=? AND status = ?")) {
             ps.setLong(1, chid);
             ps.setString(2, statusMapping.get(Status.PENDING));
             ResultSet holdRs = ps.executeQuery();
             while (holdRs.next()) {
-                bookIds.add(holdRs.getLong(1));
+                holdBookIds.add(holdRs.getLong(1));
             }
         }catch(SQLException e){
             LOGGER.info(e.getMessage());
         }
-        for(Long id : bookIds){
+
+        for(Long id : holdBookIds){
             holds.add(bd.get(id).get());
         }
+
+        try(PreparedStatement ps = connection.prepareStatement(GET_CHECKOUT_BOOK_IDS_BY_CARDHOLDER_ID)) {
+            ps.setLong(1, chid);
+            ps.setLong(2, chid);
+            ResultSet checkOutRs = ps.executeQuery();
+            while (checkOutRs.next()) {
+                checkOutBookIds.add(checkOutRs.getLong(1));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+
+        for(Long id : checkOutBookIds){
+            checkOuts.add(bd.get(id).get());
+        }
         ch.setHolds(holds);
+        ch.setCheckOuts(checkOuts);
         return ch;
     }
 

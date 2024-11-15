@@ -6,6 +6,28 @@ public class QueryConstants {
 
     public static final String BOOK_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateMasterBookIndex()}";
     public static final String CARDHOLDER_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateCardholderTableWithPhone()}";
+
+    public static final String GET_CHECKOUT_BOOK_IDS_BY_CARDHOLDER_ID = "SELECT book.bid, copy.cid, \n" +
+            "\t(SELECT cardholder_id FROM cardholder_copy WHERE copy_id = copy.cid \n" +
+            "    AND cardholder_id=?\n" +
+            "    AND checked_in is null) as checkedOutTo\n" +
+            "FROM book \n" +
+            "INNER JOIN copy \n" +
+            "ON book.bid = copy.book_id\n" +
+            "Having checkedOutTo = ?;";
+    public static final String GET_AVAILABLE_COPY_IDS_FOR_BOOK = "SELECT copy.cid as availableCopyIds\n" +
+            "FROM book \n" +
+            "INNER JOIN copy \n" +
+            "ON book.bid = copy.book_id\n" +
+            "WHERE book.bid=? "+
+            "AND (SELECT checked_in FROM cardholder_copy where copy_id = copy.cid order by checked_out desc limit 1) is not null";
+
+    public static final String GET_CHECKED_OUT_COPY_IDS_FOR_BOOK = "SELECT copy.cid as checkedOutCopyIds\n" +
+            "FROM book \n" +
+            "INNER JOIN copy \n" +
+            "ON book.bid = copy.book_id\n" +
+            "WHERE book.bid=? "+
+            "AND (SELECT checked_in FROM cardholder_copy where copy_id = copy.cid order by checked_out desc limit 1) is null";
     public static final String SEARCH_BOOK_MASTER_INDEX_TABLE =
             "select *,\n" +
                     "dense_rank() over(order by ((CASE WHEN title = ? THEN 1 ELSE 0 END) +\n" +

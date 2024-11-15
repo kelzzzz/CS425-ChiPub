@@ -25,7 +25,7 @@ public class BookDetailPanel extends AbstractPanel {
     }
 
     private void packButtonsBasedOnUserContext() {
-        addBackButton();
+        add(getBackButton());
         if (as.userContext == ADMIN) {
             packAdminButtons();
         } else if (as.userContext == CARDHOLDER) {
@@ -35,13 +35,20 @@ public class BookDetailPanel extends AbstractPanel {
 
     private void packAdminButtons() {
         JButton checkOut = new JButton("Check Out"); //TODO --> checkout page, input ID and such
+        checkOut.addActionListener(e-> as.setState(ApplicationStateManager.GuiState.ADMIN_CHECKOUT));
         add(checkOut);
+
+        JButton checkIn = new JButton("Check In"); //TODO --> checkout page, input ID and such
+        checkIn.addActionListener(e-> as.setState(ApplicationStateManager.GuiState.ADMIN_CHECKIN));
+        add(checkIn);
     }
 
     private void packUserButtons() {
         if (as.getCurrentUser().getHoldIds().contains(focusedBook.getBookId())) {
             addCancelHoldButton();
-        } else {
+        }else if(as.getCurrentUser().getCheckOutsIds().contains(focusedBook.getBookId())){
+            //do nothin'
+        }else{
             addPlaceHoldButton();
         }
     }

@@ -38,7 +38,7 @@ public class Cardholder extends AbstractCplEntity {
         return phoneNumbers;
     }
 
-    public Copy[] getCheckOuts() {
+    public ArrayList<Book> getCheckOuts() {
         return checkOuts;
     }
 
@@ -48,7 +48,7 @@ public class Cardholder extends AbstractCplEntity {
     private CardholderAddress address;
     private String email;
     private String[] phoneNumbers;
-    private Copy[] checkOuts;
+    private ArrayList<Book> checkOuts = new ArrayList<>();
     private ArrayList<Book> holds = new ArrayList<>();
 
     public String getFirstName() {
@@ -64,6 +64,13 @@ public class Cardholder extends AbstractCplEntity {
         }
         return holdIds;
     }
+    public ArrayList<Long> getCheckOutsIds(){
+        ArrayList<Long> checkOutIds = new ArrayList<>();
+        for(Book book : checkOuts){
+            checkOutIds.add(book.getBookId());
+        }
+        return checkOutIds;
+    }
     public void removeBookFromHoldsById(Long id){
         Book remove = null;
         for(Book b : holds){
@@ -73,13 +80,23 @@ public class Cardholder extends AbstractCplEntity {
         }
         holds.remove(remove);
     }
-
+    public void removeBookFromCheckOutsById(Long id){
+        Book remove = null;
+        for(Book b : checkOuts){
+            if(b.getBookId()==id){
+                remove = b;
+            }
+        }
+        checkOuts.remove(remove);
+    }
     public void addBookToHolds(Book book){
         holds.add(book);
     }
-
     public void setHolds(ArrayList<Book> holds){
         this.holds = holds;
+    }
+    public void setCheckOuts(ArrayList<Book> checkOuts){
+        this.checkOuts = checkOuts;
     }
     @Override
     public String toStringJLabelDetail() {

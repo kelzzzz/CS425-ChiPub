@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.iitcs.database.QueryConstants.BOOK_CREATE_TEMPORARY_INDEX_QUERY;
-import static org.iitcs.database.QueryConstants.SEARCH_BOOK_MASTER_INDEX_TABLE;
+import static org.iitcs.database.QueryConstants.*;
 
 public class BookDao implements IDao{
     Connection connection;
@@ -97,8 +96,8 @@ public class BookDao implements IDao{
             ps.setLong(2,book.getBookId());
             ps.setLong(3, cardholder.getChid());
             ps.setString(4,QueryConstants.statusMapping.get(QueryConstants.Status.PENDING));
-            ps.executeUpdate();
-            if(ps.getUpdateCount() > 0){
+            int i = ps.executeUpdate();
+            if(i > 0){
                 return true;
             }else{
                 LOGGER.info("Placing hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
@@ -114,8 +113,8 @@ public class BookDao implements IDao{
             ps.setString(1,QueryConstants.statusMapping.get(QueryConstants.Status.CANCELLED));
             ps.setLong(2,book.getBookId());
             ps.setLong(3, cardholder.getChid());
-            ps.executeUpdate();
-            if(ps.getUpdateCount() > 0){
+            int i = ps.executeUpdate();
+            if(i > 0){
                 return true;
             }else{
                 LOGGER.info("Cancelling hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
@@ -125,6 +124,70 @@ public class BookDao implements IDao{
             LOGGER.info(e.getMessage());
         }
         return false;
+    }
+
+    public boolean checkOut(long copyId, long cardHolderId){
+        try(PreparedStatement ps = connection.prepareStatement("{call Check_out(?,?)}")){
+            ps.setLong(1, copyId);
+            ps.setLong(2, cardHolderId);
+            int i = ps.executeUpdate();
+            if(i > 0){
+                LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
+                return true;
+            }else{
+                LOGGER.info("Failed to check out book with copy ID ".concat(String.valueOf(copyId)));
+                return false;
+            }
+        }catch(SQLException e){
+
+        }
+        return false;
+    }
+
+    public boolean checkIn(long copyId, long cardHolderId){
+        try(PreparedStatement ps = connection.prepareStatement("{call Check_in(?,?)}")){
+            ps.setLong(1, copyId);
+            ps.setLong(2, cardHolderId);
+            int i = ps.executeUpdate();
+            if(i > 0){
+                LOGGER.info("Checked in book with copy ID ".concat(String.valueOf(copyId)));
+                return true;
+            }else{
+                LOGGER.info("Failed to check in book with copy ID ".concat(String.valueOf(copyId)));
+                return false;
+            }
+        }catch(SQLException e){
+
+        }
+        return false;
+    }
+    public ArrayList<Long> getAvailableCopyIdsForBook(Book book){
+        try(PreparedStatement ps = connection.prepareStatement(GET_AVAILABLE_COPY_IDS_FOR_BOOK)){
+            ps.setLong(1,book.getBookId());
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Long> ids = new ArrayList<>();
+            while(rs.next()){
+                ids.add(rs.getLong(1));
+            }
+            return ids;
+        }catch(SQLException e){
+            //TODO do something
+        }
+        return new ArrayList<>();
+    }
+    public ArrayList<Long> getCheckedOutCopyIdsForBook(Book book){
+        try(PreparedStatement ps = connection.prepareStatement(GET_CHECKED_OUT_COPY_IDS_FOR_BOOK)){
+            ps.setLong(1,book.getBookId());
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Long> ids = new ArrayList<>();
+            while(rs.next()){
+                ids.add(rs.getLong(1));
+            }
+            return ids;
+        }catch(SQLException e){
+            //TODO do something
+        }
+        return new ArrayList<>();
     }
     @Override
     public List getAll() {

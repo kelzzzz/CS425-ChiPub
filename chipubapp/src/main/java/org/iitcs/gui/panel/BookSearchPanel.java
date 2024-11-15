@@ -32,7 +32,7 @@ public class BookSearchPanel extends AbstractPanel {
 
     private void packInnerPanels(String lastSearchTerm) {
         addSearchBarContainer();
-        add(getScrollableListOfBooks(books),BorderLayout.SOUTH);
+        add(getScrollableListOfBooks(books, 200, 200),BorderLayout.SOUTH);
     }
 
     private void addSearchBarContainer() {

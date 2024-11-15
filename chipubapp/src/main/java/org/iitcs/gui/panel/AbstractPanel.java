@@ -29,17 +29,17 @@ public abstract class AbstractPanel extends JPanel {
         LOGGER.error(e.getMessage());
     }
 
-    public void addBackButton(){
+    public JButton getBackButton(){
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> as.setState(as.rewindState()));
-        add(backButton);
+        return backButton;
     }
 
-    public JScrollPane getScrollableListOfBooks(DefaultListModel books) {
+    public JScrollPane getScrollableListOfBooks(DefaultListModel books, int w, int h) {
         JList booksJlist = new JList(books);
         booksJlist.addMouseListener(doubleClickListAction(booksJlist));
         JScrollPane scollPane = new JScrollPane(booksJlist);
-        scollPane.setPreferredSize(new Dimension(200, 200));
+        scollPane.setPreferredSize(new Dimension(w, h));
         return scollPane;
     }
 

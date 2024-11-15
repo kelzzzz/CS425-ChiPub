@@ -134,9 +134,17 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE Check_out(copid int, chid int)
 BEGIN
-	INSERT INTO cardholder_copy VALUES(
-		copid, chid, current_timestamp(), null
-	);
+INSERT INTO cardholder_copy VALUES(
+	copid, chid, current_timestamp(), null
+)ON DUPLICATE KEY UPDATE
+  checked_out = current_timestamp(),
+  checked_in = null;
+  
+UPDATE book_cardholder SET status = 'fulfilled' where book_id = (SELECT book.bid as bookId
+FROM book 
+INNER JOIN copy 
+ON book.bid = copy.book_id
+WHERE copy.cid=copid) and cardholder_id = chid;
 END //
 DELIMITER ;
 

@@ -26,7 +26,7 @@ public class ApplicationStateManager {
 
     public enum GuiState {
         LOGIN, SEARCH_BOOK, ADV_SEARCH, BOOK_DETAIL,
-        USER_DETAIL, ADMIN_CHECKOUT, ADMIN_BOOK_ADD_REMOVE,
+        USER_DETAIL, ADMIN_CHECKOUT, ADMIN_CHECKIN, ADMIN_BOOK_ADD_REMOVE,
         ADMIN_REGISTER_CARDHOLDER, ADMIN_CARDHOLDER_SEARCH
     }
     public enum UserContext {
@@ -54,6 +54,12 @@ public class ApplicationStateManager {
                 break;
             case USER_DETAIL:
                 fw.packSimpleFrame(new CardholderDetailPanel(currentUser, lastState));
+                break;
+            case ADMIN_CHECKOUT:
+                fw.packSimpleFrame(new AdminCheckinCheckoutPanel(bookDetailResponse, true));
+                break;
+            case ADMIN_CHECKIN:
+                fw.packSimpleFrame(new AdminCheckinCheckoutPanel(bookDetailResponse, false));
                 break;
         }
     }
