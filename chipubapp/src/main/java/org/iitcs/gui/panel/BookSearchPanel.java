@@ -18,7 +18,7 @@ public class BookSearchPanel extends AbstractPanel {
             logPanelException(e, "BookSearchPanel tried to use uninitialized dao.");
         }
 
-        refreshSearchOnPageReentry(lastSearchTerm);
+        //refreshSearchOnPageReentry(lastSearchTerm);
         setLayout(new BorderLayout());
         packInnerPanels(lastSearchTerm);
         setVisible(true);
@@ -32,7 +32,7 @@ public class BookSearchPanel extends AbstractPanel {
 
     private void packInnerPanels(String lastSearchTerm) {
         addSearchBarContainer();
-        add(getScrollableListOfBooks(books, 200, 200),BorderLayout.SOUTH);
+        add(getScrollableListOfItems(books, 200, 200),BorderLayout.SOUTH);
     }
 
     private void addSearchBarContainer() {
@@ -41,7 +41,7 @@ public class BookSearchPanel extends AbstractPanel {
         GridBagConstraints c = new GridBagConstraints();
 
         setGridBagConstraints(c,0,0,0);
-        JLabel label = new JLabel("Search: ");
+        JLabel label = new JLabel("Search for book: ");
         searchBarContainer.add(label, c);
 
         setGridBagConstraints(c,1,0,0);

@@ -7,6 +7,26 @@ public class QueryConstants {
     public static final String BOOK_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateMasterBookIndex()}";
     public static final String CARDHOLDER_CREATE_TEMPORARY_INDEX_QUERY = "{call CreateCardholderTableWithPhone()}";
 
+    public static final String SEARCH_FOR_CARDHOLDER = "select *,\n" +
+            "dense_rank() over(order by ((CASE WHEN card_num = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN CONCAT(chid, card_num) = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN first_name = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN last_name = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN addr_zip = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN addr_city = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN addr_state = ? THEN 1 ELSE 0 END) +\n" +
+            "(CASE WHEN email = ? THEN 1 ELSE 0 END)) desc) as match_rank\n" +
+            "from cardholder \n" +
+            "where CONCAT(chid, card_num) = ?\n" +
+            "or first_name like CONCAT( '%',?,'%')\n" +
+            "or last_name like CONCAT( '%',?,'%')\n" +
+            "or addr_zip like CONCAT( '%',?,'%')\n" +
+            "or addr_city like CONCAT( '%',?,'%')\n" +
+            "or addr_state like CONCAT( '%',?,'%')\n" +
+            "or email like CONCAT('%',?,'%')\n" +
+            "or CONCAT(first_name,' ', last_name) like CONCAT( '%',?,'%')\n" +
+            "or CONCAT(last_name,', ',first_name) like CONCAT( '%',?,'%')\n" +
+            "order by match_rank, last_name asc;";
     public static final String GET_CHECKOUT_BOOK_IDS_BY_CARDHOLDER_ID = "SELECT book.bid, copy.cid, \n" +
             "\t(SELECT cardholder_id FROM cardholder_copy WHERE copy_id = copy.cid \n" +
             "    AND cardholder_id=?\n" +

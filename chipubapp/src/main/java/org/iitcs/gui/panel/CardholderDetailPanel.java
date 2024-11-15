@@ -14,40 +14,40 @@ public class CardholderDetailPanel extends AbstractPanel {
     Cardholder currentUser;
     public CardholderDetailPanel(Cardholder currentUser, ApplicationStateManager.GuiState lastState){
         setLayout(new GridBagLayout());
-        this.currentUser = currentUser;
+        if(as.userContext == ApplicationStateManager.UserContext.CARDHOLDER){
+            this.currentUser = as.getCurrentUser();
+        }
+        else{
+            this.currentUser = currentUser;
+        }
         JLabel userDetail = new JLabel(currentUser.toStringJLabelDetail());
         add(userDetail);
         add(getBackButton());
-        if(as.userContext == ApplicationStateManager.UserContext.CARDHOLDER){
-            packUserDashboard();
-        }
-        else if(as.userContext == ApplicationStateManager.UserContext.ADMIN){
-            packAdminDashboard();
-        }
+        packUserDashboard();
         setVisible(true);
     }
-    private void packAdminDashboard(){
-        //TODO
+    private void packUserDashboard(){
+        packUserCheckoutsAndHoldsDisplay();
     }
-
     private void packUserCheckoutsAndHoldsDisplay(){
         holds.clear();
         holds.addAll(currentUser.getHolds());
 
         checkOuts.clear();
         checkOuts.addAll(currentUser.getCheckOuts());
+
         GridBagConstraints c = new GridBagConstraints();
         Util.setGridBagConstraints(c, 0,1,0);
         add(new JLabel("Holds"), c);
         Util.setGridBagConstraints(c, 0,2,30);
-        add(getScrollableListOfBooks(holds, 200,50),c);
+        add(getScrollableListOfItems(holds, 200,50),c);
         Util.setGridBagConstraints(c, 0,3,0);
+
         add(new JLabel("Check outs"), c);
         Util.setGridBagConstraints(c, 0,4,30);
-        add(getScrollableListOfBooks(checkOuts, 200, 50),c);
+        add(getScrollableListOfItems(checkOuts, 200, 50),c);
+
         revalidate();
-    }
-    private void packUserDashboard(){
-        packUserCheckoutsAndHoldsDisplay();
+        repaint();
     }
 }

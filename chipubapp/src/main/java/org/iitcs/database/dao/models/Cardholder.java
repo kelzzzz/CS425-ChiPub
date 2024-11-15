@@ -101,7 +101,7 @@ public class Cardholder extends AbstractCplEntity {
     @Override
     public String toStringJLabelDetail() {
         StringBuilder sb = new StringBuilder();
-        String cardholderNumber = String.valueOf(chid).concat(cardNum);
+        String cardholderNumber = String.valueOf(chid).concat(" ").concat(cardNum);
         appendHtmlOpenTag(sb);
         appendLineBreakWithLabel(sb, "Number", cardholderNumber);
         appendLineBreakWithLabel(sb, "First Name", firstName);
@@ -109,6 +109,20 @@ public class Cardholder extends AbstractCplEntity {
         appendLineBreakWithLabel(sb, "Address", "Not yet implemented");
         appendLineBreakWithLabel(sb, "Email", email);
         appendHtmlClosingTag(sb);
+        return sb.toString();
+    }
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        String fn = firstName;
+        String ln = lastName;
+        if(firstName.isEmpty()){
+            fn = "[No first name on file]";
+        }
+        if(lastName.isEmpty()){
+            ln = "[No last name on file]";
+        }
+        sb.append(String.valueOf(chid)).append(" ").append(String.valueOf(cardNum)).append(" | ").append(fn).append(" ").append(ln);
         return sb.toString();
     }
 }

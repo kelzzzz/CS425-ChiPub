@@ -2,7 +2,9 @@ package org.iitcs.gui.panel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.iitcs.database.dao.models.AbstractCplEntity;
 import org.iitcs.database.dao.models.Book;
+import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.gui.ApplicationStateManager;
 
 import javax.swing.*;
@@ -35,12 +37,12 @@ public abstract class AbstractPanel extends JPanel {
         return backButton;
     }
 
-    public JScrollPane getScrollableListOfBooks(DefaultListModel books, int w, int h) {
-        JList booksJlist = new JList(books);
-        booksJlist.addMouseListener(doubleClickListAction(booksJlist));
-        JScrollPane scollPane = new JScrollPane(booksJlist);
-        scollPane.setPreferredSize(new Dimension(w, h));
-        return scollPane;
+    public JScrollPane getScrollableListOfItems(DefaultListModel item, int w, int h) {
+        JList itemList = new JList(item);
+        itemList.addMouseListener(doubleClickListAction(itemList));
+        JScrollPane scrollPane = new JScrollPane(itemList);
+        scrollPane.setPreferredSize(new Dimension(w, h));
+        return scrollPane;
     }
 
     private MouseListener doubleClickListAction(JList list) {
@@ -50,15 +52,21 @@ public abstract class AbstractPanel extends JPanel {
                 if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 2) {
                     if (list.getSelectedIndex() != -1) {
                         int index = list.locationToIndex(evt.getPoint());
-                        selectBook((Book) list.getSelectedValue());
+                        selectItem((AbstractCplEntity) list.getSelectedValue());
                     }
                 }
             }
         };
         return ml;
     }
-    public void selectBook(Book book){
-        as.setBookDetailResponse(book);
-        as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
+    public void selectItem(AbstractCplEntity item){
+        as.setItemDetailResponse(item);
+        if(item instanceof Book){
+            as.setState(ApplicationStateManager.GuiState.BOOK_DETAIL);
+        }
+        else{
+            as.setUserFocus((Cardholder) item);
+            as.setState(ApplicationStateManager.GuiState.USER_DETAIL);
+        }
     }
 }

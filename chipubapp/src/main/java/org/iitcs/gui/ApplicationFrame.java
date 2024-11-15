@@ -68,8 +68,13 @@ public class ApplicationFrame extends JFrame{
         userDetailButton.setBorderPainted(false);
         userDetailButton.setOpaque(false);
         userDetailButton.setForeground(Color.BLUE);
-        userDetailButton.addActionListener(e -> ApplicationStateManager.getInstance()
-                .setState(ApplicationStateManager.GuiState.USER_DETAIL));
+        if(ApplicationStateManager.getInstance().userContext == ApplicationStateManager.UserContext.ADMIN){
+            userDetailButton.addActionListener(e -> ApplicationStateManager.getInstance()
+                    .setState(ApplicationStateManager.GuiState.ADMIN_DASHBOARD));
+        }else{
+            userDetailButton.addActionListener(e -> ApplicationStateManager.getInstance()
+                    .setState(ApplicationStateManager.GuiState.USER_DETAIL));
+        }
         userMessage.add(userDetailButton);
     }
 

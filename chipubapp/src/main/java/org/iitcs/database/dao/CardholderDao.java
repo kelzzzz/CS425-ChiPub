@@ -42,6 +42,38 @@ public class CardholderDao implements IDao{
         return Optional.empty();
     }
 
+    public ArrayList<Cardholder> search(String searchTerm){
+        ArrayList<Cardholder> ret = new ArrayList<>();
+        try(PreparedStatement ps = connection.prepareStatement(SEARCH_FOR_CARDHOLDER)){
+            ps.setString(1, searchTerm);
+            ps.setString(2, searchTerm);
+            ps.setString(3, searchTerm);
+            ps.setString(4, searchTerm);
+            ps.setString(5, searchTerm);
+            ps.setString(6, searchTerm);
+            ps.setString(7, searchTerm);
+            ps.setString(8, searchTerm);
+            ps.setString(9, searchTerm);
+            ps.setString(10, searchTerm);
+            ps.setString(11, searchTerm);
+            ps.setString(12, searchTerm);
+            ps.setString(13, searchTerm);
+            ps.setString(14, searchTerm);
+            ps.setString(15, searchTerm);
+            ps.setString(16, searchTerm);
+            ps.setString(17, searchTerm);
+
+            ResultSet chs = ps.executeQuery();
+
+            while(chs.next()){
+                ret.add(createCardholderFromResultSet(chs));
+            }
+
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+        return ret;
+    }
     private Cardholder createCardholderFromResultSet(ResultSet cardholder) throws SQLException {
         //TODO set their address, holds, checkouts, and phone numbers as well
         Long chid = cardholder.getLong(1);

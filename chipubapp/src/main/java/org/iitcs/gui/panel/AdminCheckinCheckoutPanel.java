@@ -1,6 +1,7 @@
 package org.iitcs.gui.panel;
 
 import org.iitcs.database.dao.BookDao;
+import org.iitcs.database.dao.CardholderDao;
 import org.iitcs.database.dao.models.Book;
 
 import javax.swing.*;
@@ -10,11 +11,13 @@ import java.util.ArrayList;
 public class AdminCheckinCheckoutPanel extends AbstractPanel{
 
     BookDao bd;
+    CardholderDao chd;
     ArrayList<Long> copyIds = new ArrayList<>();
     public AdminCheckinCheckoutPanel(Book book, boolean isCheckout){
         setLayout(new BorderLayout());
         try{
             bd = new BookDao();
+            chd = new CardholderDao();
         }catch(InstantiationException e){
 
         }
@@ -64,7 +67,10 @@ public class AdminCheckinCheckoutPanel extends AbstractPanel{
         add(fieldsContainer, BorderLayout.NORTH);
         if(isCheckout){
             JButton checkOutButton = new JButton("Check Out");
-            checkOutButton.addActionListener(e->bd.checkOut((Long) ids.getSelectedItem(), Long.parseLong(chIdBox.getText())));
+            checkOutButton.addActionListener(e->
+                            checkoutAction(ids, Long.parseLong(chIdBox.getText())));
+
+
             if(copyIds.isEmpty()){
                 checkOutButton.setEnabled(false);
             }
@@ -72,7 +78,7 @@ public class AdminCheckinCheckoutPanel extends AbstractPanel{
         }
         else{
             JButton checkInButton = new JButton("Check In");
-            checkInButton.addActionListener(e->bd.checkIn((Long) ids.getSelectedItem(), Long.parseLong(chIdBox.getText())));
+            checkInButton.addActionListener(e->checkinAction(ids, Long.parseLong(chIdBox.getText())));
             if(copyIds.isEmpty()){
                 checkInButton.setEnabled(false);
             }
@@ -80,5 +86,14 @@ public class AdminCheckinCheckoutPanel extends AbstractPanel{
         }
 
         add(getBackButton(),BorderLayout.SOUTH);
+    }
+    public void checkoutAction(JComboBox<Long> ids, Long chId){
+        bd.checkOut((Long) ids.getSelectedItem(),chId);
+        as.setUserFocus(chd.get(chId).get());
+    }
+
+    public void checkinAction(JComboBox<Long> ids, Long chId){
+        bd.checkIn((Long) ids.getSelectedItem(), chId);
+        as.setUserFocus(chd.get(chId).get());
     }
 }
