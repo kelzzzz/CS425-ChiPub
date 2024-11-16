@@ -89,11 +89,23 @@ public class AdminCheckinCheckoutPanel extends AbstractPanel{
     }
     public void checkoutAction(JComboBox<Long> ids, Long chId){
         bd.checkOut((Long) ids.getSelectedItem(),chId);
+        if(bd.getQuerySuccessCode() == 1){
+            JOptionPane.showMessageDialog(this,"Book successfully checked out.");
+        }else{
+            JOptionPane.showMessageDialog(this,"Check out request failed.", "Check Out Failure", JOptionPane.WARNING_MESSAGE, null);
+        }
         as.setUserFocus(chd.get(chId).get());
+        as.setState(as.rewindState());
     }
 
     public void checkinAction(JComboBox<Long> ids, Long chId){
         bd.checkIn((Long) ids.getSelectedItem(), chId);
+        if(bd.getQuerySuccessCode() == 1){
+            JOptionPane.showMessageDialog(this,"Book successfully checked in.");
+        }else{
+            JOptionPane.showMessageDialog(this,"Check in request failed.", "Check In Failure", JOptionPane.WARNING_MESSAGE, null);
+        }
         as.setUserFocus(chd.get(chId).get());
+        as.setState(as.rewindState());
     }
 }

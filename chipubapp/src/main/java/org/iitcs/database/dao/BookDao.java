@@ -140,19 +140,15 @@ public class BookDao implements IDao{
             ps.setLong(1, copyId);
             ps.setLong(2, cardHolderId);
             int i = ps.executeUpdate();
-            if(i > 0){
-                querySuccessCode=1;
-                LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
-                return true;
-            }else{
-                querySuccessCode=0;
-                LOGGER.info("Failed to check out book with copy ID ".concat(String.valueOf(copyId)));
-                return false;
-            }
-        }catch(SQLException e){
-
+            querySuccessCode=1;
+            LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
+            return true;
         }
-        return false;
+        catch(SQLException e){
+            querySuccessCode=0;
+            LOGGER.info("Failed to check out book with copy ID ".concat(String.valueOf(copyId)));
+            return false;
+        }
     }
 
     public boolean checkIn(long copyId, long cardHolderId){
@@ -170,7 +166,7 @@ public class BookDao implements IDao{
                 return false;
             }
         }catch(SQLException e){
-
+            LOGGER.error(e.getMessage());
         }
         return false;
     }
