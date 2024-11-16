@@ -42,7 +42,7 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
         Cardholder result = new Cardholder(chid, String.valueOf(cardNum), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
         chd.save(result);
-        if(chd.getQuerySuccessCode() == 1){
+        if(chd.getQuerySuccess() == true){
             JOptionPane.showMessageDialog(this,"Cardholder successfully registered.");
         }else{
                 JOptionPane.showMessageDialog(this,"Cardholder registration failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);

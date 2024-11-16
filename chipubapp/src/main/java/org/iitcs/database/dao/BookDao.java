@@ -31,7 +31,7 @@ public class BookDao implements IDao{
         try(PreparedStatement ps = connection.prepareStatement(BOOK_CREATE_TEMPORARY_INDEX_QUERY)){
             ps.execute();
             if(ps.getUpdateCount() > 0){
-                System.out.println("Book index was retrieved.");
+                LOGGER.info("Book index was retrieved.");
             }
         }catch(SQLException e){
             LOGGER.error(e.getMessage());

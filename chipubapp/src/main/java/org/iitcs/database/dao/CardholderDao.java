@@ -23,18 +23,17 @@ import static org.iitcs.util.Util.substringByRegex;
 public class CardholderDao implements IDao{
     Connection connection;
     BookDao bd;
-
-    public int getQuerySuccessCode() {
-        return querySuccessCode;
-    }
-
-    private int querySuccessCode = 0;
+    private boolean querySuccess = false;
     private static final Logger LOGGER = LogManager.getLogger(CardholderDao.class);
 
     public CardholderDao() throws InstantiationException {
         bd = new BookDao();
         connection = ConnectionWrapper.getInstance().getConnection();
     }
+    public boolean getQuerySuccess() {
+        return querySuccess;
+    }
+
     @Override
     public Optional<Cardholder> get(long id) {
         try(PreparedStatement ps = connection.prepareStatement(SQL_SELECT_CARDHOLDER)){
@@ -183,6 +182,7 @@ public class CardholderDao implements IDao{
     public void save(Object item) {
         Cardholder saveWith = (Cardholder) item;
         try(PreparedStatement ps = connection.prepareStatement(INSERT_NEW_CARDHOLDER)){
+
             ps.setLong(1,saveWith.getChid());
             ps.setString(2,saveWith.getCardNum());
             ps.setString(3,saveWith.getFirstName());
@@ -196,14 +196,13 @@ public class CardholderDao implements IDao{
             ps.setString(11,saveWith.getAddress().getAddrZip());
             ps.setString(12,saveWith.getEmail());
 
-            System.out.println(ps);
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccessCode = 1;
+                querySuccess = true;
                 LOGGER.info("New cardholder with id ".concat(String.valueOf(saveWith.getChid()).concat(" was inserted.")));
             }
         }catch(SQLException e){
-            querySuccessCode =0;
+            querySuccess = false;
             LOGGER.info(e.getMessage());
         }
     }
@@ -226,11 +225,11 @@ public class CardholderDao implements IDao{
 
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccessCode = 1;
+                querySuccess = true;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(updateWith.getChid()).concat(" was updated.")));
             }
         }catch(SQLException e){
-            querySuccessCode = 0;
+            querySuccess = false;
             LOGGER.info(e.getMessage());
         }
     }
@@ -242,11 +241,11 @@ public class CardholderDao implements IDao{
             ps.setLong(1,toDelete.getChid());
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccessCode=1;
+                querySuccess=true;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(toDelete.getChid()).concat(" was deleted.")));
             }
         }catch(SQLException e){
-            querySuccessCode=0;
+            querySuccess=false;
             LOGGER.info(e.getMessage());
         }
     }

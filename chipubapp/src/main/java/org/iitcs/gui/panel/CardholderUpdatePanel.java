@@ -42,7 +42,7 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
         Cardholder result = new Cardholder(Long.valueOf(cardholderIdField.getText()), cardholderNumberField.getText(), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
         chd.update(result, null);
-        if(chd.getQuerySuccessCode() == 1){
+        if(chd.getQuerySuccess() == true){
             JOptionPane.showMessageDialog(this,"Cardholder successfully updated.");
         }else{
             JOptionPane.showMessageDialog(this,"Cardholder update failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);
