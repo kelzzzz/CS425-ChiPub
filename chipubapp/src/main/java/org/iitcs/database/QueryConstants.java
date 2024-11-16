@@ -26,7 +26,6 @@ public class QueryConstants {
         try {
             this.queryProps.load(QueryConstants.class.getResourceAsStream("/constant_queries.properties"));
             readPropertiesIntoVariables();
-            System.out.println(SEARCH_BOOK_MASTER_INDEX_TABLE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
