@@ -3,25 +3,17 @@ package org.iitcs.util;
 import java.util.HashMap;
 
 public class Constants {
-    public static final String QUERY_PROPERTIES_FILE = "/queries.properties";
     public static final String DEFAULT_PROPERTIES_FILE = "/default_properties.properties";
-    public static final String TABULATE_FORMATTING="%-20s";
-    public static final String CARRIAGE_RETURN="\\r";
-    public static final String EMPTY_STRING="";
-    public static final String ELLIPSES="...";
-    public static final String SEPERATOR="--------------------";
-    public static final int TRAILING_CHARACTERS_CONCAT_BOOK_QUERY = 4;
+
+    public static final String APP_INFO = (
+            "<html><span style=font-size:10> This application was made in 2024 for CS425 at the Illinois Institute of Technology. <br/><br/>" +
+            "Primary Developer (GUI, JDBC, build), logical SQL @ Kelsey Cavin <br/>" +
+            "Reach out to kcavin@hawk.iit.edu for issues with running/building this app. <br/><br/>" +
+            "Database schema, CLI, & build scripts @ Andrew Chang-DeWitt <br/><br/>" +
+            "Assistance, QA, math @ Peter Capuzzi <br/><br/>" +
+            "</span></html>");
 
     public static final int APP_W = 600;
     public static final int APP_H = 500;
     public static final Long LOGIN_ERROR_CODE = (long) -99999;
-    public enum CRUD{
-        CREATE, READ, UPDATE, DELETE
-    }
-    public static final HashMap<CRUD, String> QUERY_KEYS = new HashMap<>(){{
-        put(CRUD.CREATE, "sql.create.");
-        put(CRUD.READ, "sql.read.");
-        put(CRUD.UPDATE, "sql.update.");
-        put(CRUD.DELETE, "sql.delete.");
-    }};
 }

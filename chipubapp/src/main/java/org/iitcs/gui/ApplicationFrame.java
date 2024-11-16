@@ -16,6 +16,7 @@ public class ApplicationFrame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ImageIcon icon = new ImageIcon(ApplicationFrame.class.getClassLoader().getResource("cplicon.png"));
         setIconImage(icon.getImage());
+        setTitle("Chicago Public Library Catalog");
         setVisible(true);
     }
 

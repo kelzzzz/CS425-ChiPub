@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static org.iitcs.util.Constants.APP_INFO;
 import static org.iitcs.util.Util.setGridBagConstraints;
 
 public class LoginPanel extends AbstractPanel {
@@ -36,7 +37,22 @@ public class LoginPanel extends AbstractPanel {
         setGridBagConstraints(c,0,2,0);
         add(failureLabel, c);
 
+        setGridBagConstraints(c,GridBagConstraints.BELOW_BASELINE_TRAILING, GridBagConstraints.BELOW_BASELINE_TRAILING, 0);
+        JButton infoBtn = new JButton("Info");
+        infoBtn.setFocusPainted(false);
+        infoBtn.setMargin(new Insets(0, 0, 0, 0));
+        infoBtn.setContentAreaFilled(false);
+        //infoBtn.setBorderPainted(false);
+        //infoBtn.setOpaque(false);
+        infoBtn.setForeground(Color.GRAY);
+        infoBtn.addActionListener(e->infoButtonAction());
+        add(infoBtn, c);
         setVisible(true);
+    }
+
+    private void infoButtonAction() {
+        JOptionPane.showMessageDialog(this,APP_INFO,
+                "App Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void packComponentContainer(){
