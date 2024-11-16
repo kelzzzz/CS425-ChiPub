@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.iitcs.database.connection.ConnectionWrapper;
 import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.models.Cardholder;
+import org.iitcs.database.dao.models.CardholderAddress;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import static org.iitcs.database.QueryConstants.*;
 import static org.iitcs.util.Constants.LOGIN_ERROR_CODE;
+import static org.iitcs.util.Util.generatePassword;
 import static org.iitcs.util.Util.substringByRegex;
 
 public class CardholderDao implements IDao{
@@ -75,14 +77,22 @@ public class CardholderDao implements IDao{
         return ret;
     }
     private Cardholder createCardholderFromResultSet(ResultSet cardholder) throws SQLException {
-        //TODO set their address, holds, checkouts, and phone numbers as well
+        //TODO set their phone numbers as well
         Long chid = cardholder.getLong(1);
+        CardholderAddress addr = new CardholderAddress(
+                cardholder.getString(6),
+                cardholder.getString(7),
+                cardholder.getString(8),
+                cardholder.getString(9),
+                cardholder.getString(10),
+                cardholder.getString(11)
+        );
         Cardholder ch = new Cardholder(
                 chid,
                 cardholder.getString(2),
                 cardholder.getString(3),
                 cardholder.getString(4),
-                null,
+                addr,
                 cardholder.getString(12)
         );
         ArrayList<Book> holds = new ArrayList<Book>();
@@ -165,16 +175,67 @@ public class CardholderDao implements IDao{
     }
     @Override
     public void save(Object item) {
+        Cardholder saveWith = (Cardholder) item;
+        try(PreparedStatement ps = connection.prepareStatement(INSERT_NEW_CARDHOLDER)){
+            ps.setLong(1,saveWith.getChid());
+            ps.setString(2,saveWith.getCardNum());
+            ps.setString(3,saveWith.getFirstName());
+            ps.setString(4,saveWith.getLastName());
+            ps.setString(5,generatePassword());
+            ps.setString(6,saveWith.getAddress().getAddrNum());
+            ps.setString(7,saveWith.getAddress().getAddrStrt());
+            ps.setString(8,saveWith.getAddress().getAddrApt());
+            ps.setString(9,saveWith.getAddress().getAddrCity());
+            ps.setString(10,saveWith.getAddress().getAddrState());
+            ps.setString(11,saveWith.getAddress().getAddrZip());
+            ps.setString(12,saveWith.getEmail());
 
+            System.out.println(ps.toString());
+            int i = ps.executeUpdate();
+            if(i>0){
+                LOGGER.info("New cardholder with id ".concat(String.valueOf(saveWith.getChid()).concat(" was inserted.")));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
     }
 
     @Override
     public void update(Object o, String[] parameters) {
+        Cardholder updateWith = (Cardholder) o;
+        try(PreparedStatement ps = connection.prepareStatement(UPDATE_CARDHOLDER_INFORMATION)){
+            ps.setString(1,updateWith.getFirstName());
+            ps.setString(2,updateWith.getLastName());
+            ps.setString(3,updateWith.getAddress().getAddrNum());
+            ps.setString(4,updateWith.getAddress().getAddrStrt());
+            ps.setString(5,updateWith.getAddress().getAddrApt());
+            ps.setString(6,updateWith.getAddress().getAddrCity());
+            ps.setString(7,updateWith.getAddress().getAddrState());
+            ps.setString(8,updateWith.getAddress().getAddrZip());
+            ps.setString(9,updateWith.getEmail());
 
+            ps.setLong(10,updateWith.getChid());
+
+            int i = ps.executeUpdate();
+            if(i>0){
+                LOGGER.info("Cardholder with id ".concat(String.valueOf(updateWith.getChid()).concat(" was updated.")));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
     }
 
     @Override
     public void delete(Object o, String[] parameters) {
-
+        Cardholder toDelete = (Cardholder) o;
+        try(PreparedStatement ps = connection.prepareStatement(DELETE_CARDHOLDER)){
+            ps.setLong(1,toDelete.getChid());
+            int i = ps.executeUpdate();
+            if(i>0){
+                LOGGER.info("Cardholder with id ".concat(String.valueOf(toDelete.getChid()).concat(" was deleted.")));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
     }
 }

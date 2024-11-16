@@ -26,7 +26,7 @@ public class QueryConstants {
             "or email like CONCAT('%',?,'%')\n" +
             "or CONCAT(first_name,' ', last_name) like CONCAT( '%',?,'%')\n" +
             "or CONCAT(last_name,', ',first_name) like CONCAT( '%',?,'%')\n" +
-            "order by match_rank, last_name asc;";
+            "order by match_rank, last_name asc";
     public static final String GET_CHECKOUT_BOOK_IDS_BY_CARDHOLDER_ID = "SELECT book.bid, copy.cid, \n" +
             "\t(SELECT cardholder_id FROM cardholder_copy WHERE copy_id = copy.cid \n" +
             "    AND cardholder_id=?\n" +
@@ -72,6 +72,21 @@ public class QueryConstants {
     public static final String SQL_SELECT_CARDHOLDER_PASSWORD = "SELECT password FROM cardholder WHERE chid = ? AND last_name = ?";
     public static final String PASSWORD_COLUMN_NAME = "password";
 
+    public static final String UPDATE_CARDHOLDER_INFORMATION = "UPDATE cardholder SET \n" +
+            "first_name = ?, \n" +
+            "last_name = ?,\n" +
+            "addr_num = ?,\n" +
+            "addr_street = ?,\n" +
+            "addr_apt = ?,\n" +
+            "addr_city = ?,\n" +
+            "addr_state = ?,\n" +
+            "addr_zip = ?,\n" +
+            "email = ?\n" +
+            "WHERE chid = ?";
+    public static final String INSERT_NEW_CARDHOLDER ="INSERT INTO cardholder VALUES(" +
+            "?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    public static final String DELETE_CARDHOLDER = "DELETE FROM cardholder WHERE chid = ?";
     public enum Status{
         PENDING, FULLFILLED, CANCELLED;
     }

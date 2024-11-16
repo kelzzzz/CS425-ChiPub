@@ -11,6 +11,7 @@ public class AdminDashboardPanel extends AbstractPanel{
         JButton lookupBooks = new JButton("Look up books");
         lookupCardholder.addActionListener(e-> as.setState(ApplicationStateManager.GuiState.ADMIN_CARDHOLDER_SEARCH));
         lookupBooks.addActionListener(e-> as.setState(ApplicationStateManager.GuiState.SEARCH_BOOK));
+        registerCardholder.addActionListener(e->as.setState(ApplicationStateManager.GuiState.ADMIN_REGISTER_CARDHOLDER));
         add(registerCardholder);
         add(lookupCardholder);
         add(lookupBooks);

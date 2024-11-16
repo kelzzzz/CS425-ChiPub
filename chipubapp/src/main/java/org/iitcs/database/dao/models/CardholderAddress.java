@@ -1,24 +1,54 @@
 package org.iitcs.database.dao.models;
 
 public class CardholderAddress {
-    private String addr_num;
+    private String addrNum;
+
+    private String addrStrt;
+    private String addrApt;
+    private String addrCity;
+    private String addrState;
+    private String addrZip;
 
     public CardholderAddress(String addr_num, String addr_street, String addr_apt, String addr_city, String addr_state, String addr_zip) {
-        this.addr_num = addr_num;
-        this.addr_street = addr_street;
-        this.addr_apt = addr_apt;
-        this.addr_city = addr_city;
-        this.addr_state = addr_state;
-        this.addr_zip = addr_zip;
+        this.addrNum = addr_num;
+        this.addrStrt = addr_street;
+        this.addrApt = addr_apt;
+        this.addrCity = addr_city;
+        this.addrState = addr_state;
+        this.addrZip = addr_zip;
     }
 
     public String getFormattedAddress(){
-        return this.addr_apt;
+        StringBuilder sb = new StringBuilder();
+        sb.append(addrNum).append(" ").append(addrStrt);
+        if(!addrApt.isEmpty()) {
+            sb.append(" ").append(addrApt);
+        }
+        sb.append(", ").append(addrCity).append(", ").append(addrState).append(" ").append(addrZip);
+        return sb.toString();
     }
 
-    private String addr_street;
-    private String addr_apt;
-    private String addr_city;
-    private String addr_state;
-    private String  addr_zip;
+    public String getAddrNum() {
+        return addrNum;
+    }
+
+    public String getAddrStrt() {
+        return addrStrt;
+    }
+
+    public String getAddrApt() {
+        return addrApt;
+    }
+
+    public String getAddrCity() {
+        return addrCity;
+    }
+
+    public String getAddrState() {
+        return addrState;
+    }
+
+    public String getAddrZip() {
+        return addrZip;
+    }
 }

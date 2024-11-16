@@ -106,7 +106,7 @@ public class Cardholder extends AbstractCplEntity {
         appendLineBreakWithLabel(sb, "Number", cardholderNumber);
         appendLineBreakWithLabel(sb, "First Name", firstName);
         appendLineBreakWithLabel(sb, "Last Name", lastName);
-        appendLineBreakWithLabel(sb, "Address", "Not yet implemented");
+        appendLineBreakWithLabel(sb, "Address", address.getFormattedAddress());
         appendLineBreakWithLabel(sb, "Email", email);
         appendHtmlClosingTag(sb);
         return sb.toString();

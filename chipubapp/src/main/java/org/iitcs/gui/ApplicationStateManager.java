@@ -36,7 +36,7 @@ public class ApplicationStateManager {
 
     public enum GuiState {
         LOGIN, SEARCH_BOOK, ADV_SEARCH, BOOK_DETAIL,
-        USER_DETAIL, ADMIN_CHECKOUT, ADMIN_CHECKIN, ADMIN_BOOK_ADD_REMOVE,
+        USER_DETAIL, ADMIN_CHECKOUT, ADMIN_CHECKIN, ADMIN_EDIT_CARDHOLDER,
         ADMIN_REGISTER_CARDHOLDER, ADMIN_CARDHOLDER_SEARCH, ADMIN_DASHBOARD
     }
     public enum UserContext {
@@ -77,6 +77,12 @@ public class ApplicationStateManager {
                 break;
             case ADMIN_CARDHOLDER_SEARCH:
                 fw.packFrameWithUserDetailButton(new CardholderSearchPanel(persistedSearch), currentUser.getFirstName());
+                break;
+            case ADMIN_REGISTER_CARDHOLDER:
+                fw.packSimpleFrame(new CardholderRegisterPanel());
+                break;
+            case ADMIN_EDIT_CARDHOLDER:
+                fw.packSimpleFrame(new CardholderUpdatePanel(userFocus));
                 break;
         }
     }
