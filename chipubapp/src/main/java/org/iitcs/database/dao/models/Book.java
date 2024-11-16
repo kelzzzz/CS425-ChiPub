@@ -1,14 +1,14 @@
 package org.iitcs.database.dao.models;
 
 public class Book extends AbstractCplEntity {
-    private long bookId;
-    private String isbn;
-    private String title;
-    private String authorLastName;
-    private String authorFirstName;
-    private String language;
-    private String subject;
-    private String genre;
+    private final long bookId;
+    private final String isbn;
+    private final String title;
+    private final String authorLastName;
+    private final String authorFirstName;
+    private final String language;
+    private final String subject;
+    private final String genre;
     public Book(long id, String isbn, String title, String aln, String afn, String lang, String subj, String gnr){
         this.bookId = id;
         this.isbn = isbn;

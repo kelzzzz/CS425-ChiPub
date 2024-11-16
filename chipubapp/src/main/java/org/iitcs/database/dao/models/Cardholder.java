@@ -1,7 +1,6 @@
 package org.iitcs.database.dao.models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Cardholder extends AbstractCplEntity {
     public Cardholder(long chid, String cardNum, String firstName, String lastName, CardholderAddress address, String email) {
@@ -12,7 +11,7 @@ public class Cardholder extends AbstractCplEntity {
         this.address = address;
         this.email = email;
     }
-    private Long chid;
+    private final Long chid;
 
     public Long getChid() {
         return chid;
@@ -42,11 +41,11 @@ public class Cardholder extends AbstractCplEntity {
         return checkOuts;
     }
 
-    private String cardNum;
-    private String firstName;
-    private String lastName;
-    private CardholderAddress address;
-    private String email;
+    private final String cardNum;
+    private final String firstName;
+    private final String lastName;
+    private final CardholderAddress address;
+    private final String email;
     private String[] phoneNumbers;
     private ArrayList<Book> checkOuts = new ArrayList<>();
     private ArrayList<Book> holds = new ArrayList<>();
@@ -79,15 +78,6 @@ public class Cardholder extends AbstractCplEntity {
             }
         }
         holds.remove(remove);
-    }
-    public void removeBookFromCheckOutsById(Long id){
-        Book remove = null;
-        for(Book b : checkOuts){
-            if(b.getBookId()==id){
-                remove = b;
-            }
-        }
-        checkOuts.remove(remove);
     }
     public void addBookToHolds(Book book){
         holds.add(book);
@@ -122,7 +112,7 @@ public class Cardholder extends AbstractCplEntity {
         if(lastName.isEmpty()){
             ln = "[No last name on file]";
         }
-        sb.append(String.valueOf(chid)).append(" ").append(String.valueOf(cardNum)).append(" | ").append(fn).append(" ").append(ln);
+        sb.append(chid).append(" ").append(cardNum).append(" | ").append(fn).append(" ").append(ln);
         return sb.toString();
     }
 }

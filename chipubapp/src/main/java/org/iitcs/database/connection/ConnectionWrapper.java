@@ -13,13 +13,11 @@ import java.util.Properties;
 public class ConnectionWrapper {
     private static ConnectionWrapper instance;
     private Connection connection;
-    private Properties credentials;
-    private String url;
-    private String schema;
+    private final Properties credentials;
+    private final String url;
     private static final Logger LOGGER = LogManager.getLogger(ConnectionWrapper.class);
-    private ConnectionWrapper(String url, String schema, Properties credentials){
+    private ConnectionWrapper(String url, Properties credentials){
         this.url = url;
-        this.schema = schema;
         this.credentials = credentials;
         try{
             loadDriver();
@@ -28,11 +26,11 @@ public class ConnectionWrapper {
             LOGGER.error(e.getMessage());
         }
     }
-    public static void initializeConnectionWrapper(String url, String schema, Properties credentials){
+    public static void initializeConnectionWrapper(String url, Properties credentials){
         if(instance != null){
             instance.releaseConnection();
         }
-        instance = new ConnectionWrapper(url, schema, credentials);
+        instance = new ConnectionWrapper(url, credentials);
         LOGGER.info("New ConnectionWrapper instance was initialized.");
     }
     public static ConnectionWrapper getInstance() throws InstantiationException {

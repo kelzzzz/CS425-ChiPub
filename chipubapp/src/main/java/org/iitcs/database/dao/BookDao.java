@@ -31,17 +31,16 @@ public class BookDao implements IDao{
         try(PreparedStatement ps = connection.prepareStatement(BOOK_CREATE_TEMPORARY_INDEX_QUERY)){
             ps.execute();
             if(ps.getUpdateCount() > 0){
-                System.out.println("Book search temp table was created.");
+                System.out.println("Book index was retrieved.");
             }
         }catch(SQLException e){
-
+            LOGGER.error(e.getMessage());
         }
 
     }
     @Override
     public Optional<Book> get(long id) {
-        //run query for a book with the id
-        try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM MasterBookIndex WHERE BID = ?");){
+        try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM MasterBookIndex WHERE BID = ?")){
             ps.setLong(1, id);
             ResultSet books = ps.executeQuery();
             while(books.next()){
@@ -139,7 +138,6 @@ public class BookDao implements IDao{
         try(PreparedStatement ps = connection.prepareStatement("{call Check_out(?,?)}")){
             ps.setLong(1, copyId);
             ps.setLong(2, cardHolderId);
-            int i = ps.executeUpdate();
             querySuccessCode=1;
             LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
             return true;
@@ -200,23 +198,23 @@ public class BookDao implements IDao{
     }
     @Override
     public List getAll() {
-
+        //N/A This isn't needed
         return null;
     }
 
     @Override
     public void save(Object item) {
-
+        //TODO Adding new books
     }
 
     @Override
     public void update(Object o, String[] parameters) {
-
+        //TODO Updating new books
     }
 
     @Override
     public void delete(Object o, String[] parameters) {
-
+    //TODO Deleting new books
     }
 
     private Book createBookFromResultSet(ResultSet rs) throws SQLException {

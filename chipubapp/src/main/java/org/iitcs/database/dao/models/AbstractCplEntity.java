@@ -1,5 +1,7 @@
 package org.iitcs.database.dao.models;
 
+import java.util.Objects;
+
 public abstract class AbstractCplEntity {
     public static final String BR_TAG = "<br/>";
     public static final String NO_ATTRIBUTE = "N/A";
@@ -8,11 +10,7 @@ public abstract class AbstractCplEntity {
     public static final String HTML_CLOSE_TAG = "</html>";
     public abstract String toStringJLabelDetail();
     public void appendLineBreakWithLabel(StringBuilder sb, String tag, String s){
-        if(s!=null){
-            sb.append(tag.concat(COLON_SPACE).concat(s).concat(BR_TAG));
-        }else{
-            sb.append(tag.concat(COLON_SPACE).concat( NO_ATTRIBUTE).concat(BR_TAG));
-        }
+        sb.append(tag.concat(COLON_SPACE).concat(Objects.requireNonNullElse(s, NO_ATTRIBUTE)).concat(BR_TAG));
     }
 
     public void appendHtmlOpenTag(StringBuilder sb){

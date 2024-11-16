@@ -1,13 +1,13 @@
 package org.iitcs.database.dao.models;
 
 public class CardholderAddress {
-    private String addrNum;
+    private final String addrNum;
 
-    private String addrStrt;
-    private String addrApt;
-    private String addrCity;
-    private String addrState;
-    private String addrZip;
+    private final String addrStrt;
+    private final String addrApt;
+    private final String addrCity;
+    private final String addrState;
+    private final String addrZip;
 
     public CardholderAddress(String addr_num, String addr_street, String addr_apt, String addr_city, String addr_state, String addr_zip) {
         this.addrNum = addr_num;

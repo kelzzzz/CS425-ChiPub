@@ -84,7 +84,7 @@ public class CardholderDao implements IDao{
     }
     private Cardholder createCardholderFromResultSet(ResultSet cardholder) throws SQLException {
         //TODO set their phone numbers as well
-        Long chid = cardholder.getLong(1);
+        long chid = cardholder.getLong(1);
         CardholderAddress addr = new CardholderAddress(
                 cardholder.getString(6),
                 cardholder.getString(7),
@@ -101,7 +101,7 @@ public class CardholderDao implements IDao{
                 addr,
                 cardholder.getString(12)
         );
-        ArrayList<Book> holds = new ArrayList<Book>();
+        ArrayList<Book> holds = new ArrayList<>();
         ArrayList<Long> holdBookIds = new ArrayList<>();
 
         ArrayList<Book> checkOuts = new ArrayList<>();
@@ -196,7 +196,7 @@ public class CardholderDao implements IDao{
             ps.setString(11,saveWith.getAddress().getAddrZip());
             ps.setString(12,saveWith.getEmail());
 
-            System.out.println(ps.toString());
+            System.out.println(ps);
             int i = ps.executeUpdate();
             if(i>0){
                 querySuccessCode = 1;

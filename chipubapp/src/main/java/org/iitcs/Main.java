@@ -18,7 +18,7 @@ public class Main {
         try{
             PropertiesLoader pl = PropertiesLoader.getInstance();
             QueryConstants qc = new QueryConstants();
-            ConnectionWrapper.initializeConnectionWrapper(pl.getDbJdbcUrl(), pl.getDbJdbcSchema(), pl.getJdbcAdminCredentials());
+            ConnectionWrapper.initializeConnectionWrapper(pl.getDbJdbcUrl(), pl.getJdbcAdminCredentials());
             ConnectionWrapper.getInstance().connect();
         }catch(InstantiationException | SQLException e){
             LOGGER.error("Something went wrong trying to connect to database.");

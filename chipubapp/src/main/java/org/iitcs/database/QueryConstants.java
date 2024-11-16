@@ -1,6 +1,5 @@
 package org.iitcs.database;
 
-import org.iitcs.util.PropertiesLoader;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class QueryConstants {
     }
 
     public enum Status{
-        PENDING, FULLFILLED, CANCELLED;
+        PENDING, FULLFILLED, CANCELLED
     }
     public static HashMap<Status, String> statusMapping = new HashMap<>(){{
         put(Status.PENDING, "pending");
