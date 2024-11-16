@@ -3,6 +3,7 @@ package org.iitcs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import org.iitcs.database.QueryConstants;
 import org.iitcs.database.connection.ConnectionWrapper;
 import org.iitcs.gui.ApplicationStateManager;
 import org.iitcs.util.PropertiesLoader;
@@ -16,6 +17,7 @@ public class Main {
     public static void main(String... args) {
         try{
             PropertiesLoader pl = PropertiesLoader.getInstance();
+            QueryConstants qc = new QueryConstants();
             ConnectionWrapper.initializeConnectionWrapper(pl.getDbJdbcUrl(), pl.getDbJdbcSchema(), pl.getJdbcAdminCredentials());
             ConnectionWrapper.getInstance().connect();
         }catch(InstantiationException | SQLException e){
