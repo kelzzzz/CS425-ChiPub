@@ -14,6 +14,8 @@ public class ApplicationFrame extends JFrame{
     public ApplicationFrame(){
         setSize(APP_W,APP_H);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ImageIcon icon = new ImageIcon(ApplicationFrame.class.getClassLoader().getResource("cplicon.png"));
+        setIconImage(icon.getImage());
         setVisible(true);
     }
 

@@ -14,7 +14,7 @@ public abstract class CardholderEditInformationPanel extends AbstractPanel{
     JTextField cardholderNumberField = new JTextField(10);
     JLabel firstName = new JLabel("First Name: ");
     JTextField firstNameField = new JTextField(10);
-    JLabel lastName = new JLabel("Last Name");
+    JLabel lastName = new JLabel("Last Name: ");
     JTextField lastNameField = new JTextField(10);
     JLabel Address_Num = new JLabel("Address Num: ");
     JTextField Address_NumField = new JTextField(10);
@@ -33,38 +33,33 @@ public abstract class CardholderEditInformationPanel extends AbstractPanel{
     JTextField EmailField = new JTextField(10);
     public CardholderEditInformationPanel(){
         setLayout(new BorderLayout());
+        JPanel fieldsPanel = new JPanel();
+        fieldsPanel.setLayout(new GridLayout(6,2,0,10));
         try{
             chd = new CardholderDao();
         }catch(InstantiationException e){
             logPanelException(e, "CardholderEditInformationPanel tried to use uninitialized dao.");
         }
 
-        JPanel upperPanel = new JPanel();
-        upperPanel.setLayout(new BorderLayout());
-        JPanel lowerPanel = new JPanel();
-        lowerPanel.setLayout(new BorderLayout());
-        upperPanel.add(getRowPanel(getLabelPackedWithField(cardholderID, cardholderIdField),
-                getLabelPackedWithField(cardholderNumber, cardholderNumberField)),
-                BorderLayout.NORTH);
-        upperPanel.add(getRowPanel(getLabelPackedWithField(firstName, firstNameField),
-                getLabelPackedWithField(lastName, lastNameField))
-                ,BorderLayout.CENTER);
-        upperPanel.add(getRowPanel(getLabelPackedWithField(Address_Num, Address_NumField),
-                getLabelPackedWithField(Street, StreetField)),
-                BorderLayout.SOUTH);
+        fieldsPanel.add(getLabelPackedWithField(cardholderID, cardholderIdField));
+        fieldsPanel.add(getLabelPackedWithField(cardholderNumber, cardholderNumberField));
 
-        lowerPanel.add(getRowPanel(getLabelPackedWithField(Apt, AptField),
-                        getLabelPackedWithField(City, CityField)),
-                BorderLayout.NORTH);
-        lowerPanel.add(getRowPanel(getLabelPackedWithField(State, StateField),
-                        getLabelPackedWithField(Zip, ZipField))
-                ,BorderLayout.CENTER);
-        lowerPanel.add(getRowPanel(getLabelPackedWithField(Email, EmailField),
-                        new JPanel()),
-                BorderLayout.SOUTH);
+        fieldsPanel.add(getLabelPackedWithField(firstName, firstNameField));
+        fieldsPanel.add(getLabelPackedWithField(lastName, lastNameField));
 
-        add(upperPanel, BorderLayout.NORTH);
-        add(lowerPanel, BorderLayout.CENTER);
+        fieldsPanel.add(getLabelPackedWithField(Address_Num, Address_NumField));
+        fieldsPanel.add(getLabelPackedWithField(Street, StreetField));
+
+        fieldsPanel.add(getLabelPackedWithField(Apt, AptField));
+        fieldsPanel.add(getLabelPackedWithField(City, CityField));
+
+        fieldsPanel.add(getLabelPackedWithField(State, StateField));
+        fieldsPanel.add(getLabelPackedWithField(Zip, ZipField));
+
+        fieldsPanel.add(getLabelPackedWithField(Email, EmailField));
+
+        add(fieldsPanel, BorderLayout.NORTH);
+
     }
     public JPanel getLabelPackedWithField(JLabel a, JTextField b){
         JPanel packedPanel = new JPanel();

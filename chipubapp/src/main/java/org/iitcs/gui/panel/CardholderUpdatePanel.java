@@ -10,7 +10,9 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
     public CardholderUpdatePanel(Cardholder user) {
         super();
         JButton updateBtn = new JButton("Update User Info");
-        add(updateBtn, BorderLayout.SOUTH);
+        JPanel selections = new JPanel();
+        selections.setLayout(new GridLayout(2,1,10,10));
+
         cardholderIdField.setText(String.valueOf(user.getChid()));
         cardholderIdField.setEditable(false);
         cardholderNumberField.setText(String.valueOf(user.getCardNum()));
@@ -29,12 +31,10 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
 
         updateBtn.addActionListener(e->updateButtonAction());
 
-        JPanel selections = new JPanel();
-        selections.setLayout(new BorderLayout());
-        selections.add(updateBtn, BorderLayout.WEST);
-        selections.add(getBackButton(), BorderLayout.EAST);
+        selections.add(updateBtn);
+        selections.add(getBackButton());
 
-        add(selections,BorderLayout.SOUTH);
+        add(selections,BorderLayout.CENTER);
     }
     private void updateButtonAction(){
         CardholderAddress addr = new CardholderAddress(Address_NumField.getText(), StreetField.getText(), AptField.getText(),
@@ -42,5 +42,11 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
         Cardholder result = new Cardholder(Long.valueOf(cardholderIdField.getText()), cardholderNumberField.getText(), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
         chd.update(result, null);
+        if(chd.getQuerySuccessCode() == 1){
+            JOptionPane.showMessageDialog(this,"Cardholder successfully updated.");
+        }else{
+            JOptionPane.showMessageDialog(this,"Cardholder update failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);
+        }
+        as.setUserFocus(chd.get(Long.parseLong(cardholderIdField.getText())).get());
     }
 }

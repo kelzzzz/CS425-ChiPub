@@ -56,7 +56,7 @@ public class QueryConstants {
                     "(CASE WHEN genre = CONCAT(?,char(13)) OR genre = ? THEN 1 ELSE 0 END) +\n" +
                     "(CASE WHEN subject = CONCAT(?,char(13)) OR subject = ? THEN 1 ELSE 0 END) +\n" +
                     "(CASE WHEN language = CONCAT(?,char(13)) OR language = ? THEN 1 ELSE 0 END)) desc) as match_rank\n" +
-                    "from MasterBookIndex where isbn = ?\n" +
+                    "from MasterBookIndex where (isbn = ?\n" +
                     "or title like CONCAT( '%',?,'%')\n" +
                     "or author_last_name like CONCAT( '%',?,'%')\n" +
                     "or author_first_name like CONCAT( '%',?,'%')\n" +
@@ -65,7 +65,12 @@ public class QueryConstants {
                     "or subject like CONCAT( '%',?,'%')"+
                     "or CONCAT(author_first_name,' ', author_last_name) like CONCAT( '%',?,'%')\n" +
                     "or CONCAT(author_last_name,' ',author_first_name) like CONCAT( '%',?,'%')"+
-                    "or CONCAT(author_last_name,', ',author_first_name) like CONCAT( '%',?,'%')"+
+                    "or CONCAT(author_last_name,', ',author_first_name) like CONCAT( '%',?,'%'))"+
+                    "AND EXISTS\n" +
+                    "(\n" +
+                    "   SELECT * FROM copy as a\n" +
+                    "   WHERE bid = a.book_id\n" +
+                    ")"+
                     "order by match_rank, title asc";
     public static final String SQL_USE_SCHEMA_QUERY = "USE chipub";
     public static final String SQL_SELECT_CARDHOLDER = "SELECT * FROM cardholder WHERE chid = ?";

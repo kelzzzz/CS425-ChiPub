@@ -23,6 +23,12 @@ import static org.iitcs.util.Util.substringByRegex;
 public class CardholderDao implements IDao{
     Connection connection;
     BookDao bd;
+
+    public int getQuerySuccessCode() {
+        return querySuccessCode;
+    }
+
+    private int querySuccessCode = 0;
     private static final Logger LOGGER = LogManager.getLogger(CardholderDao.class);
 
     public CardholderDao() throws InstantiationException {
@@ -193,9 +199,11 @@ public class CardholderDao implements IDao{
             System.out.println(ps.toString());
             int i = ps.executeUpdate();
             if(i>0){
+                querySuccessCode = 1;
                 LOGGER.info("New cardholder with id ".concat(String.valueOf(saveWith.getChid()).concat(" was inserted.")));
             }
         }catch(SQLException e){
+            querySuccessCode =0;
             LOGGER.info(e.getMessage());
         }
     }
@@ -218,9 +226,11 @@ public class CardholderDao implements IDao{
 
             int i = ps.executeUpdate();
             if(i>0){
+                querySuccessCode = 1;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(updateWith.getChid()).concat(" was updated.")));
             }
         }catch(SQLException e){
+            querySuccessCode = 0;
             LOGGER.info(e.getMessage());
         }
     }
@@ -232,9 +242,11 @@ public class CardholderDao implements IDao{
             ps.setLong(1,toDelete.getChid());
             int i = ps.executeUpdate();
             if(i>0){
+                querySuccessCode=1;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(toDelete.getChid()).concat(" was deleted.")));
             }
         }catch(SQLException e){
+            querySuccessCode=0;
             LOGGER.info(e.getMessage());
         }
     }

@@ -11,7 +11,6 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
     public CardholderRegisterPanel() {
         super();
         JButton registerButton = new JButton("Register Cardholder");
-        add(registerButton, BorderLayout.SOUTH);
 
         //TODO ---> THIS SHOULD HAPPEN IN THE DB, NOT THE APPLICATION!
         Random rand = new Random();
@@ -19,6 +18,7 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
         long min = 10000000L;
         long max = 100000000L;
         long randomCardNum = min+((long)(rand.nextDouble()*(max-min)));
+
 
         cardholderIdField.setText(String.valueOf(randomChid));
         cardholderIdField.setEditable(false);
@@ -28,9 +28,11 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
         registerButton.addActionListener(e-> registerButtonAction(randomChid, randomCardNum));
 
         JPanel selections = new JPanel();
-        selections.setLayout(new BorderLayout());
-        selections.add(registerButton, BorderLayout.WEST);
-        selections.add(getBackButton(), BorderLayout.EAST);
+
+        selections.setLayout(new GridLayout(2,1,10,10));
+
+        selections.add(registerButton);
+        selections.add(getBackButton());
 
         add(selections,BorderLayout.SOUTH);
     }
@@ -40,5 +42,10 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
         Cardholder result = new Cardholder(chid, String.valueOf(cardNum), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
         chd.save(result);
+        if(chd.getQuerySuccessCode() == 1){
+            JOptionPane.showMessageDialog(this,"Cardholder successfully registered.");
+        }else{
+                JOptionPane.showMessageDialog(this,"Cardholder registration failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);
+        }
     }
 }

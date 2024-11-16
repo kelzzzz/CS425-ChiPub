@@ -9,7 +9,6 @@ public class Book extends AbstractCplEntity {
     private String language;
     private String subject;
     private String genre;
-
     public Book(long id, String isbn, String title, String aln, String afn, String lang, String subj, String gnr){
         this.bookId = id;
         this.isbn = isbn;
@@ -70,4 +69,5 @@ public class Book extends AbstractCplEntity {
     public String getGenre() {
         return genre;
     }
+
 }

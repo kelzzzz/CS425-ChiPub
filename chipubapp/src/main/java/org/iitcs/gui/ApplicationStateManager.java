@@ -5,6 +5,7 @@ import org.iitcs.database.dao.models.Book;
 import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.gui.panel.*;
 
+import javax.swing.*;
 import java.util.Stack;
 
 import static org.iitcs.gui.ApplicationStateManager.GuiState.ADMIN_CARDHOLDER_SEARCH;
@@ -18,14 +19,10 @@ public class ApplicationStateManager {
     public GuiState lastState;
     public UserContext userContext;
     private Cardholder currentUser;
-
-    public Cardholder getUserFocus() {
-        return userFocus;
-    }
-
     private Cardholder userFocus;
     private AbstractCplEntity itemDetailResponse;
-    private String persistedSearch = null;
+    public DefaultListModel<Book> lastBookList = new DefaultListModel<>();
+    public DefaultListModel<Cardholder> lastUserList = new DefaultListModel<>();
     private ApplicationStateManager(){}
     public static synchronized ApplicationStateManager getInstance(){
         if(instance == null){
@@ -48,17 +45,19 @@ public class ApplicationStateManager {
     }
     public void setState(GuiState state){
         this.state = state;
+
         if(this.state == SEARCH_BOOK || this.state == ADMIN_CARDHOLDER_SEARCH){
             this.stateTrail.clear();
         }
+
         this.stateTrail.add(this.state);
-        System.out.println(stateTrail);
+
         switch(state){
             case LOGIN:
                 fw.packSimpleFrame(new LoginPanel());
                 break;
             case SEARCH_BOOK:
-                fw.packFrameWithUserDetailButton(new BookSearchPanel(persistedSearch), currentUser.getFirstName());
+                fw.packFrameWithUserDetailButton(new BookSearchPanel(), currentUser.getFirstName());
                 break;
             case BOOK_DETAIL:
                 fw.packFrameWithUserDetailButton(new BookDetailPanel((Book) itemDetailResponse), currentUser.getFirstName());
@@ -76,7 +75,7 @@ public class ApplicationStateManager {
                 fw.packSimpleFrame(new AdminDashboardPanel());
                 break;
             case ADMIN_CARDHOLDER_SEARCH:
-                fw.packFrameWithUserDetailButton(new CardholderSearchPanel(persistedSearch), currentUser.getFirstName());
+                fw.packFrameWithUserDetailButton(new CardholderSearchPanel(), currentUser.getFirstName());
                 break;
             case ADMIN_REGISTER_CARDHOLDER:
                 fw.packSimpleFrame(new CardholderRegisterPanel());
@@ -89,13 +88,10 @@ public class ApplicationStateManager {
     public Cardholder getCurrentUser() {
         return currentUser;
     }
-
     public void setUserContext(UserContext userContext){
         this.userContext = userContext;
     }
     public void setItemDetailResponse(AbstractCplEntity item) {this.itemDetailResponse = item;}
-    public void setPersistedSearch(String searchTerm) {this.persistedSearch = searchTerm;}
-    public String getPersistedSearch(){return this.persistedSearch;}
     public void setCurrentUser(Cardholder currentUser) {
         this.currentUser = currentUser;
     }

@@ -8,6 +8,8 @@ import org.iitcs.util.PropertiesLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import static org.iitcs.util.Util.setGridBagConstraints;
 
@@ -23,9 +25,15 @@ public class LoginPanel extends AbstractPanel {
         packComponentContainer();
         GridBagConstraints c = new GridBagConstraints();
         setGridBagConstraints(c,0,0,0);
-        add(loginComponentContainer, c);
+
+        ImageIcon imageIcon = new ImageIcon(LoginPanel.class.getClassLoader().getResource("chipub_logo.png"));
+        JLabel label = new JLabel(imageIcon);
+        add(label);
 
         setGridBagConstraints(c,0,1,0);
+        add(loginComponentContainer, c);
+
+        setGridBagConstraints(c,0,2,0);
         add(failureLabel, c);
 
         setVisible(true);
@@ -52,6 +60,24 @@ public class LoginPanel extends AbstractPanel {
         loginButton.setText("Login");
         loginButton.addActionListener(e -> loginAction(cardnumberField.getText(),passwordField.getPassword()));
         loginComponentContainer.add(loginButton, BorderLayout.SOUTH);
+        passwordField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                //no impl
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    loginAction(cardnumberField.getText(),passwordField.getPassword());
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 
     private static JPanel getFormattedFieldContainer(JPanel cardHolderFieldContainer, JPanel passwordFieldContainer) {

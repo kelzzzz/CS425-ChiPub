@@ -17,7 +17,10 @@ public class CardholderDetailPanel extends AbstractPanel {
     Cardholder currentUser;
     CardholderDao chd;
     public CardholderDetailPanel(Cardholder currentUser, ApplicationStateManager.GuiState lastState){
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayout(2,2,20,20));
+
         try{
             chd = new CardholderDao();
         }catch(InstantiationException e){
@@ -26,18 +29,21 @@ public class CardholderDetailPanel extends AbstractPanel {
         if(as.userContext == ApplicationStateManager.UserContext.CARDHOLDER){
             this.currentUser = as.getCurrentUser();
         }
+
         else{
             this.currentUser = currentUser;
             JButton closeAccButton = new JButton("Close this account");
             closeAccButton.addActionListener(e-> deleteButtonAction());
-            add(closeAccButton);
+            buttonsPanel.add(closeAccButton);
             JButton updateAccButton = new JButton("Update account");
             updateAccButton.addActionListener(e->as.setState(ApplicationStateManager.GuiState.ADMIN_EDIT_CARDHOLDER));
-            add(updateAccButton);
+            buttonsPanel.add(updateAccButton);
         }
-        JLabel userDetail = new JLabel(currentUser.toStringJLabelDetail());
-        add(userDetail);
-        add(getBackButton());
+
+        JLabel userDetail = new JLabel(this.currentUser.toStringJLabelDetail());
+        add(userDetail, BorderLayout.NORTH);
+        buttonsPanel.add(getBackButton());
+        add(buttonsPanel, BorderLayout.SOUTH);
         packUserDashboard();
         setVisible(true);
     }
@@ -51,16 +57,15 @@ public class CardholderDetailPanel extends AbstractPanel {
         checkOuts.clear();
         checkOuts.addAll(currentUser.getCheckOuts());
 
-        GridBagConstraints c = new GridBagConstraints();
-        Util.setGridBagConstraints(c, 0,1,0);
-        add(new JLabel("Holds"), c);
-        Util.setGridBagConstraints(c, 0,2,30);
-        add(getScrollableListOfItems(holds, 200,50),c);
-        Util.setGridBagConstraints(c, 0,3,0);
+        JPanel holdsCheckOuts = new JPanel();
+        holdsCheckOuts.setLayout(new GridLayout(4,1));
+        holdsCheckOuts.add(new JLabel("Holds"));
+        holdsCheckOuts.add(getScrollableListOfItems(holds, 200,60));
 
-        add(new JLabel("Check outs"), c);
-        Util.setGridBagConstraints(c, 0,4,30);
-        add(getScrollableListOfItems(checkOuts, 200, 50),c);
+        holdsCheckOuts.add(new JLabel("Check outs"));
+        holdsCheckOuts.add(getScrollableListOfItems(checkOuts, 200, 60));
+
+        add(holdsCheckOuts, BorderLayout.CENTER);
 
         revalidate();
         repaint();

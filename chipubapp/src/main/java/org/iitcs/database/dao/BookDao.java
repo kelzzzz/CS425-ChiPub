@@ -20,6 +20,11 @@ import static org.iitcs.database.QueryConstants.*;
 public class BookDao implements IDao{
     Connection connection;
     private static final Logger LOGGER = LogManager.getLogger(BookDao.class);
+    public int getQuerySuccessCode() {
+        return querySuccessCode;
+    }
+
+    private int querySuccessCode = 0;
     public BookDao() throws InstantiationException {
         connection = ConnectionWrapper.getInstance().getConnection();
 
@@ -98,12 +103,14 @@ public class BookDao implements IDao{
             ps.setString(4,QueryConstants.statusMapping.get(QueryConstants.Status.PENDING));
             int i = ps.executeUpdate();
             if(i > 0){
+                querySuccessCode=1;
                 return true;
             }else{
                 LOGGER.info("Placing hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
                 return false;
             }
         }catch(SQLException e){
+            querySuccessCode=0;
             LOGGER.info(e.getMessage());
         }
         return false;
@@ -115,12 +122,14 @@ public class BookDao implements IDao{
             ps.setLong(3, cardholder.getChid());
             int i = ps.executeUpdate();
             if(i > 0){
+                querySuccessCode=1;
                 return true;
             }else{
                 LOGGER.info("Cancelling hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
                 return false;
             }
         }catch(SQLException e){
+            querySuccessCode=0;
             LOGGER.info(e.getMessage());
         }
         return false;
@@ -132,9 +141,11 @@ public class BookDao implements IDao{
             ps.setLong(2, cardHolderId);
             int i = ps.executeUpdate();
             if(i > 0){
+                querySuccessCode=1;
                 LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
                 return true;
             }else{
+                querySuccessCode=0;
                 LOGGER.info("Failed to check out book with copy ID ".concat(String.valueOf(copyId)));
                 return false;
             }
@@ -150,9 +161,11 @@ public class BookDao implements IDao{
             ps.setLong(2, cardHolderId);
             int i = ps.executeUpdate();
             if(i > 0){
+                querySuccessCode=1;
                 LOGGER.info("Checked in book with copy ID ".concat(String.valueOf(copyId)));
                 return true;
             }else{
+                querySuccessCode=0;
                 LOGGER.info("Failed to check in book with copy ID ".concat(String.valueOf(copyId)));
                 return false;
             }

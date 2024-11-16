@@ -5,22 +5,24 @@ import org.iitcs.database.dao.models.Cardholder;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import static org.iitcs.util.Util.setGridBagConstraints;
 
 public class CardholderSearchPanel extends AbstractPanel{
     CardholderDao dao;
     DefaultListModel<Cardholder> chs = new DefaultListModel<>();
-    public CardholderSearchPanel(String lastSearchTerm){
+    public CardholderSearchPanel(){
         try{
             dao = new CardholderDao();
         }catch(InstantiationException e){
             logPanelException(e, "CardholderSearchPanel tried to use uninitialized dao.");
         }
-
+        chs = as.lastUserList;
         //refreshSearchOnPageReentry(lastSearchTerm);
         setLayout(new BorderLayout());
-        packInnerPanels(lastSearchTerm);
+        packInnerPanels();
         setVisible(true);
     }
 
@@ -30,7 +32,7 @@ public class CardholderSearchPanel extends AbstractPanel{
         }
     }
 
-    private void packInnerPanels(String lastSearchTerm) {
+    private void packInnerPanels() {
         addSearchBarContainer();
         add(getScrollableListOfItems(chs, 200, 200),BorderLayout.SOUTH);
     }
@@ -48,21 +50,51 @@ public class CardholderSearchPanel extends AbstractPanel{
         JTextField searchBar = new JTextField(15);
         searchBarContainer.add(searchBar, c);
 
+        searchBar.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                //no impl
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    clickSearchButtonAction(searchBar);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
         setGridBagConstraints(c,2,0,0);
         JButton searchButton = new JButton("Search");
         searchButton.addActionListener(e -> clickSearchButtonAction(searchBar));
         searchBarContainer.add(searchButton, c);
 
+        setGridBagConstraints(c,3,0,0);
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(e -> clearSearch(searchBar));
+        searchBarContainer.add(clearButton, c);
         add(searchBarContainer, BorderLayout.NORTH);
     }
 
     public void clickSearchButtonAction(JTextField searchBar){
-        //as.setPersistedSearch(searchBar.getText());
         searchCardholders(searchBar.getText());
+    }
+    public void clearSearch(JTextField searchBar){
+        chs.clear();
+        searchBar.setText("");
+        as.lastUserList = chs;
+        revalidate();
+        repaint();
     }
     public void searchCardholders(String searchTerm){
         chs.clear();
         chs.addAll(dao.search(searchTerm));
+        as.lastUserList = chs;
         revalidate();
     }
 }
