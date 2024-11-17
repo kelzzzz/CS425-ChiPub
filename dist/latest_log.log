@@ -1,0 +1,23 @@
+2024-11-17 16:43:57.879 [main] INFO  org.iitcs.util.PropertiesLoader - Trying to load properties from file -> user_defined_properties.properties
+2024-11-17 16:43:57.888 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Driver loaded.
+2024-11-17 16:43:57.889 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - New ConnectionWrapper instance was initialized.
+2024-11-17 16:43:57.889 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Attempting to connect to jdbc:mysql://localhost:3306/?user=root with credentials: root, admin
+2024-11-17 16:43:58.376 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Connection successful to: jdbc:mysql://localhost:3306/?user=root
+2024-11-17 16:44:02.127 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book index was retrieved.
+2024-11-17 16:44:30.935 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Failed to check in book with copy ID 628006338
+2024-11-17 16:44:32.625 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.CardholderDao - Cardholder with id 0 searched for.
+2024-11-17 16:44:32.630 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 6 searched for.
+2024-11-17 16:44:32.632 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 115990 searched for.
+2024-11-17 16:44:32.634 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 832 searched for.
+2024-11-17 16:44:32.635 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 138 searched for.
+2024-11-17 16:44:32.637 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 68938846 searched for.
+2024-11-17 16:44:32.642 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 63418 searched for.
+2024-11-17 16:44:32.644 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 88866 searched for.
+2024-11-17 16:44:48.334 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 250 searched for.
+2024-11-17 16:44:48.336 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 868 searched for.
+2024-11-17 16:44:48.340 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 59182 searched for.
+2024-11-17 16:45:06.008 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Checked in book with copy ID 105444022
+2024-11-17 16:45:07.726 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.CardholderDao - Cardholder with id 11222 searched for.
+2024-11-17 16:45:07.729 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 250 searched for.
+2024-11-17 16:45:07.730 [AWT-EventQueue-0] INFO  org.iitcs.database.dao.BookDao - Book with id 868 searched for.
+2024-11-17 16:45:22.265 [Shutdown hook] INFO  org.iitcs.database.connection.ConnectionWrapper - Releasing current DB connection.

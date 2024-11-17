@@ -4,7 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
+
+import static org.iitcs.util.Constants.DEFAULT_PROPERTIES_FILE;
+import static org.iitcs.util.Constants.JAR_FILE_NAME;
 
 public class PropertiesLoader {
     private static PropertiesLoader instance = null;
@@ -29,7 +33,15 @@ public class PropertiesLoader {
     private PropertiesLoader(String fileName){
         /*TODO: Should be able to pass a custom properties file in the JVM args*/
         try{
-            this.properties.load(PropertiesLoader.class.getResourceAsStream(fileName));
+            LOGGER.info("Trying to load properties from file -> ".concat(fileName));
+            if(!fileName.equals(DEFAULT_PROPERTIES_FILE)){
+                String url = PropertiesLoader.class.getProtectionDomain().getCodeSource().getLocation().toString();
+                url = url.replace(JAR_FILE_NAME,fileName);
+                URL toLoad = new URL(url);
+                this.properties.load(toLoad.openStream());
+            }else{
+                this.properties.load(PropertiesLoader.class.getResourceAsStream(fileName));
+            }
             readPropertiesIntoVariables();
         }
         catch(IOException e){

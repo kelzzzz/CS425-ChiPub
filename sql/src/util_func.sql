@@ -88,8 +88,6 @@ BEGIN
 	CALL SelectBookBySubject();
 	CALL SelectBookByLanguage();
 
-	DROP TABLE IF EXISTS MasterBookIndex;
-
 	CREATE TEMPORARY TABLE IF NOT EXISTS MasterBookIndex AS
 		SELECT * FROM booktempCLI_BaseIndex
 		LEFT OUTER JOIN booktempCLI_AuthLName USING (bid)

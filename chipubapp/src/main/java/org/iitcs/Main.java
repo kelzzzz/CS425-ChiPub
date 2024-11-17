@@ -40,6 +40,7 @@ public class Main {
         String propertiesFileName = System.getProperty(SYSTEM_PROPERTY_KEY);
 
         if(noPropertiesFound(propertiesFileName)){
+            LOGGER.info("No properties file found -- switching to default.");
             propertiesFileName = Constants.DEFAULT_PROPERTIES_FILE;
         }else if(propertiesFileNameInvalid(propertiesFileName)){
             throw new RuntimeException("Invalid properties file passed to JVM.");
