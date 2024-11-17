@@ -23,17 +23,12 @@ import static org.iitcs.util.Util.substringByRegex;
 public class CardholderDao implements IDao{
     Connection connection;
     BookDao bd;
-    private boolean querySuccess = false;
     private static final Logger LOGGER = LogManager.getLogger(CardholderDao.class);
 
     public CardholderDao() throws InstantiationException {
         bd = new BookDao();
         connection = ConnectionWrapper.getInstance().getConnection();
     }
-    public boolean getQuerySuccess() {
-        return querySuccess;
-    }
-
     @Override
     public Optional<Cardholder> get(long id) {
         try(PreparedStatement ps = connection.prepareStatement(SQL_SELECT_CARDHOLDER)){
@@ -44,31 +39,19 @@ public class CardholderDao implements IDao{
                 return Optional.of(createCardholderFromResultSet(cardholder));
             }
         }catch(SQLException e){
-            //do something
+            LOGGER.error(e.getMessage());
+            LOGGER.error("Failed to find cardholder with id " + id);
         }
         return Optional.empty();
     }
 
+    @Override
     public ArrayList<Cardholder> search(String searchTerm){
         ArrayList<Cardholder> ret = new ArrayList<>();
         try(PreparedStatement ps = connection.prepareStatement(SEARCH_FOR_CARDHOLDER)){
-            ps.setString(1, searchTerm);
-            ps.setString(2, searchTerm);
-            ps.setString(3, searchTerm);
-            ps.setString(4, searchTerm);
-            ps.setString(5, searchTerm);
-            ps.setString(6, searchTerm);
-            ps.setString(7, searchTerm);
-            ps.setString(8, searchTerm);
-            ps.setString(9, searchTerm);
-            ps.setString(10, searchTerm);
-            ps.setString(11, searchTerm);
-            ps.setString(12, searchTerm);
-            ps.setString(13, searchTerm);
-            ps.setString(14, searchTerm);
-            ps.setString(15, searchTerm);
-            ps.setString(16, searchTerm);
-            ps.setString(17, searchTerm);
+            for(int i = 1; i < CARDHOLDER_SEARCH_PARAMETER_COUNT; i++){
+                ps.setString(i,searchTerm);
+            }
 
             ResultSet chs = ps.executeQuery();
 
@@ -84,14 +67,8 @@ public class CardholderDao implements IDao{
     private Cardholder createCardholderFromResultSet(ResultSet cardholder) throws SQLException {
         //TODO set their phone numbers as well
         long chid = cardholder.getLong(1);
-        CardholderAddress addr = new CardholderAddress(
-                cardholder.getString(6),
-                cardholder.getString(7),
-                cardholder.getString(8),
-                cardholder.getString(9),
-                cardholder.getString(10),
-                cardholder.getString(11)
-        );
+        CardholderAddress addr = createAddressFromResultSet(cardholder);
+
         Cardholder ch = new Cardholder(
                 chid,
                 cardholder.getString(2),
@@ -100,27 +77,27 @@ public class CardholderDao implements IDao{
                 addr,
                 cardholder.getString(12)
         );
+
+        setCardholderHoldsAndCheckOutIds(chid, ch);
+
+        return ch;
+    }
+
+    private void setCardholderHoldsAndCheckOutIds(long chid, Cardholder ch) {
         ArrayList<Book> holds = new ArrayList<>();
         ArrayList<Long> holdBookIds = new ArrayList<>();
 
         ArrayList<Book> checkOuts = new ArrayList<>();
         ArrayList<Long> checkOutBookIds = new ArrayList<>();
 
-        try(PreparedStatement ps = connection.prepareStatement("SELECT book_id FROM book_cardholder WHERE cardholder_id=? AND status = ?")) {
-            ps.setLong(1, chid);
-            ps.setString(2, statusMapping.get(Status.PENDING));
-            ResultSet holdRs = ps.executeQuery();
-            while (holdRs.next()) {
-                holdBookIds.add(holdRs.getLong(1));
-            }
-        }catch(SQLException e){
-            LOGGER.info(e.getMessage());
-        }
+        populateCardholderHoldIds(chid, holds, holdBookIds);
+        populateCardholderCheckOutIds(chid, checkOuts, checkOutBookIds);
 
-        for(Long id : holdBookIds){
-            holds.add(bd.get(id).get());
-        }
+        ch.setHolds(holds);
+        ch.setCheckOuts(checkOuts);
+    }
 
+    private void populateCardholderCheckOutIds(long chid, ArrayList<Book> checkOuts, ArrayList<Long> checkOutBookIds) {
         try(PreparedStatement ps = connection.prepareStatement(GET_CHECKOUT_BOOK_IDS_BY_CARDHOLDER_ID)) {
             ps.setLong(1, chid);
             ps.setLong(2, chid);
@@ -135,9 +112,35 @@ public class CardholderDao implements IDao{
         for(Long id : checkOutBookIds){
             checkOuts.add(bd.get(id).get());
         }
-        ch.setHolds(holds);
-        ch.setCheckOuts(checkOuts);
-        return ch;
+    }
+
+    private void populateCardholderHoldIds(long chid, ArrayList<Book> holds, ArrayList<Long> holdBookIds) {
+        try(PreparedStatement ps = connection.prepareStatement(GET_HOLD_BOOK_IDS)) {
+            ps.setLong(1, chid);
+            ps.setString(2, statusMapping.get(Status.PENDING));
+            ResultSet holdRs = ps.executeQuery();
+            while (holdRs.next()) {
+                holdBookIds.add(holdRs.getLong(1));
+            }
+        }catch(SQLException e){
+            LOGGER.info(e.getMessage());
+        }
+
+        for(Long id : holdBookIds){
+            holds.add(bd.get(id).get());
+        }
+    }
+
+    private static CardholderAddress createAddressFromResultSet(ResultSet cardholder) throws SQLException {
+        CardholderAddress addr = new CardholderAddress(
+                cardholder.getString(6),
+                cardholder.getString(7),
+                cardholder.getString(8),
+                cardholder.getString(9),
+                cardholder.getString(10),
+                cardholder.getString(11)
+        );
+        return addr;
     }
 
     @Override
@@ -179,7 +182,7 @@ public class CardholderDao implements IDao{
         return LOGIN_ERROR_CODE.toString();
     }
     @Override
-    public void save(Object item) {
+    public boolean save(Object item) {
         Cardholder saveWith = (Cardholder) item;
         try(PreparedStatement ps = connection.prepareStatement(INSERT_NEW_CARDHOLDER)){
 
@@ -198,17 +201,18 @@ public class CardholderDao implements IDao{
 
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccess = true;
                 LOGGER.info("New cardholder with id ".concat(String.valueOf(saveWith.getChid()).concat(" was inserted.")));
+                return true;
             }
         }catch(SQLException e){
-            querySuccess = false;
             LOGGER.info(e.getMessage());
+            return false;
         }
+        return false;
     }
 
     @Override
-    public void update(Object o, String[] parameters) {
+    public boolean update(Object o, String[] parameters) {
         Cardholder updateWith = (Cardholder) o;
         try(PreparedStatement ps = connection.prepareStatement(UPDATE_CARDHOLDER_INFORMATION)){
             ps.setString(1,updateWith.getFirstName());
@@ -225,28 +229,30 @@ public class CardholderDao implements IDao{
 
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccess = true;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(updateWith.getChid()).concat(" was updated.")));
+                return true;
             }
         }catch(SQLException e){
-            querySuccess = false;
             LOGGER.info(e.getMessage());
+            return false;
         }
+        return false;
     }
 
     @Override
-    public void delete(Object o, String[] parameters) {
+    public boolean delete(Object o, String[] parameters) {
         Cardholder toDelete = (Cardholder) o;
         try(PreparedStatement ps = connection.prepareStatement(DELETE_CARDHOLDER)){
             ps.setLong(1,toDelete.getChid());
             int i = ps.executeUpdate();
             if(i>0){
-                querySuccess=true;
                 LOGGER.info("Cardholder with id ".concat(String.valueOf(toDelete.getChid()).concat(" was deleted.")));
+                return true;
             }
         }catch(SQLException e){
-            querySuccess=false;
             LOGGER.info(e.getMessage());
+            return false;
         }
+        return false;
     }
 }

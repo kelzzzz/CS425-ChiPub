@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>chipub</name>
-    <description>A small cli for interacting with the Chicago Public Library database system.</description>
+    <description>A GUI application for interacting with a simple book database, based on the Chicago Public Library system.</description>
 
     <groupId>org.iitcs</groupId>
     <artifactId>chipubapp</artifactId>

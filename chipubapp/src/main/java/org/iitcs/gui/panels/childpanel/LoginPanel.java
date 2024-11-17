@@ -1,9 +1,10 @@
-package org.iitcs.gui.panel;
+package org.iitcs.gui.panels.childpanel;
 
 import org.iitcs.database.dao.models.Admin;
 import org.iitcs.database.dao.CardholderDao;
 import org.iitcs.database.dao.models.Cardholder;
-import org.iitcs.gui.ApplicationStateManager;
+import org.iitcs.gui.panels.parentpanel.SimplePanel;
+import org.iitcs.controller.state.concretestate.SearchBookState;
 import org.iitcs.util.PropertiesLoader;
 
 import javax.swing.*;
@@ -14,8 +15,7 @@ import java.awt.event.KeyListener;
 import static org.iitcs.util.Constants.APP_INFO;
 import static org.iitcs.util.Util.setGridBagConstraints;
 
-public class LoginPanel extends AbstractPanel {
-    ApplicationStateManager as = ApplicationStateManager.getInstance();
+public class LoginPanel extends SimplePanel {
     JPanel loginComponentContainer = new JPanel();
     JTextField cardnumberField = new JTextField(20);
     JPasswordField passwordField = new JPasswordField(20);
@@ -42,8 +42,7 @@ public class LoginPanel extends AbstractPanel {
         infoBtn.setFocusPainted(false);
         infoBtn.setMargin(new Insets(0, 0, 0, 0));
         infoBtn.setContentAreaFilled(false);
-        //infoBtn.setBorderPainted(false);
-        //infoBtn.setOpaque(false);
+
         infoBtn.setForeground(Color.GRAY);
         infoBtn.addActionListener(e->infoButtonAction());
         add(infoBtn, c);
@@ -76,7 +75,11 @@ public class LoginPanel extends AbstractPanel {
         loginButton.setText("Login");
         loginButton.addActionListener(e -> loginAction(cardnumberField.getText(),passwordField.getPassword()));
         loginComponentContainer.add(loginButton, BorderLayout.SOUTH);
-        passwordField.addKeyListener(new KeyListener() {
+        passwordField.addKeyListener(getLoginEnterKeyListener());
+    }
+
+    private KeyListener getLoginEnterKeyListener() {
+        return new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 //no impl
@@ -84,16 +87,16 @@ public class LoginPanel extends AbstractPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    loginAction(cardnumberField.getText(),passwordField.getPassword());
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginAction(cardnumberField.getText(), passwordField.getPassword());
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-
+                //no impl
             }
-        });
+        };
     }
 
     private static JPanel getFormattedFieldContainer(JPanel cardHolderFieldContainer, JPanel passwordFieldContainer) {
@@ -120,11 +123,11 @@ public class LoginPanel extends AbstractPanel {
         try{
             CardholderDao chd = new CardholderDao();
 
-            if(isAdminCredentials(userName, password)){
-                validated = sendUserContextResponse(ApplicationStateManager.UserContext.ADMIN, new Admin());
-            }else if(isUserCredentials(userName, password, chd)){
+            if(isValidAdminCredentials(userName, password)){
+                validated = updateLoggedInUser(new Admin());
+            }else if(isValidUserCredentials(userName, password, chd)){
                 Cardholder user = chd.get(chd.getChIDFromUsername(userName)).get();
-                validated = sendUserContextResponse(ApplicationStateManager.UserContext.CARDHOLDER,
+                validated = updateLoggedInUser(
                         user);
             }
 
@@ -133,7 +136,7 @@ public class LoginPanel extends AbstractPanel {
         }
 
         if(validated){
-            as.setState(ApplicationStateManager.GuiState.SEARCH_BOOK);
+            context.setState(new SearchBookState(context));
         }
         else{
             showFailureMessage();
@@ -144,17 +147,16 @@ public class LoginPanel extends AbstractPanel {
         failureLabel.setText("Login attempt failed. Try again.");
     }
 
-    private boolean sendUserContextResponse(ApplicationStateManager.UserContext ctx, Cardholder user){
-        as.setUserContext(ctx);
-        as.setCurrentUser(user);
+    private boolean updateLoggedInUser(Cardholder user){
+        context.getMemory().setLoggedInUser(user);
         return true;
     }
-    private static boolean isUserCredentials(String cardholderId, char[] password, CardholderDao chd) {
+    private static boolean isValidUserCredentials(String cardholderId, char[] password, CardholderDao chd) {
         return chd.validateCredentials(cardholderId, new String(password));
     }
 
-    private static boolean isAdminCredentials(String cardholderId, char[] password) {
-        return cardholderId.equals(PropertiesLoader.getInstance().getDbAdminUsername())
-                && new String(password).equals(PropertiesLoader.getInstance().getDbAdminPassword());
+    private static boolean isValidAdminCredentials(String cardholderId, char[] password) {
+        return cardholderId.equals(PropertiesLoader.dbAdminUsername)
+                && new String(password).equals(PropertiesLoader.dbAdminPassword);
     }
 }

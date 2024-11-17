@@ -1,24 +1,22 @@
-package org.iitcs.gui.panel;
+package org.iitcs.gui.panels.childpanel;
 
 import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.database.dao.models.CardholderAddress;
+import org.iitcs.gui.panels.components.ComponentFactory;
+import org.iitcs.gui.panels.parentpanel.CardholderFillableFormPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class CardholderRegisterPanel extends CardholderEditInformationPanel{
+public class CardholderRegisterPanel extends CardholderFillableFormPanel {
     public CardholderRegisterPanel() {
         super();
         JButton registerButton = new JButton("Register Cardholder");
 
-        //TODO ---> THIS SHOULD HAPPEN IN THE DB, NOT THE APPLICATION!
-        Random rand = new Random();
-        int randomChid = rand.nextInt(12000);
-        long min = 10000000L;
-        long max = 100000000L;
-        long randomCardNum = min+((long)(rand.nextDouble()*(max-min)));
-
+        //TODO This should happen in the DB, not the application
+        int randomChid = createRandomChid();
+        long randomCardNum = createRandomCardNumber();
 
         cardholderIdField.setText(String.valueOf(randomChid));
         cardholderIdField.setEditable(false);
@@ -32,7 +30,7 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
         selections.setLayout(new GridLayout(2,1,10,10));
 
         selections.add(registerButton);
-        selections.add(getBackButton());
+        selections.add(ComponentFactory.createBackButton(context));
 
         add(selections,BorderLayout.SOUTH);
     }
@@ -41,11 +39,22 @@ public class CardholderRegisterPanel extends CardholderEditInformationPanel{
                 CityField.getText(),StateField.getText(), ZipField.getText());
         Cardholder result = new Cardholder(chid, String.valueOf(cardNum), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
-        chd.save(result);
-        if(chd.getQuerySuccess() == true){
+        boolean success = chd.save(result);
+        if(success){
             JOptionPane.showMessageDialog(this,"Cardholder successfully registered.");
         }else{
                 JOptionPane.showMessageDialog(this,"Cardholder registration failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);
         }
+    }
+    private int createRandomChid(){
+        Random rand = new Random();
+        return rand.nextInt(12000);
+    }
+
+    private long createRandomCardNumber(){
+        Random rand = new Random();
+        long min = 10000000L;
+        long max = 100000000L;
+        return min+((long)(rand.nextDouble()*(max-min)));
     }
 }

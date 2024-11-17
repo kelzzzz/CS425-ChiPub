@@ -15,5 +15,6 @@ public class Constants {
 
     public static final int APP_W = 600;
     public static final int APP_H = 500;
+    public static final String SYSTEM_PROPERTY_KEY = "props";
     public static final Long LOGIN_ERROR_CODE = (long) -99999;
 }

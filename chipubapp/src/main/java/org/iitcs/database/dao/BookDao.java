@@ -18,13 +18,8 @@ import java.util.Optional;
 import static org.iitcs.database.QueryConstants.*;
 
 public class BookDao implements IDao{
-    Connection connection;
+    private Connection connection;
     private static final Logger LOGGER = LogManager.getLogger(BookDao.class);
-    public int getQuerySuccessCode() {
-        return querySuccessCode;
-    }
-
-    private int querySuccessCode = 0;
     public BookDao() throws InstantiationException {
         connection = ConnectionWrapper.getInstance().getConnection();
 
@@ -40,7 +35,7 @@ public class BookDao implements IDao{
     }
     @Override
     public Optional<Book> get(long id) {
-        try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM MasterBookIndex WHERE BID = ?")){
+        try(PreparedStatement ps = connection.prepareStatement(SELECT_FROM_MASTERBOOKINDEX)){
             ps.setLong(1, id);
             ResultSet books = ps.executeQuery();
             while(books.next()){
@@ -49,33 +44,17 @@ public class BookDao implements IDao{
             }
         }catch(SQLException e){
             LOGGER.info(e.getMessage());
+            LOGGER.error("Failed to find book with id " + id);
         }
         return Optional.empty();
     }
+    @Override
     public ArrayList<Book> search(String searchTerm){
         ArrayList<Book> ret = new ArrayList<>();
         try(PreparedStatement ps = connection.prepareStatement(SEARCH_BOOK_MASTER_INDEX_TABLE)){
-            ps.setString(1, searchTerm);
-            ps.setString(2, searchTerm);
-            ps.setString(3, searchTerm);
-            ps.setString(4, searchTerm);
-            ps.setString(5, searchTerm);
-            ps.setString(6, searchTerm);
-            ps.setString(7, searchTerm);
-
-            ps.setString(8, searchTerm);
-            ps.setString(9, searchTerm);
-            ps.setString(10, searchTerm);
-            ps.setString(11, searchTerm);
-            ps.setString(12, searchTerm);
-            ps.setString(13, searchTerm);
-
-            ps.setString(14, searchTerm);
-            ps.setString(15, searchTerm);
-            ps.setString(16, searchTerm);
-            ps.setString(17, searchTerm);
-            ps.setString(18, searchTerm);
-            ps.setString(19, searchTerm);
+            for(int i = 1; i < BOOK_SEARCH_PARAMETER_COUNT; i++){
+                ps.setString(i, searchTerm);
+            }
 
             ResultSet books = ps.executeQuery();
 
@@ -90,7 +69,7 @@ public class BookDao implements IDao{
     }
 
     public boolean placeHold(Book book, Cardholder cardholder){
-        try(PreparedStatement ps  = connection.prepareStatement("INSERT INTO book_cardholder (timestamp, book_id, cardholder_id, status) VALUES(?,?,?,?)")){
+        try(PreparedStatement ps  = connection.prepareStatement(PLACE_HOLD)){
             Timestamp timestamp = new Timestamp(ZonedDateTime
                     .now(ZoneId.systemDefault())
                     .with(LocalTime.now())
@@ -102,71 +81,64 @@ public class BookDao implements IDao{
             ps.setString(4,QueryConstants.statusMapping.get(QueryConstants.Status.PENDING));
             int i = ps.executeUpdate();
             if(i > 0){
-                querySuccessCode=1;
                 return true;
             }else{
                 LOGGER.info("Placing hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
                 return false;
             }
         }catch(SQLException e){
-            querySuccessCode=0;
             LOGGER.info(e.getMessage());
+            return false;
         }
-        return false;
     }
-    public boolean cancelHold(Book book, Cardholder cardholder){
-        try(PreparedStatement ps  = connection.prepareStatement("UPDATE book_cardholder SET status = ? WHERE book_id = ? and cardholder_id = ?")){
-            ps.setString(1,QueryConstants.statusMapping.get(QueryConstants.Status.CANCELLED));
-            ps.setLong(2,book.getBookId());
+    public boolean cancelHold(Book book, Cardholder cardholder) {
+        try (PreparedStatement ps = connection.prepareStatement(CANCEL_HOLD)) {
+            ps.setString(1, QueryConstants.statusMapping.get(QueryConstants.Status.CANCELLED));
+            ps.setLong(2, book.getBookId());
             ps.setLong(3, cardholder.getChid());
             int i = ps.executeUpdate();
-            if(i > 0){
-                querySuccessCode=1;
+            if (i > 0) {
                 return true;
-            }else{
+            } else {
                 LOGGER.info("Cancelling hold for book ID:".concat(String.valueOf(book.getBookId())).concat("failed."));
                 return false;
             }
-        }catch(SQLException e){
-            querySuccessCode=0;
+        } catch (SQLException e) {
             LOGGER.info(e.getMessage());
+            return false;
         }
-        return false;
     }
 
     public boolean checkOut(long copyId, long cardHolderId){
-        try(PreparedStatement ps = connection.prepareStatement("{call Check_out(?,?)}")){
+        try(PreparedStatement ps = connection.prepareStatement(CHECK_OUT)){
             ps.setLong(1, copyId);
             ps.setLong(2, cardHolderId);
-            querySuccessCode=1;
+            ps.executeUpdate();
             LOGGER.info("Checked out book with copy ID ".concat(String.valueOf(copyId)));
             return true;
         }
         catch(SQLException e){
-            querySuccessCode=0;
             LOGGER.info("Failed to check out book with copy ID ".concat(String.valueOf(copyId)));
             return false;
         }
     }
 
     public boolean checkIn(long copyId, long cardHolderId){
-        try(PreparedStatement ps = connection.prepareStatement("{call Check_in(?,?)}")){
+        try(PreparedStatement ps = connection.prepareStatement(CHECK_IN)){
             ps.setLong(1, copyId);
             ps.setLong(2, cardHolderId);
             int i = ps.executeUpdate();
             if(i > 0){
-                querySuccessCode=1;
                 LOGGER.info("Checked in book with copy ID ".concat(String.valueOf(copyId)));
                 return true;
             }else{
-                querySuccessCode=0;
                 LOGGER.info("Failed to check in book with copy ID ".concat(String.valueOf(copyId)));
                 return false;
             }
         }catch(SQLException e){
             LOGGER.error(e.getMessage());
+            return false;
         }
-        return false;
     }
     public ArrayList<Long> getAvailableCopyIdsForBook(Book book){
         try(PreparedStatement ps = connection.prepareStatement(GET_AVAILABLE_COPY_IDS_FOR_BOOK)){
@@ -178,7 +150,7 @@ public class BookDao implements IDao{
             }
             return ids;
         }catch(SQLException e){
-            //TODO do something
+            LOGGER.error(e.getMessage());
         }
         return new ArrayList<>();
     }
@@ -192,29 +164,31 @@ public class BookDao implements IDao{
             }
             return ids;
         }catch(SQLException e){
-            //TODO do something
+            LOGGER.error(e.getMessage());
         }
         return new ArrayList<>();
     }
     @Override
     public List getAll() {
-        //N/A This isn't needed
         return null;
     }
 
     @Override
-    public void save(Object item) {
+    public boolean save(Object item) {
         //TODO Adding new books
+        return false;
     }
 
     @Override
-    public void update(Object o, String[] parameters) {
-        //TODO Updating new books
+    public boolean update(Object o, String[] parameters) {
+        //TODO Updating books
+        return false;
     }
 
     @Override
-    public void delete(Object o, String[] parameters) {
-    //TODO Deleting new books
+    public boolean delete(Object o, String[] parameters) {
+        //TODO Deleting books
+        return false;
     }
 
     private Book createBookFromResultSet(ResultSet rs) throws SQLException {

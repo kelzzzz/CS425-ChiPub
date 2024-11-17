@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import static org.iitcs.database.QueryConstants.SQL_DRIVER;
+
 public class ConnectionWrapper {
     private static ConnectionWrapper instance;
     private Connection connection;
@@ -41,7 +43,7 @@ public class ConnectionWrapper {
         return instance;
     }
     private void loadDriver() throws ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName(SQL_DRIVER);
         LOGGER.info("Driver loaded.");
     }
     public Connection getConnection(){
@@ -52,16 +54,9 @@ public class ConnectionWrapper {
     }
     public boolean connect() throws SQLException {
 
-        LOGGER.info("Attempting to connect to "
-                .concat(url)
-                .concat(" with credentials: ")
-                .concat(credentials.getProperty("user"))
-                .concat(", ")
-                .concat(credentials.getProperty("password")));
-
+        LOGGER.info(getConnectionMessage());
         connection = DriverManager.getConnection(url, credentials);
-        PreparedStatement ps = connection.prepareStatement(QueryConstants.SQL_USE_SCHEMA_QUERY);
-        ps.execute();
+        setSchema();
         if(connection.isValid(1)){
             LOGGER.info("Connection successful to: ".concat(url));
             return true;
@@ -69,6 +64,21 @@ public class ConnectionWrapper {
         LOGGER.error("Connection failure.");
         return false;
     }
+
+    private void setSchema() throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(QueryConstants.SQL_USE_SCHEMA_QUERY);
+        ps.execute();
+    }
+
+    private String getConnectionMessage() {
+        return "Attempting to connect to "
+                .concat(url)
+                .concat(" with credentials: ")
+                .concat(credentials.getProperty("user"))
+                .concat(", ")
+                .concat(credentials.getProperty("password"));
+    }
+
     public boolean releaseConnection(){
         try{
             LOGGER.info("Releasing current DB connection.");

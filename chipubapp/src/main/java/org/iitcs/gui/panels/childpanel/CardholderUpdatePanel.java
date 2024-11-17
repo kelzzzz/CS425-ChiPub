@@ -1,12 +1,14 @@
-package org.iitcs.gui.panel;
+package org.iitcs.gui.panels.childpanel;
 
 import org.iitcs.database.dao.models.Cardholder;
 import org.iitcs.database.dao.models.CardholderAddress;
+import org.iitcs.gui.panels.components.ComponentFactory;
+import org.iitcs.gui.panels.parentpanel.CardholderFillableFormPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CardholderUpdatePanel extends CardholderEditInformationPanel{
+public class CardholderUpdatePanel extends CardholderFillableFormPanel {
     public CardholderUpdatePanel(Cardholder user) {
         super();
         JButton updateBtn = new JButton("Update User Info");
@@ -32,7 +34,7 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
         updateBtn.addActionListener(e->updateButtonAction());
 
         selections.add(updateBtn);
-        selections.add(getBackButton());
+        selections.add(ComponentFactory.createBackButton(context));
 
         add(selections,BorderLayout.CENTER);
     }
@@ -41,12 +43,14 @@ public class CardholderUpdatePanel extends CardholderEditInformationPanel{
                 CityField.getText(),StateField.getText(), ZipField.getText());
         Cardholder result = new Cardholder(Long.valueOf(cardholderIdField.getText()), cardholderNumberField.getText(), firstNameField.getText(),
                 lastNameField.getText(), addr, EmailField.getText());
-        chd.update(result, null);
-        if(chd.getQuerySuccess() == true){
+        boolean success = chd.update(result, null);
+
+        if(success){
             JOptionPane.showMessageDialog(this,"Cardholder successfully updated.");
         }else{
             JOptionPane.showMessageDialog(this,"Cardholder update failed.", "Registration Failure", JOptionPane.WARNING_MESSAGE, null);
         }
-        as.setUserFocus(chd.get(Long.parseLong(cardholderIdField.getText())).get());
+
+        context.getMemory().setCardholderFocus(chd.get(Long.parseLong(cardholderIdField.getText())).get());
     }
 }
