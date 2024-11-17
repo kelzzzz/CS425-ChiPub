@@ -1,8 +1,8 @@
 $db="chipub"
-$passwordcommand="-padmin"
+$passwordcommand="-pPASSHERE"
 $properties_file="user_defined_properties.properties"
 $sqldir="sqlscripts"
-$glob = Get-ChildItem "C:\Users\kcavin\Documents\temi go to colleg\IIT HW\DB ORG\Clean_Clone_CS425Project\CS425-ChiPub\dist\mock-data"
+$glob = Get-ChildItem "PATH\TO\YOUR\CLONE\CS425-ChiPub\dist\mock-data"
 
 echo "Setting up database & tables..."
 # start in sys database since a database has to
