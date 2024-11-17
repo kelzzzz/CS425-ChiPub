@@ -1,6 +1,6 @@
-2024-11-17 16:48:40.592 [main] INFO  org.iitcs.util.PropertiesLoader - Trying to load properties from file -> user_defined_properties.properties
-2024-11-17 16:48:40.602 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Driver loaded.
-2024-11-17 16:48:40.603 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - New ConnectionWrapper instance was initialized.
-2024-11-17 16:48:40.603 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Attempting to connect to jdbc:mysql://localhost:3306/?user=root with credentials: root, admin
-2024-11-17 16:48:41.090 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Connection successful to: jdbc:mysql://localhost:3306/?user=root
-2024-11-17 16:48:42.882 [Shutdown hook] INFO  org.iitcs.database.connection.ConnectionWrapper - Releasing current DB connection.
+2024-11-17 17:21:01.192 [main] INFO  org.iitcs.util.PropertiesLoader - Trying to load properties from file -> user_defined_properties.properties
+2024-11-17 17:21:01.201 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Driver loaded.
+2024-11-17 17:21:01.201 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - New ConnectionWrapper instance was initialized.
+2024-11-17 17:21:01.202 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Attempting to connect to jdbc:mysql://localhost:3306/?user=root with credentials: root, admin
+2024-11-17 17:21:01.605 [main] INFO  org.iitcs.database.connection.ConnectionWrapper - Connection successful to: jdbc:mysql://localhost:3306/?user=root
+2024-11-17 17:21:05.529 [Shutdown hook] INFO  org.iitcs.database.connection.ConnectionWrapper - Releasing current DB connection.
