@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>chipub</name>
-    <description>A small cli for interacting with the Chicago Public Library database system.</description>
+    <description>A GUI application for interacting with a simple book database, based on the Chicago Public Library system.</description>
 
     <groupId>org.iitcs</groupId>
     <artifactId>chipubapp</artifactId>
@@ -23,6 +23,10 @@
           <directory>src/main/resources</directory>
           <filtering>true</filtering>
         </resource>
+          <resource>
+              <directory>properties</directory>
+              <filtering>true</filtering>
+          </resource>
       </resources>
 
       <plugins>
@@ -34,7 +38,28 @@
             <mainClass>org.iitcs.Main</mainClass>
           </configuration>
         </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-shade-plugin</artifactId>
+              <version>2.4.3</version>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>shade</goal>
+                      </goals>
+                      <configuration>
+                          <transformers>
+                              <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                  <mainClass>org.iitcs.Main</mainClass>
+                              </transformer>
+                          </transformers>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
       </plugins>
+
     </build>
 
     <dependencies>
