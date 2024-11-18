@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 $db="chipub"
-$passwordcommand="-padmin"
+$passwordcommand="-pPASSWORDHERE"
 $sqldir="sqlscripts"
 
 echo "Tearing down database & tables..."
