@@ -12,7 +12,7 @@ This application can spin up a simple book database full of mock data, connect t
 - Clone the project to any directory you see fit
 - Right now, you can only run this project out the box from Windows Powershell
 - First, you must edit the `up.ps1` file and the `user_defined_properties.properties` file located in the `disc` directory.
-- In the `up.ps1` file: update the `$passwordcommand` and `$glob` variables. The password command should be formatted like -pDBPASSWORDHERE and the glob variable should point to the mock-data directory in your clone's dist folder.
+- In the `up.ps1` file: update the `$passwordcommand` and `$glob` variables. The password command should be formatted like -pDBPASSWORDHERE and the glob variable should point to the mock-data directory in your clone's dist folder. You should update this password value in the `down.ps1` file as well.
   - ![screenshots8.png](https://github.com/kelzzzz/CS425-ChiPub/blob/main/screenshots8.png)
 - In the `user_defined_properties.properties` file, update the `db.jdbc.url`, `db.admin.username` and `db.admin.password` to match that of your desired MySQL database instance. The chipub table will be inserted and accessed here. If you aren't sure how to get the JDBC url, refer here: https://github.com/kelzzzz/CS425-ChiPub/blob/kels_gui_wip/chipubapp/docs/DEV_FAQ.md
   - ![screenshot9.png](https://github.com/kelzzzz/CS425-ChiPub/blob/main/screenshot9.png)
